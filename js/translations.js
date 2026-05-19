@@ -388,3 +388,57 @@ const T = {
     },
   },
 };
+
+// ── Append new keys ──────────────────────────────────────────
+T.en.nav.myList   = 'My List';
+T.en.nav.ecAdvisor = 'EC Advisor';
+T.ar.nav.myList   = 'قائمتي';
+T.ar.nav.ecAdvisor = 'الأنشطة';
+
+T.en.myList = {
+  pageTitle: 'My College List',
+  pageSubtitle: 'Your saved universities — reach, target, and safety schools in one place.',
+  total: 'Total Saved', reaches: 'Reaches', targets: 'Targets', safeties: 'Safeties',
+  emptyTitle: 'Your list is empty',
+  emptyDesc: 'Build your college list with AI and save schools you\'re interested in.',
+  emptyCta: 'Build My List',
+  clearAll: 'Clear All',
+};
+T.ar.myList = {
+  pageTitle: 'قائمة جامعاتي',
+  pageSubtitle: 'جامعاتك المحفوظة — الطموح والمناسبة والآمنة في مكان واحد.',
+  total: 'إجمالي المحفوظ', reaches: 'الطموح', targets: 'المناسبة', safeties: 'الآمنة',
+  emptyTitle: 'قائمتك فارغة',
+  emptyDesc: 'ابنِ قائمة جامعاتك بالذكاء الاصطناعي واحفظ الجامعات التي تهتم بها.',
+  emptyCta: 'ابنِ قائمتي',
+  clearAll: 'مسح الكل',
+};
+
+T.en.ec = {
+  pageTitle: 'EC Advisor',
+  pageSubtitle: 'Find out exactly how strong your extracurriculars are — and which colleges match them best.',
+  addEC: '+ Add Another Activity',
+  ecName: 'Activity Name',
+  ecNameHint: 'e.g., Robotics Club Founder',
+  ecType: 'Type',
+  ecRole: 'Your Role',
+  targetCollegesLabel: 'Target Colleges (optional)',
+  targetCollegesHint: 'e.g., MIT, Carnegie Mellon, Imperial',
+  submitBtn: '⚡ Analyze My ECs',
+  loadingText: 'Analyzing your extracurricular profile...',
+  resultHeader: 'Your EC Assessment',
+};
+T.ar.ec = {
+  pageTitle: 'مستشار الأنشطة',
+  pageSubtitle: 'اكتشف مدى قوة أنشطتك اللاصفية — وأي الجامعات تناسبها أكثر.',
+  addEC: '+ أضف نشاطاً آخر',
+  ecName: 'اسم النشاط',
+  ecNameHint: 'مثال: مؤسس نادي الروبوتيك',
+  ecType: 'النوع',
+  ecRole: 'دورك',
+  targetCollegesLabel: 'الجامعات المستهدفة (اختياري)',
+  targetCollegesHint: 'مثال: MIT، كارنيجي ميلون، إمبيريال',
+  submitBtn: '⚡ حلّل أنشطتي',
+  loadingText: 'جاري تحليل ملفك اللاصفي...',
+  resultHeader: 'تقييم أنشطتك',
+};

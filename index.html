@@ -19,9 +19,11 @@
     <div class="nav-links">
       <a href="index.html" data-i18n="nav.home">Home</a>
       <a href="college-list.html" data-i18n="nav.collegeList">College List</a>
+      <a href="my-list.html" data-i18n="nav.myList">My List <span class="nav-list-badge"></span></a>
       <a href="scholarships.html" data-i18n="nav.scholarships">Scholarships</a>
       <a href="sat-guide.html" data-i18n="nav.satGuide">Test Guide</a>
       <a href="essay-advisor.html" data-i18n="nav.essayAdvisor">Essay Advisor</a>
+      <a href="ec-advisor.html" data-i18n="nav.ecAdvisor">EC Advisor</a>
     </div>
     <div class="nav-right">
       <button class="lang-toggle" onclick="toggleLanguage()">عربي</button>
@@ -33,9 +35,11 @@
   <div class="mobile-menu">
     <a href="index.html" data-i18n="nav.home">Home</a>
     <a href="college-list.html" data-i18n="nav.collegeList">College List</a>
+    <a href="my-list.html" data-i18n="nav.myList">My List</a>
     <a href="scholarships.html" data-i18n="nav.scholarships">Scholarships</a>
     <a href="sat-guide.html" data-i18n="nav.satGuide">Test Guide</a>
     <a href="essay-advisor.html" data-i18n="nav.essayAdvisor">Essay Advisor</a>
+    <a href="ec-advisor.html" data-i18n="nav.ecAdvisor">EC Advisor</a>
   </div>
 </nav>
 
@@ -65,12 +69,12 @@
 
     <div class="hero-stats">
       <div class="hero-stat">
-        <span class="hero-stat-number" data-i18n="hero.stat1Number">4</span>
+        <span class="hero-stat-number" data-i18n="hero.stat1Number">6</span>
         <span class="hero-stat-label" data-i18n="hero.stat1Label">AI Tools</span>
       </div>
       <div class="hero-stat">
-        <span class="hero-stat-number" data-i18n="hero.stat2Number">CPP</span>
-        <span class="hero-stat-label" data-i18n="hero.stat2Label">Aramco Ready</span>
+        <span class="hero-stat-number" data-i18n="hero.stat2Number">Free</span>
+        <span class="hero-stat-label" data-i18n="hero.stat2Label">Always Free</span>
       </div>
       <div class="hero-stat">
         <span class="hero-stat-number" data-i18n="hero.stat3Number">100%</span>
@@ -83,36 +87,44 @@
 <!-- ── Features ── -->
 <section class="section" id="features" style="background: var(--off-white);">
   <div class="container">
-    <div class="section-header">
+    <div class="section-header" data-anim>
       <span class="section-label" data-i18n="features.label">Features</span>
-      <h2 class="section-title" data-i18n="features.title">Four tools. One goal.</h2>
+      <h2 class="section-title" data-i18n="features.title">Six tools. One goal.</h2>
       <p class="section-subtitle" data-i18n="features.subtitle">
         Everything a Saudi student needs to navigate international university admissions.
       </p>
     </div>
 
     <div class="features-grid">
-      <a href="college-list.html" class="feature-card">
+      <a href="college-list.html" class="feature-card" data-anim>
         <div class="feature-card-icon">🎓</div>
         <span class="feature-card-badge" data-i18n="features.f1Badge">AI-Powered</span>
         <h3 data-i18n="features.f1Title">College List Builder</h3>
         <p data-i18n="features.f1Desc">
-          Input your GPA, SAT, Qudurat, and major. Get a personalized list of reaches, targets, and safeties with an honest assessment of your profile.
+          Input your GPA, SAT, Qudurat, and major. Get a personalized list of reaches, targets, and safeties — as interactive cards with deadlines and costs.
         </p>
         <div class="feature-card-arrow">→</div>
       </a>
 
-      <a href="scholarships.html" class="feature-card">
+      <a href="ec-advisor.html" class="feature-card" data-anim>
+        <div class="feature-card-icon">⚡</div>
+        <span class="feature-card-badge">New</span>
+        <h3 data-i18n="nav.ecAdvisor">EC Advisor</h3>
+        <p>Find out exactly what tier your extracurriculars are — Tier 1 down to Tier 5 — and which colleges they match best. Brutally honest.</p>
+        <div class="feature-card-arrow">→</div>
+      </a>
+
+      <a href="scholarships.html" class="feature-card" data-anim>
         <div class="feature-card-icon">💰</div>
         <span class="feature-card-badge" data-i18n="features.f2Badge">Saudi Focus</span>
-        <h3 data-i18n="features.f2Title">Scholarship & CPP Finder</h3>
+        <h3 data-i18n="features.f2Title">Scholarship Finder</h3>
         <p data-i18n="features.f2Desc">
-          Discover every scholarship available to you, starting with Aramco CPP. Get an AI assessment of your eligibility and what to do to improve.
+          Discover every funding pathway available — Aramco CPP, KASP, Mawhiba, SABIC, and more. AI eligibility assessment for all of them.
         </p>
         <div class="feature-card-arrow">→</div>
       </a>
 
-      <a href="sat-guide.html" class="feature-card">
+      <a href="sat-guide.html" class="feature-card" data-anim>
         <div class="feature-card-icon">📊</div>
         <span class="feature-card-badge" data-i18n="features.f3Badge">Explained</span>
         <h3 data-i18n="features.f3Title">SAT vs Qudurat Guide</h3>
@@ -122,13 +134,21 @@
         <div class="feature-card-arrow">→</div>
       </a>
 
-      <a href="essay-advisor.html" class="feature-card">
+      <a href="essay-advisor.html" class="feature-card" data-anim>
         <div class="feature-card-icon">✍️</div>
         <span class="feature-card-badge" data-i18n="features.f4Badge">AI Coach</span>
         <h3 data-i18n="features.f4Title">Essay Advisor</h3>
         <p data-i18n="features.f4Desc">
           AI essay coach that understands Saudi cultural context. Knows what Western admissions officers find compelling about Saudi applicants.
         </p>
+        <div class="feature-card-arrow">→</div>
+      </a>
+
+      <a href="my-list.html" class="feature-card" data-anim>
+        <div class="feature-card-icon">📋</div>
+        <span class="feature-card-badge">Saves Locally</span>
+        <h3 data-i18n="nav.myList">My College List</h3>
+        <p>Save colleges from your AI-generated list. View your reaches, targets, and safeties side by side — with all the info you need in one place.</p>
         <div class="feature-card-arrow">→</div>
       </a>
     </div>
@@ -144,54 +164,29 @@
     </div>
 
     <div class="steps-grid">
-      <div class="step-card">
+      <div class="step-card" data-anim>
         <div class="step-number">1</div>
         <h3 data-i18n="howItWorks.s1Title">Enter Your Profile</h3>
         <p data-i18n="howItWorks.s1Desc">GPA, test scores, school type, major, budget — the things that actually matter in Saudi admissions.</p>
       </div>
-      <div class="step-card">
+      <div class="step-card" data-anim>
         <div class="step-number">2</div>
         <h3 data-i18n="howItWorks.s2Title">Get AI Analysis</h3>
         <p data-i18n="howItWorks.s2Desc">Llama 3.3 analyzes your profile through a Saudi lens — not an American one. Every recommendation is Saudi-specific.</p>
       </div>
-      <div class="step-card">
+      <div class="step-card" data-anim>
         <div class="step-number">3</div>
         <h3 data-i18n="howItWorks.s3Title">Take Action</h3>
-        <p data-i18n="howItWorks.s3Desc">Use your college list, scholarship plan, and essay feedback to apply with confidence.</p>
+        <p data-i18n="howItWorks.s3Desc">Use your college list, scholarship plan, essay feedback, and EC assessment to apply with confidence.</p>
       </div>
     </div>
   </div>
 </section>
 
-<!-- ── CPP Callout ── -->
-<section class="section-sm" style="background: var(--off-white);">
-  <div class="container">
-    <div class="cpp-box">
-      <div class="cpp-box-label">Aramco Program</div>
-      <h3>Is Your Profile CPP-Ready?</h3>
-      <p>The Aramco College Degree Program (CPP) is the most prestigious sponsorship for Saudi international school graduates. We'll tell you exactly where you stand — and what to do to qualify.</p>
-      <div class="cpp-requirements">
-        <div class="cpp-req-item">
-          <div class="req-label">SAT Math</div>
-          <div class="req-value">630+</div>
-        </div>
-        <div class="cpp-req-item">
-          <div class="req-label">OR Qudurat</div>
-          <div class="req-value">90+</div>
-        </div>
-        <div class="cpp-req-item">
-          <div class="req-label">Cumulative GPA</div>
-          <div class="req-value">85%+</div>
-        </div>
-        <div class="cpp-req-item">
-          <div class="req-label">Math & Science GPA</div>
-          <div class="req-value">85%+</div>
-        </div>
-      </div>
-      <a href="scholarships.html" class="btn btn-primary">Check My CPP Eligibility →</a>
-    </div>
-  </div>
-</section>
+<!-- Floating My List button -->
+<button class="fab-list" id="fabList" onclick="location.href='my-list.html'">
+  🎓 My List <span class="fab-count">0</span>
+</button>
 
 <!-- ── Footer ── -->
 <footer>
@@ -207,6 +202,7 @@
         <a href="scholarships.html" data-i18n="footer.scholarships">Scholarship Finder</a>
         <a href="sat-guide.html" data-i18n="footer.satGuide">Test Guide</a>
         <a href="essay-advisor.html" data-i18n="footer.essayAdvisor">Essay Advisor</a>
+        <a href="ec-advisor.html" data-i18n="nav.ecAdvisor">EC Advisor</a>
       </div>
       <div class="footer-col">
         <h4 data-i18n="footer.resourcesTitle">Resources</h4>

@@ -18,9 +18,11 @@
     <div class="nav-links">
       <a href="index.html" data-i18n="nav.home">Home</a>
       <a href="college-list.html" data-i18n="nav.collegeList">College List</a>
+      <a href="my-list.html" data-i18n="nav.myList">My List <span class="nav-list-badge"></span></a>
       <a href="scholarships.html" data-i18n="nav.scholarships">Scholarships</a>
       <a href="sat-guide.html" data-i18n="nav.satGuide">Test Guide</a>
       <a href="essay-advisor.html" data-i18n="nav.essayAdvisor">Essay Advisor</a>
+      <a href="ec-advisor.html" data-i18n="nav.ecAdvisor">EC Advisor</a>
     </div>
     <div class="nav-right">
       <button class="lang-toggle" onclick="toggleLanguage()">عربي</button>
@@ -30,9 +32,11 @@
   <div class="mobile-menu">
     <a href="index.html" data-i18n="nav.home">Home</a>
     <a href="college-list.html" data-i18n="nav.collegeList">College List</a>
+    <a href="my-list.html" data-i18n="nav.myList">My List</a>
     <a href="scholarships.html" data-i18n="nav.scholarships">Scholarships</a>
     <a href="sat-guide.html" data-i18n="nav.satGuide">Test Guide</a>
     <a href="essay-advisor.html" data-i18n="nav.essayAdvisor">Essay Advisor</a>
+    <a href="ec-advisor.html" data-i18n="nav.ecAdvisor">EC Advisor</a>
   </div>
 </nav>
 
@@ -187,6 +191,11 @@
   </div>
 </section>
 
+<!-- Floating My List button -->
+<button class="fab-list" id="fabList" onclick="location.href='my-list.html'">
+  🎓 My List <span class="fab-count">0</span>
+</button>
+
 <footer>
   <div class="container">
     <div class="footer-top">
@@ -200,6 +209,7 @@
         <a href="scholarships.html" data-i18n="footer.scholarships">Scholarship Finder</a>
         <a href="sat-guide.html" data-i18n="footer.satGuide">Test Guide</a>
         <a href="essay-advisor.html" data-i18n="footer.essayAdvisor">Essay Advisor</a>
+        <a href="ec-advisor.html" data-i18n="nav.ecAdvisor">EC Advisor</a>
       </div>
       <div class="footer-col">
         <h4 data-i18n="footer.resourcesTitle">Resources</h4>

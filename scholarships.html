@@ -18,9 +18,11 @@
     <div class="nav-links">
       <a href="index.html" data-i18n="nav.home">Home</a>
       <a href="college-list.html" data-i18n="nav.collegeList">College List</a>
+      <a href="my-list.html" data-i18n="nav.myList">My List <span class="nav-list-badge"></span></a>
       <a href="scholarships.html" data-i18n="nav.scholarships">Scholarships</a>
       <a href="sat-guide.html" data-i18n="nav.satGuide">Test Guide</a>
       <a href="essay-advisor.html" data-i18n="nav.essayAdvisor">Essay Advisor</a>
+      <a href="ec-advisor.html" data-i18n="nav.ecAdvisor">EC Advisor</a>
     </div>
     <div class="nav-right">
       <button class="lang-toggle" onclick="toggleLanguage()">عربي</button>
@@ -30,9 +32,11 @@
   <div class="mobile-menu">
     <a href="index.html" data-i18n="nav.home">Home</a>
     <a href="college-list.html" data-i18n="nav.collegeList">College List</a>
+    <a href="my-list.html" data-i18n="nav.myList">My List</a>
     <a href="scholarships.html" data-i18n="nav.scholarships">Scholarships</a>
     <a href="sat-guide.html" data-i18n="nav.satGuide">Test Guide</a>
     <a href="essay-advisor.html" data-i18n="nav.essayAdvisor">Essay Advisor</a>
+    <a href="ec-advisor.html" data-i18n="nav.ecAdvisor">EC Advisor</a>
   </div>
 </nav>
 
@@ -45,55 +49,32 @@
 <section class="section">
   <div class="container">
 
-    <!-- ── CPP Feature Box ── -->
-    <div class="cpp-box" style="margin-bottom: 40px;">
-      <div class="cpp-box-label" data-i18n="scholarships.cppTitle">Aramco College Degree Program (CPP)</div>
-      <h3 data-i18n="scholarships.cppSubtitle">The most prestigious sponsorship for Saudi international school graduates</h3>
-      <p data-i18n="scholarships.cppDesc">The Aramco CPP sponsors high-achieving Saudi international school graduates to study at top universities abroad. It covers full tuition, living expenses, and provides a guaranteed job at Saudi Aramco upon graduation.</p>
-
-      <div class="cpp-requirements">
-        <div class="cpp-req-item">
-          <div class="req-label" data-i18n="scholarships.cppReq1Label">SAT Math</div>
-          <div class="req-value" data-i18n="scholarships.cppReq1Value">630+ (or Qudurat 90+)</div>
-        </div>
-        <div class="cpp-req-item">
-          <div class="req-label" data-i18n="scholarships.cppReq2Label">Cumulative GPA</div>
-          <div class="req-value" data-i18n="scholarships.cppReq2Value">85%+ overall</div>
-        </div>
-        <div class="cpp-req-item">
-          <div class="req-label" data-i18n="scholarships.cppReq3Label">Math &amp; Science GPA</div>
-          <div class="req-value" data-i18n="scholarships.cppReq3Value">85%+ in M&amp;S subjects</div>
-        </div>
-        <div class="cpp-req-item">
-          <div class="req-label" data-i18n="scholarships.cppReq4Label">School Type</div>
-          <div class="req-value" data-i18n="scholarships.cppReq4Value">International school graduates</div>
-        </div>
-      </div>
-
-      <div style="margin-bottom: 20px;">
-        <div style="font-size:.78rem;font-weight:700;text-transform:uppercase;letter-spacing:.8px;color:var(--gold);margin-bottom:12px;" data-i18n="scholarships.cppTimeline">Key Dates</div>
-        <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;">
-          <div style="background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);border-radius:6px;padding:10px 14px;font-size:.82rem;color:rgba(255,255,255,.75);" data-i18n="scholarships.cppDate1">February–March: Application window opens</div>
-          <div style="background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);border-radius:6px;padding:10px 14px;font-size:.82rem;color:rgba(255,255,255,.75);" data-i18n="scholarships.cppDate2">May 1–2: Screening tests</div>
-          <div style="background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);border-radius:6px;padding:10px 14px;font-size:.82rem;color:rgba(255,255,255,.75);" data-i18n="scholarships.cppDate3">June 3–4: Career fair</div>
-          <div style="background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);border-radius:6px;padding:10px 14px;font-size:.82rem;color:rgba(255,255,255,.75);" data-i18n="scholarships.cppDate4">August 2: Orientation</div>
-        </div>
-      </div>
-
-      <div style="background:rgba(201,168,76,.1);border:1px solid rgba(201,168,76,.25);border-radius:10px;padding:18px 20px;margin-bottom:20px;">
-        <div style="font-size:.8rem;font-weight:700;color:var(--gold);text-transform:uppercase;letter-spacing:.6px;margin-bottom:8px;" data-i18n="scholarships.cppWaiverTitle">CPP Waiver Pathway</div>
-        <p style="font-size:.85rem;color:rgba(255,255,255,.8);line-height:1.65;" data-i18n="scholarships.cppWaiverDesc">If you receive an unconditional offer from a Top 30 university globally, you may apply for the CPP Waiver — skipping the prep year and entering directly. This is the pathway for students accepted to schools like MIT, Stanford, Imperial, Oxford, or any university in the global Top 30.</p>
-      </div>
-    </div>
-
-    <!-- ── Other Scholarships ── -->
-    <div class="section-header" style="text-align:start;margin-bottom:28px;">
-      <span class="section-label" data-i18n="scholarships.otherTitle">Other Scholarships for Saudi Students</span>
+    <!-- ── Scholarships Grid ── -->
+    <div class="section-header" style="text-align:start;margin-bottom:28px;" data-anim>
+      <span class="section-label" data-i18n="scholarships.otherTitle">Scholarships &amp; Sponsorships for Saudi Students</span>
     </div>
 
     <div class="scholarship-grid" style="margin-bottom:48px;">
 
-      <div class="scholarship-card featured" data-tag="Most Sought After">
+      <!-- CPP — now an equal card -->
+      <div class="scholarship-card featured" data-tag="Full Sponsorship" data-anim>
+        <div class="scholarship-card-header">
+          <div class="scholarship-logo">🛢️</div>
+          <div>
+            <h3>Aramco CPP — College Degree Program</h3>
+            <div class="amount">Full Funding + Guaranteed Aramco Job</div>
+          </div>
+        </div>
+        <p>Sponsors high-achieving Saudi international school graduates to study at top universities abroad. Covers full tuition and living expenses with a guaranteed job at Saudi Aramco on graduation. Requirements: SAT Math 630+ (or Qudurat 90+), cumulative GPA 85%+, Math &amp; Science GPA 85%+. Top-30 admits may apply for the CPP Waiver to skip the prep year.</p>
+        <div class="scholarship-meta">
+          <span class="meta-tag">International School</span>
+          <span class="meta-tag">Full Funding</span>
+          <span class="meta-tag">Employment Guaranteed</span>
+          <span class="meta-tag">SAT Math 630+</span>
+        </div>
+      </div>
+
+      <div class="scholarship-card featured" data-tag="Most Sought After" data-anim>
         <div class="scholarship-card-header">
           <div class="scholarship-logo">🎓</div>
           <div>
@@ -254,6 +235,11 @@
   </div>
 </section>
 
+<!-- Floating My List button -->
+<button class="fab-list" id="fabList" onclick="location.href='my-list.html'">
+  🎓 My List <span class="fab-count">0</span>
+</button>
+
 <footer>
   <div class="container">
     <div class="footer-top">
@@ -267,6 +253,7 @@
         <a href="scholarships.html" data-i18n="footer.scholarships">Scholarship Finder</a>
         <a href="sat-guide.html" data-i18n="footer.satGuide">Test Guide</a>
         <a href="essay-advisor.html" data-i18n="footer.essayAdvisor">Essay Advisor</a>
+        <a href="ec-advisor.html" data-i18n="nav.ecAdvisor">EC Advisor</a>
       </div>
       <div class="footer-col">
         <h4 data-i18n="footer.resourcesTitle">Resources</h4>
