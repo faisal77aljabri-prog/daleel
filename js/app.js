@@ -129,14 +129,25 @@ function renderCollegeCards(data, container) {
     const list = colleges.filter(c => c.type === g.key);
     if (!list.length) continue;
     html += `<div class="college-group">
-      <div class="college-group-label ${g.cls}">${g.label}</div>`;
+      <div class="college-group-label ${g.cls}">${g.label}</div>
+      <div class="college-cards-grid">`;
     list.forEach((c, i) => { html += buildCard(c, saved, i); });
-    html += `</div>`;
+    html += `</div></div>`;
   }
 
   container.innerHTML = html;
+  _bindCardEvents(container);
+}
+
+function _bindCardEvents(container) {
   container.querySelectorAll('.ccard-header').forEach(h => {
     h.addEventListener('click', () => toggleCard(h.closest('.ccard')));
+  });
+  container.querySelectorAll('.ccard-more-btn').forEach(btn => {
+    btn.addEventListener('click', e => {
+      e.stopPropagation();
+      toggleCard(btn.closest('.ccard'));
+    });
   });
   container.querySelectorAll('.ccard-save-btn').forEach(btn => {
     btn.addEventListener('click', e => {
@@ -153,31 +164,26 @@ function buildCard(c, saved, i) {
   const saveLabel = isSaved
     ? (currentLang === 'ar' ? '✓ محفوظ' : '✓ Saved')
     : (currentLang === 'ar' ? '+ قائمتي' : '+ My List');
+  const moreLabel = currentLang === 'ar' ? 'تفاصيل ←' : 'More Info →';
+
+  const statsLine = [
+    c.acceptanceRate ? `Accept: ${c.acceptanceRate}` : '',
+    c.annualCost     ? `${c.annualCost}`             : '',
+  ].filter(Boolean).join(' · ');
 
   return `<div class="ccard" data-college='${JSON.stringify(c).replace(/'/g, "&#39;")}'>
     <div class="ccard-header">
-      <span class="ccard-type ${c.type}">${c.type}</span>
-      <div class="ccard-main">
-        <div class="ccard-name">${c.name}</div>
-        <div class="ccard-loc">${c.flag || ''} ${c.location || ''}</div>
-      </div>
-      <div class="ccard-stats">
-        <div class="ccard-stat">
-          <span class="ccard-stat-label">${currentLang === 'ar' ? 'القبول' : 'Accept'}</span>
-          <span class="ccard-stat-value">${c.acceptanceRate || '—'}</span>
-        </div>
-        <div class="ccard-stat">
-          <span class="ccard-stat-label">${currentLang === 'ar' ? 'التكلفة' : 'Cost/yr'}</span>
-          <span class="ccard-stat-value">${c.annualCost || '—'}</span>
-        </div>
-        <div class="ccard-stat">
-          <span class="ccard-stat-label">SAT Med</span>
-          <span class="ccard-stat-value">${c.medianSAT || '—'}</span>
-        </div>
-      </div>
-      <div class="ccard-right">
-        <button class="ccard-save-btn ${isSaved ? 'saved' : ''}">${saveLabel}</button>
+      <div class="ccard-header-top">
+        <span class="ccard-type ${c.type}">${c.type}</span>
         <span class="ccard-chevron">▼</span>
+      </div>
+      <div class="ccard-flag-wrap">${c.flag || '🎓'}</div>
+      <div class="ccard-name">${c.name}</div>
+      <div class="ccard-loc">${c.location || ''}</div>
+      ${statsLine ? `<div class="ccard-peek">${statsLine}</div>` : ''}
+      <div class="ccard-actions">
+        <button class="ccard-save-btn ${isSaved ? 'saved' : ''}">${saveLabel}</button>
+        <button class="ccard-more-btn">${moreLabel}</button>
       </div>
     </div>
     <div class="ccard-body" hidden>
@@ -190,20 +196,32 @@ function buildCard(c, saved, i) {
       </div>
       <div class="ccard-details-grid">
         <div class="ccard-detail">
-          <span class="detail-label">📅 ${currentLang === 'ar' ? 'الموعد المبكر' : 'Early Deadline'}</span>
+          <span class="detail-label">${currentLang === 'ar' ? 'نسبة القبول' : 'Acceptance'}</span>
+          <span class="detail-value">${c.acceptanceRate || '—'}</span>
+        </div>
+        <div class="ccard-detail">
+          <span class="detail-label">${currentLang === 'ar' ? 'التكلفة السنوية' : 'Cost / yr'}</span>
+          <span class="detail-value">${c.annualCost || '—'}</span>
+        </div>
+        <div class="ccard-detail">
+          <span class="detail-label">SAT Median</span>
+          <span class="detail-value">${c.medianSAT || '—'}</span>
+        </div>
+        <div class="ccard-detail">
+          <span class="detail-label">💰 ${currentLang === 'ar' ? 'مساعدة مالية' : 'Financial Aid'}</span>
+          <span class="detail-value">${c.financialAid || '—'}</span>
+        </div>
+        <div class="ccard-detail">
+          <span class="detail-label">📅 ${currentLang === 'ar' ? 'موعد مبكر' : 'Early Deadline'}</span>
           <span class="detail-value">${c.earlyDeadline || 'N/A'}</span>
         </div>
         <div class="ccard-detail">
-          <span class="detail-label">📅 ${currentLang === 'ar' ? 'الموعد العادي' : 'Regular Deadline'}</span>
+          <span class="detail-label">📅 ${currentLang === 'ar' ? 'موعد عادي' : 'Regular Deadline'}</span>
           <span class="detail-value">${c.regularDeadline || '—'}</span>
         </div>
         <div class="ccard-detail">
           <span class="detail-label">🖊 ${currentLang === 'ar' ? 'التقديم عبر' : 'Apply Through'}</span>
           <span class="detail-value">${c.applyThrough || '—'}</span>
-        </div>
-        <div class="ccard-detail">
-          <span class="detail-label">💰 ${currentLang === 'ar' ? 'المساعدة المالية' : 'Financial Aid'}</span>
-          <span class="detail-value">${c.financialAid || '—'}</span>
         </div>
       </div>
       ${c.bestMajors?.length ? `
@@ -340,14 +358,20 @@ function renderMyListPage() {
   for (const g of groups) {
     const items = list.filter(c => c.type === g.key);
     if (!items.length) continue;
-    html += `<div class="college-group"><div class="college-group-label ${g.cls}">${g.label}</div>`;
+    html += `<div class="college-group"><div class="college-group-label ${g.cls}">${g.label}</div>
+      <div class="college-cards-grid">`;
     items.forEach((c, i) => { html += buildCard(c, saved, i); });
-    html += `</div>`;
+    html += `</div></div>`;
   }
   contentEl.innerHTML = html;
-
   contentEl.querySelectorAll('.ccard-header').forEach(h => {
     h.addEventListener('click', () => toggleCard(h.closest('.ccard')));
+  });
+  contentEl.querySelectorAll('.ccard-more-btn').forEach(btn => {
+    btn.addEventListener('click', e => {
+      e.stopPropagation();
+      toggleCard(btn.closest('.ccard'));
+    });
   });
   contentEl.querySelectorAll('.ccard-save-btn').forEach(btn => {
     btn.addEventListener('click', e => {
