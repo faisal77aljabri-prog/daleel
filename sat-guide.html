@@ -61,51 +61,165 @@
     <div id="tab-overview" class="tab-pane active">
 
       <!-- CPP Critical Note -->
-      <div class="callout callout-gold" style="margin-bottom:32px;">
+      <div class="callout callout-gold" style="margin-bottom:28px;">
         <span class="callout-icon">⚡</span>
         <div class="callout-content">
           <h4>Aramco CPP Key Threshold</h4>
-          <p>For CPP eligibility, <strong>SAT Math 630+</strong> substitutes for <strong>Qudurat 90+</strong>. Only SAT Math matters for CPP — not the total SAT score. This is the most important number for students pursuing Aramco CPP.</p>
+          <p>For CPP eligibility, <strong>SAT Math 630+</strong> substitutes for <strong>Qudurat 90+</strong>. Only SAT Math matters for CPP — not the total SAT score.</p>
         </div>
       </div>
 
-      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:24px;">
+      <div class="test-cards-grid">
 
-        <div class="info-card">
-          <h4>📐 <span data-i18n="satGuide.qudurTitle">Qudurat (قدرات)</span></h4>
-          <p data-i18n="satGuide.qudurDesc">The General Aptitude Test administered by the National Center for Assessment (Qiyas). Tests verbal and quantitative reasoning. Score reported as a percentile (out of 100). Required for admission to all Saudi public universities. Two versions: General Qudurat and Scientific Qudurat (for engineering/science).</p>
-          <div style="margin-top:14px;display:flex;flex-wrap:wrap;gap:8px;">
-            <span class="badge badge-amber">Score: out of 100</span>
-            <span class="badge badge-amber">By: Qiyas</span>
-            <span class="badge badge-green">Required: Saudi Public Unis</span>
+        <!-- Qudurat -->
+        <div class="test-card">
+          <div class="test-card-top">
+            <div class="test-card-icon">📐</div>
+            <div>
+              <div class="test-card-name">Qudurat — قدرات</div>
+              <div class="test-card-subtitle">General Aptitude Test · Qiyas</div>
+            </div>
           </div>
+          <div class="scholarship-meta" style="margin-bottom:14px;">
+            <span class="meta-tag">Score: 0–100</span>
+            <span class="meta-tag">Saudi Public Unis</span>
+            <span class="meta-tag" style="background:#d1fae5;color:#065f46;border-color:#6ee7b7;">CPP: 90+ required</span>
+          </div>
+          <p class="test-card-desc">Tests verbal and quantitative reasoning. Two versions: General (for humanities) and Scientific (for STEM). Required for all Saudi public university admissions. Qudurat 90+ qualifies for Aramco CPP in lieu of SAT Math 630+.</p>
+          <div class="test-card-details">
+            <div class="test-card-detail"><span class="test-detail-label">Format</span><span class="test-detail-value">Verbal + Quantitative, MCQ</span></div>
+            <div class="test-card-detail"><span class="test-detail-label">Duration</span><span class="test-detail-value">~2.5 hours</span></div>
+            <div class="test-card-detail"><span class="test-detail-label">Frequency</span><span class="test-detail-value">~4–5 times/year</span></div>
+            <div class="test-card-detail"><span class="test-detail-label">Fee</span><span class="test-detail-value">~SAR 100</span></div>
+          </div>
+          <a href="https://www.qiyas.sa" target="_blank" rel="noopener" class="test-card-btn">Register on Qiyas.sa →</a>
         </div>
 
-        <div class="info-card">
-          <h4>📚 <span data-i18n="satGuide.tahsiliTitle">Tahsili (تحصيلي)</span></h4>
-          <p data-i18n="satGuide.tahsiliDesc">The Achievement Test administered by Qiyas. Tests knowledge in specific subjects (Math, Sciences, English). Score reported out of 100. Alongside Qudurat, this is required for Saudi public university admission. Scores are weighted differently by each university.</p>
-          <div style="margin-top:14px;display:flex;flex-wrap:wrap;gap:8px;">
-            <span class="badge badge-amber">Score: out of 100</span>
-            <span class="badge badge-amber">By: Qiyas</span>
-            <span class="badge badge-green">Required: Saudi Public Unis</span>
+        <!-- Tahsili -->
+        <div class="test-card">
+          <div class="test-card-top">
+            <div class="test-card-icon">📚</div>
+            <div>
+              <div class="test-card-name">Tahsili — تحصيلي</div>
+              <div class="test-card-subtitle">Achievement Test · Qiyas</div>
+            </div>
           </div>
+          <div class="scholarship-meta" style="margin-bottom:14px;">
+            <span class="meta-tag">Score: 0–100</span>
+            <span class="meta-tag">Saudi Public Unis</span>
+            <span class="meta-tag">Required with Qudurat</span>
+          </div>
+          <p class="test-card-desc">Tests subject knowledge in Math, Sciences, Arabic, and English. Two tracks: Scientific (علمي) and Literary (أدبي). Required alongside Qudurat for all Saudi public university admissions. Each university weights it differently in their admissions formula.</p>
+          <div class="test-card-details">
+            <div class="test-card-detail"><span class="test-detail-label">Format</span><span class="test-detail-value">Subject knowledge, MCQ</span></div>
+            <div class="test-card-detail"><span class="test-detail-label">Duration</span><span class="test-detail-value">~2 hours</span></div>
+            <div class="test-card-detail"><span class="test-detail-label">Frequency</span><span class="test-detail-value">~4–5 times/year</span></div>
+            <div class="test-card-detail"><span class="test-detail-label">Fee</span><span class="test-detail-value">~SAR 100</span></div>
+          </div>
+          <a href="https://www.qiyas.sa" target="_blank" rel="noopener" class="test-card-btn">Register on Qiyas.sa →</a>
         </div>
 
-        <div class="info-card">
-          <h4>🌍 <span data-i18n="satGuide.satTitle">SAT</span></h4>
-          <p data-i18n="satGuide.satDesc">The US College Board standardized test. Total score out of 1600 (Math 800 + EBRW 800). Accepted by international universities worldwide. In Saudi Arabia, accepted as a substitute for Qudurat at some universities (KFUPM, Taibah, Prince Sultan, etc.). The Aramco CPP uses SAT Math 630+ as a substitute for Qudurat 90+.</p>
-          <div style="margin-top:14px;display:flex;flex-wrap:wrap;gap:8px;">
-            <span class="badge badge-amber">Score: out of 1600</span>
-            <span class="badge badge-amber">By: College Board</span>
-            <span class="badge badge-green">Required: International Unis</span>
+        <!-- SAT -->
+        <div class="test-card">
+          <div class="test-card-top">
+            <div class="test-card-icon">🌍</div>
+            <div>
+              <div class="test-card-name">SAT</div>
+              <div class="test-card-subtitle">Scholastic Assessment Test · College Board</div>
+            </div>
           </div>
+          <div class="scholarship-meta" style="margin-bottom:14px;">
+            <span class="meta-tag">Score: 400–1600</span>
+            <span class="meta-tag">US/Canada/Global</span>
+            <span class="meta-tag" style="background:#d1fae5;color:#065f46;border-color:#6ee7b7;">CPP: Math 630+</span>
+          </div>
+          <p class="test-card-desc">Math (800) + Evidence-Based Reading &amp; Writing (800). Recommended for US/Canadian universities. In Saudi Arabia, SAT Math 630+ substitutes for Qudurat 90+ for Aramco CPP. Accepted by KFUPM, Prince Sultan, Al-Faisal, Taibah in lieu of Qudurat.</p>
+          <div class="test-card-details">
+            <div class="test-card-detail"><span class="test-detail-label">Format</span><span class="test-detail-value">Math + Reading &amp; Writing</span></div>
+            <div class="test-card-detail"><span class="test-detail-label">Duration</span><span class="test-detail-value">2h 14min</span></div>
+            <div class="test-card-detail"><span class="test-detail-label">Frequency</span><span class="test-detail-value">7 dates/year globally</span></div>
+            <div class="test-card-detail"><span class="test-detail-label">Fee</span><span class="test-detail-value">~$60 + regional fee</span></div>
+          </div>
+          <a href="https://www.collegeboard.org/students/testing/sat" target="_blank" rel="noopener" class="test-card-btn">Register on CollegeBoard.org →</a>
+        </div>
+
+        <!-- IELTS -->
+        <div class="test-card" style="border-color:rgba(201,168,76,.3);">
+          <div class="test-card-top">
+            <div class="test-card-icon" style="background:linear-gradient(135deg,#005f9e,#003d6b);">🎧</div>
+            <div>
+              <div class="test-card-name">IELTS Academic</div>
+              <div class="test-card-subtitle">International English Language Testing System</div>
+            </div>
+          </div>
+          <div class="scholarship-meta" style="margin-bottom:14px;">
+            <span class="meta-tag">Band: 0–9</span>
+            <span class="meta-tag">UK / Australia / Canada</span>
+            <span class="meta-tag">IDP / British Council</span>
+          </div>
+          <p class="test-card-desc">The world's most popular English language test. Required by virtually all UK, Australian, and Canadian universities. Some US universities also accept IELTS. Most top UK unis require 6.5–7.0 overall with no band below 6.5. Comprises Listening, Reading, Writing, and Speaking sections.</p>
+          <div class="test-card-details">
+            <div class="test-card-detail"><span class="test-detail-label">Format</span><span class="test-detail-value">Listening · Reading · Writing · Speaking</span></div>
+            <div class="test-card-detail"><span class="test-detail-label">Duration</span><span class="test-detail-value">~2h 45min</span></div>
+            <div class="test-card-detail"><span class="test-detail-label">Validity</span><span class="test-detail-value">2 years</span></div>
+            <div class="test-card-detail"><span class="test-detail-label">Fee</span><span class="test-detail-value">~SAR 900–1,000</span></div>
+          </div>
+          <a href="https://www.ielts.org/book-a-test/book-test-saudi-arabia" target="_blank" rel="noopener" class="test-card-btn">Book IELTS Test →</a>
+        </div>
+
+        <!-- TOEFL -->
+        <div class="test-card">
+          <div class="test-card-top">
+            <div class="test-card-icon" style="background:linear-gradient(135deg,#1a5276,#0e3460);">💬</div>
+            <div>
+              <div class="test-card-name">TOEFL iBT</div>
+              <div class="test-card-subtitle">Test of English as a Foreign Language · ETS</div>
+            </div>
+          </div>
+          <div class="scholarship-meta" style="margin-bottom:14px;">
+            <span class="meta-tag">Score: 0–120</span>
+            <span class="meta-tag">USA / Canada</span>
+            <span class="meta-tag">ETS</span>
+          </div>
+          <p class="test-card-desc">Preferred by most US universities over IELTS. Tests reading, listening, speaking, and writing in an academic context. Most top US universities require 100+ for competitive admissions. Some Saudi and UAE universities also accept TOEFL as an English proficiency proof.</p>
+          <div class="test-card-details">
+            <div class="test-card-detail"><span class="test-detail-label">Format</span><span class="test-detail-value">Reading · Listening · Speaking · Writing</span></div>
+            <div class="test-card-detail"><span class="test-detail-label">Duration</span><span class="test-detail-value">~3 hours</span></div>
+            <div class="test-card-detail"><span class="test-detail-label">Validity</span><span class="test-detail-value">2 years</span></div>
+            <div class="test-card-detail"><span class="test-detail-label">Fee</span><span class="test-detail-value">~$245</span></div>
+          </div>
+          <a href="https://www.ets.org/toefl/test-takers/ibt/register" target="_blank" rel="noopener" class="test-card-btn">Register for TOEFL →</a>
+        </div>
+
+        <!-- ACT -->
+        <div class="test-card">
+          <div class="test-card-top">
+            <div class="test-card-icon" style="background:linear-gradient(135deg,#1e3a5f,#0d2540);">📊</div>
+            <div>
+              <div class="test-card-name">ACT</div>
+              <div class="test-card-subtitle">American College Testing</div>
+            </div>
+          </div>
+          <div class="scholarship-meta" style="margin-bottom:14px;">
+            <span class="meta-tag">Score: 1–36</span>
+            <span class="meta-tag">USA / Canada</span>
+            <span class="meta-tag">ACT Inc.</span>
+          </div>
+          <p class="test-card-desc">Alternative to the SAT for US/Canadian university admissions — all universities that accept the SAT accept the ACT. Four sections: English, Math, Reading, Science Reasoning. Some students perform significantly better on the ACT vs SAT due to the Science section and pacing.</p>
+          <div class="test-card-details">
+            <div class="test-card-detail"><span class="test-detail-label">Format</span><span class="test-detail-value">English · Math · Reading · Science</span></div>
+            <div class="test-card-detail"><span class="test-detail-label">Duration</span><span class="test-detail-value">~2h 55min (no Writing)</span></div>
+            <div class="test-card-detail"><span class="test-detail-label">Frequency</span><span class="test-detail-value">6–7 dates/year</span></div>
+            <div class="test-card-detail"><span class="test-detail-label">Fee</span><span class="test-detail-value">~$68 (no Writing)</span></div>
+          </div>
+          <a href="https://www.act.org/content/act/en/products-and-services/the-act.html" target="_blank" rel="noopener" class="test-card-btn">Register for ACT →</a>
         </div>
 
       </div>
 
       <!-- When do I need each -->
-      <div style="margin-top:32px;">
-        <h3 style="font-size:1.1rem;font-weight:700;color:var(--navy-deep);margin-bottom:16px;">When do you need each test?</h3>
+      <div style="margin-top:36px;">
+        <h3 style="font-size:1rem;font-weight:700;color:var(--navy-deep);margin-bottom:16px;">When do you need each test?</h3>
         <div class="table-wrapper">
           <table>
             <thead>
@@ -113,57 +227,59 @@
                 <th>Situation</th>
                 <th>Qudurat</th>
                 <th>Tahsili</th>
-                <th>SAT</th>
+                <th>SAT / ACT</th>
+                <th>IELTS / TOEFL</th>
               </tr>
             </thead>
             <tbody>
               <tr>
-                <td>Saudi public university (KAUST, KFUPM, etc.)</td>
+                <td>Saudi public university (KFUPM, KAU...)</td>
                 <td><span class="badge badge-green">Required</span></td>
                 <td><span class="badge badge-green">Required</span></td>
-                <td><span class="badge badge-amber">Sometimes accepted</span></td>
+                <td><span class="badge badge-amber">Sometimes in lieu</span></td>
+                <td><span class="badge badge-red">Not used</span></td>
               </tr>
               <tr>
-                <td>US university (MIT, Stanford, UCLA...)</td>
+                <td>US university (MIT, Stanford...)</td>
                 <td><span class="badge badge-red">Not used</span></td>
                 <td><span class="badge badge-red">Not used</span></td>
                 <td><span class="badge badge-green">Recommended</span></td>
+                <td><span class="badge badge-amber">If English not first lang.</span></td>
               </tr>
               <tr>
-                <td>UK university (Imperial, UCL, Edinburgh...)</td>
+                <td>UK university (Imperial, UCL...)</td>
                 <td><span class="badge badge-red">Not used</span></td>
                 <td><span class="badge badge-red">Not used</span></td>
                 <td><span class="badge badge-amber">Sometimes accepted</span></td>
+                <td><span class="badge badge-green">Required (6.5–7.0)</span></td>
+              </tr>
+              <tr>
+                <td>Canada (UofT, UBC, McGill...)</td>
+                <td><span class="badge badge-red">Not used</span></td>
+                <td><span class="badge badge-red">Not used</span></td>
+                <td><span class="badge badge-amber">Optional / helpful</span></td>
+                <td><span class="badge badge-green">Required (6.5+)</span></td>
+              </tr>
+              <tr>
+                <td>Australia (UNSW, Melbourne...)</td>
+                <td><span class="badge badge-red">Not used</span></td>
+                <td><span class="badge badge-red">Not used</span></td>
+                <td><span class="badge badge-amber">Optional</span></td>
+                <td><span class="badge badge-green">Required (6.5+)</span></td>
               </tr>
               <tr>
                 <td>Aramco CPP eligibility</td>
                 <td><span class="badge badge-green">90+ qualifies</span></td>
                 <td><span class="badge badge-red">Not required</span></td>
-                <td><span class="badge badge-green">Math 630+ qualifies</span></td>
+                <td><span class="badge badge-green">SAT Math 630+</span></td>
+                <td><span class="badge badge-red">Not required</span></td>
               </tr>
               <tr>
-                <td>KFUPM (Saudi)</td>
-                <td><span class="badge badge-green">Required</span></td>
-                <td><span class="badge badge-green">Required</span></td>
+                <td>KFUPM / Taibah / Prince Sultan</td>
+                <td><span class="badge badge-green">Required / Accepted</span></td>
+                <td><span class="badge badge-green">Required / Accepted</span></td>
                 <td><span class="badge badge-green">Accepted in lieu</span></td>
-              </tr>
-              <tr>
-                <td>Prince Sultan University</td>
-                <td><span class="badge badge-amber">Optional</span></td>
-                <td><span class="badge badge-amber">Optional</span></td>
-                <td><span class="badge badge-green">Accepted</span></td>
-              </tr>
-              <tr>
-                <td>Al-Faisal University</td>
-                <td><span class="badge badge-amber">Optional</span></td>
-                <td><span class="badge badge-amber">Optional</span></td>
-                <td><span class="badge badge-green">Primary test used</span></td>
-              </tr>
-              <tr>
-                <td>Taibah University</td>
-                <td><span class="badge badge-green">Accepted</span></td>
-                <td><span class="badge badge-green">Accepted</span></td>
-                <td><span class="badge badge-green">Accepted in lieu</span></td>
+                <td><span class="badge badge-red">Not used</span></td>
               </tr>
             </tbody>
           </table>
@@ -261,58 +377,114 @@
 
     <!-- ── Tab 3: University Requirements ── -->
     <div id="tab-unis" class="tab-pane">
-      <p style="color:var(--text-muted);font-size:.9rem;margin-bottom:24px;" data-i18n="satGuide.uniTitle">Saudi University SAT Policies</p>
+      <p style="color:var(--text-muted);font-size:.9rem;margin-bottom:24px;">Saudi university admissions test policies — always verify on the official admissions page as requirements change annually.</p>
 
-      <div style="display:grid;gap:16px;">
+      <div class="scholarship-grid">
 
-        <div class="info-card">
-          <h4>🏫 KFUPM — King Fahd University of Petroleum &amp; Minerals</h4>
-          <p>One of the top engineering universities in Saudi Arabia and the Arab world. Accepts SAT in lieu of Qudurat for admission. Strong engineering and computer science programs. Highly competitive.</p>
-          <div style="margin-top:12px;display:flex;flex-wrap:wrap;gap:8px;">
-            <span class="badge badge-green">SAT Accepted</span>
-            <span class="badge badge-amber">Dhahran</span>
-            <span class="badge badge-amber">Engineering Focus</span>
+        <div class="scholarship-card featured" data-tag="Top Engineering">
+          <div class="scholarship-card-header">
+            <div class="scholarship-logo">🛢️</div>
+            <div>
+              <h3>KFUPM — King Fahd University of Petroleum &amp; Minerals</h3>
+              <div class="amount">📍 Dhahran, Eastern Province</div>
+            </div>
           </div>
+          <p>One of the top engineering universities in the Arab world. Accepts SAT in lieu of Qudurat. Consistently ranks in top 5 Saudi universities. Highly competitive for engineering, CS, and petroleum programs.</p>
+          <div class="scholarship-meta">
+            <span class="meta-tag">SAT Accepted</span>
+            <span class="meta-tag">Qudurat Required</span>
+            <span class="meta-tag">Engineering / CS / Petroleum</span>
+            <span class="meta-tag">Arabic-medium</span>
+          </div>
+          <a href="https://www.kfupm.edu.sa/admissions" target="_blank" rel="noopener" class="card-website-btn">Official Admissions Page →</a>
         </div>
 
-        <div class="info-card">
-          <h4>🏫 Taibah University — جامعة طيبة</h4>
-          <p>Located in Madinah. Accepts SAT as a substitute for Qudurat requirements for some programs. Strong medical and engineering faculties. Significant growth in quality since 2010.</p>
-          <div style="margin-top:12px;display:flex;flex-wrap:wrap;gap:8px;">
-            <span class="badge badge-green">SAT Accepted</span>
-            <span class="badge badge-amber">Madinah</span>
-            <span class="badge badge-amber">Medicine / Engineering</span>
+        <div class="scholarship-card featured" data-tag="Islamic Heritage">
+          <div class="scholarship-card-header">
+            <div class="scholarship-logo">🕌</div>
+            <div>
+              <h3>Taibah University — جامعة طيبة</h3>
+              <div class="amount">📍 Madinah</div>
+            </div>
           </div>
+          <p>Rapidly growing university in Madinah with strong medicine, pharmacy, and engineering faculties. Accepts SAT as a substitute for Qudurat requirements. Notable research output and good campus facilities.</p>
+          <div class="scholarship-meta">
+            <span class="meta-tag">SAT Accepted</span>
+            <span class="meta-tag">Medicine / Engineering</span>
+            <span class="meta-tag">Madinah</span>
+          </div>
+          <a href="https://www.taibahu.edu.sa/ar/admission" target="_blank" rel="noopener" class="card-website-btn">Official Admissions Page →</a>
         </div>
 
-        <div class="info-card">
-          <h4>🏫 Prince Sultan University — جامعة الأمير سلطان</h4>
-          <p>Private university in Riyadh. Primarily uses SAT for admissions. American-style curriculum. Strong computer science and business programs. Popular among returning Saudi students from international schools.</p>
-          <div style="margin-top:12px;display:flex;flex-wrap:wrap;gap:8px;">
-            <span class="badge badge-green">SAT Primary</span>
-            <span class="badge badge-amber">Riyadh</span>
-            <span class="badge badge-amber">Private</span>
+        <div class="scholarship-card">
+          <div class="scholarship-card-header">
+            <div class="scholarship-logo">🏛️</div>
+            <div>
+              <h3>Prince Sultan University — جامعة الأمير سلطان</h3>
+              <div class="amount">📍 Riyadh · Private</div>
+            </div>
           </div>
+          <p>Private university with an American-style curriculum. SAT is the primary admissions test — no Qudurat required. Strong CS, business, and engineering programs. Popular with returning students from international schools.</p>
+          <div class="scholarship-meta">
+            <span class="meta-tag">SAT Primary</span>
+            <span class="meta-tag">English-medium</span>
+            <span class="meta-tag">Private</span>
+            <span class="meta-tag">CS / Business</span>
+          </div>
+          <a href="https://www.psu.edu.sa/en/admissions" target="_blank" rel="noopener" class="card-website-btn">Official Admissions Page →</a>
         </div>
 
-        <div class="info-card">
-          <h4>🏫 Al-Faisal University — جامعة الفيصل</h4>
-          <p>Private university in Riyadh, established in collaboration with international institutions. Uses SAT as the primary admissions test. English-medium instruction. Affiliated with global universities for some programs.</p>
-          <div style="margin-top:12px;display:flex;flex-wrap:wrap;gap:8px;">
-            <span class="badge badge-green">SAT Primary</span>
-            <span class="badge badge-amber">Riyadh</span>
-            <span class="badge badge-amber">English-Medium</span>
+        <div class="scholarship-card">
+          <div class="scholarship-card-header">
+            <div class="scholarship-logo">🔬</div>
+            <div>
+              <h3>Al-Faisal University — جامعة الفيصل</h3>
+              <div class="amount">📍 Riyadh · Private</div>
+            </div>
           </div>
+          <p>English-medium private university with strong ties to international institutions. SAT is the primary test. Programs in medicine, engineering, science, and business. Smaller, selective cohorts.</p>
+          <div class="scholarship-meta">
+            <span class="meta-tag">SAT Primary</span>
+            <span class="meta-tag">English-medium</span>
+            <span class="meta-tag">Medicine / Engineering</span>
+          </div>
+          <a href="https://www.alfaisal.edu/admissions" target="_blank" rel="noopener" class="card-website-btn">Official Admissions Page →</a>
         </div>
 
-        <div class="info-card">
-          <h4>🏫 KAUST — King Abdullah University of Science &amp; Technology</h4>
-          <p>Graduate-only research university. Accepts GRE and sometimes GMAT for graduate admissions. For undergraduate track partnerships, SAT is relevant. World-class research environment on the Red Sea coast.</p>
-          <div style="margin-top:12px;display:flex;flex-wrap:wrap;gap:8px;">
-            <span class="badge badge-amber">Graduate Only</span>
-            <span class="badge badge-amber">GRE/GMAT</span>
-            <span class="badge badge-green">Research University</span>
+        <div class="scholarship-card">
+          <div class="scholarship-card-header">
+            <div class="scholarship-logo">🔭</div>
+            <div>
+              <h3>KAUST — King Abdullah University of Science &amp; Technology</h3>
+              <div class="amount">📍 Thuwal, Red Sea Coast · Graduate Only</div>
+            </div>
           </div>
+          <p>Graduate-only research university on the Red Sea. World-class research facilities. Uses GRE for graduate admissions. Fully funded fellowships for all students. Accepts Saudi and international graduates.</p>
+          <div class="scholarship-meta">
+            <span class="meta-tag">Graduate Only</span>
+            <span class="meta-tag">GRE Required</span>
+            <span class="meta-tag">Full Funding</span>
+            <span class="meta-tag">Research-focused</span>
+          </div>
+          <a href="https://www.kaust.edu.sa/en/study/applying-to-kaust" target="_blank" rel="noopener" class="card-website-btn">Official Admissions Page →</a>
+        </div>
+
+        <div class="scholarship-card">
+          <div class="scholarship-card-header">
+            <div class="scholarship-logo">🎓</div>
+            <div>
+              <h3>KAU — King Abdulaziz University</h3>
+              <div class="amount">📍 Jeddah</div>
+            </div>
+          </div>
+          <p>One of Saudi Arabia's largest universities with a broad range of programs. Qudurat and Tahsili required for admissions. Strong medicine, dentistry, engineering, and business faculties. Large international student body.</p>
+          <div class="scholarship-meta">
+            <span class="meta-tag">Qudurat Required</span>
+            <span class="meta-tag">Tahsili Required</span>
+            <span class="meta-tag">Jeddah</span>
+            <span class="meta-tag">Medicine / Engineering</span>
+          </div>
+          <a href="https://www.kau.edu.sa/ar/Pages/Admission.aspx" target="_blank" rel="noopener" class="card-website-btn">Official Admissions Page →</a>
         </div>
 
       </div>
