@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Essay Advisor — دليل</title>
+  <meta name="description" content="AI essay coaching for Saudi students. Understands Saudi cultural context and what Western admissions officers want to read." />
+  <link rel="stylesheet" href="css/styles.css" />
+</head>
+<body>
+
+<nav class="navbar">
+  <div class="container">
+    <a href="index.html" class="nav-logo">
+      <span class="logo-arabic">دليل</span>
+      <span class="logo-dot"></span>
+    </a>
+    <div class="nav-links">
+      <a href="index.html" data-i18n="nav.home">Home</a>
+      <a href="college-list.html" data-i18n="nav.collegeList">College List</a>
+      <a href="scholarships.html" data-i18n="nav.scholarships">Scholarships</a>
+      <a href="sat-guide.html" data-i18n="nav.satGuide">Test Guide</a>
+      <a href="essay-advisor.html" data-i18n="nav.essayAdvisor">Essay Advisor</a>
+    </div>
+    <div class="nav-right">
+      <button class="lang-toggle" onclick="toggleLanguage()">عربي</button>
+      <button class="hamburger" aria-label="Menu"><span></span><span></span><span></span></button>
+    </div>
+  </div>
+  <div class="mobile-menu">
+    <a href="index.html" data-i18n="nav.home">Home</a>
+    <a href="college-list.html" data-i18n="nav.collegeList">College List</a>
+    <a href="scholarships.html" data-i18n="nav.scholarships">Scholarships</a>
+    <a href="sat-guide.html" data-i18n="nav.satGuide">Test Guide</a>
+    <a href="essay-advisor.html" data-i18n="nav.essayAdvisor">Essay Advisor</a>
+  </div>
+</nav>
+
+<div class="page-header">
+  <div class="page-header-icon">✍️</div>
+  <h1 data-i18n="essay.pageTitle">Essay Advisor</h1>
+  <p data-i18n="essay.pageSubtitle">AI essay coaching that understands Saudi cultural context — and what Western admissions officers actually want to read.</p>
+</div>
+
+<section class="section">
+  <div class="container">
+    <div class="two-col">
+
+      <!-- ── Left: Form ── -->
+      <div>
+
+        <!-- Step 1: Prompt -->
+        <div style="margin-bottom:32px;">
+          <div class="form-section-title" data-i18n="essay.step1">1. Choose a Prompt</div>
+
+          <div class="prompt-grid">
+            <div class="prompt-option selected" onclick="selectPrompt(this, 'Prompt 1: Background, identity, interest, or talent that is so meaningful it defines who you are. (650 words)')">
+              <h4>Prompt 1 — Identity</h4>
+              <p>Background, identity, interest, or talent that defines who you are.</p>
+            </div>
+            <div class="prompt-option" onclick="selectPrompt(this, 'Prompt 2: Obstacle, challenge, or failure you faced, how you overcame it, and what you learned. (650 words)')">
+              <h4>Prompt 2 — Challenge</h4>
+              <p>An obstacle or failure you faced and what you learned from it.</p>
+            </div>
+            <div class="prompt-option" onclick="selectPrompt(this, 'Prompt 3: A belief or idea you questioned, and what prompted your thinking. (650 words)')">
+              <h4>Prompt 3 — Belief</h4>
+              <p>A belief or idea you questioned — what prompted that thinking?</p>
+            </div>
+            <div class="prompt-option" onclick="selectPrompt(this, 'Prompt 4: Describe a problem you solved or would like to solve. (650 words)')">
+              <h4>Prompt 4 — Problem</h4>
+              <p>A problem you've solved or would like to solve — intellectual or otherwise.</p>
+            </div>
+            <div class="prompt-option" onclick="selectPrompt(this, 'Prompt 5: An accomplishment, event, or realization that sparked personal growth. (650 words)')">
+              <h4>Prompt 5 — Growth</h4>
+              <p>An accomplishment or realization that sparked personal growth.</p>
+            </div>
+            <div class="prompt-option" onclick="selectPrompt(this, 'Prompt 6: Describe a topic, idea, or concept that captivates you so much you lose track of time. (650 words)')">
+              <h4>Prompt 6 — Captivation</h4>
+              <p>A topic or concept that captivates you so much you lose track of time.</p>
+            </div>
+            <div class="prompt-option" onclick="selectPrompt(this, 'Prompt 7: Share an essay on any topic of your choice. (650 words)')">
+              <h4>Prompt 7 — Free Choice</h4>
+              <p>Share an essay on any topic of your choice.</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Step 2: Draft -->
+        <form class="form-card" onsubmit="submitEssay(event)" novalidate>
+          <div class="form-section-title" data-i18n="essay.step2">2. Your Draft or Idea</div>
+
+          <div class="form-group" style="margin-bottom:18px;">
+            <label for="draft" data-i18n="essay.draftLabel">Your Draft or Rough Idea</label>
+            <small data-i18n="essay.draftHint">Write your full draft or just the rough idea — the AI will work with whatever you have.</small>
+            <textarea id="draft" rows="10" placeholder="Paste your draft here, or describe your idea: &#10;&#10;e.g., 'I want to write about founding a robotics club in Medina with no budget and no sponsor, and how I convinced the principal by building a prototype in my garage...'&#10;&#10;Or paste a full draft for detailed line-by-line feedback." required></textarea>
+          </div>
+
+          <div class="form-group">
+            <label for="essayContext" data-i18n="essay.contextLabel">Any Additional Context</label>
+            <small data-i18n="essay.contextHint">e.g., "I am writing about founding a robotics club in Medina" or "I don't know what angle to take"</small>
+            <textarea id="essayContext" rows="3" placeholder="Any context about your background, what you're going for, or specific feedback you want..."></textarea>
+          </div>
+
+          <div class="form-actions">
+            <button type="submit" class="btn btn-primary btn-lg" data-i18n="essay.submitBtn">
+              ✍️ Get Essay Feedback
+            </button>
+          </div>
+        </form>
+
+        <!-- AI Result -->
+        <div id="aiResult" class="ai-result">
+          <div class="ai-result-header">
+            <span class="ai-result-header-icon">🤖</span>
+            <span data-i18n="essay.resultHeader">Essay Feedback</span>
+            <span class="ai-model-badge">Grok AI</span>
+          </div>
+          <div class="loading-overlay" id="aiLoading">
+            <div class="spinner"></div>
+            <span data-i18n="essay.loadingText">Reading your essay through a Saudi lens...</span>
+          </div>
+          <div class="ai-result-body" id="aiOutput"></div>
+        </div>
+
+      </div>
+
+      <!-- ── Right: Sidebar ── -->
+      <div style="display:flex;flex-direction:column;gap:20px;">
+
+        <!-- Saudi Story Angles -->
+        <div class="angles-sidebar">
+          <h4 data-i18n="essay.anglesTitle">🇸🇦 Saudi Story Angles</h4>
+          <p style="font-size:.78rem;color:rgba(255,255,255,.5);margin-bottom:16px;" data-i18n="essay.anglesSubtitle">Themes that resonate with Western admissions officers</p>
+
+          <div class="angle-item">
+            <span class="angle-item-icon">🏗️</span>
+            <p><strong>Building something in your city</strong> A startup, community project, or innovation in Riyadh, Jeddah, Medina — Saudi entrepreneurship is compelling and uncommon in applicant pools.</p>
+          </div>
+
+          <div class="angle-item">
+            <span class="angle-item-icon">🕌</span>
+            <p><strong>Islamic identity with intellectual confidence</strong> Not apologetic, not performative — specific, grounded, and intellectually engaged. The prayer schedule that shaped your discipline. Ramadan that changed your relationship with discomfort.</p>
+          </div>
+
+          <div class="angle-item">
+            <span class="angle-item-icon">📖</span>
+            <p><strong>Arabic as intellectual passion</strong> Language, poetry, classical literature, identity. Arabic as the vehicle for ideas — not just a language you speak at home.</p>
+          </div>
+
+          <div class="angle-item">
+            <span class="angle-item-icon">👨‍👩‍👧</span>
+            <p><strong>Generational narrative</strong> First in your family to study abroad. Your grandmother's stories. What your parents sacrificed and what that means for your ambition.</p>
+          </div>
+
+          <div class="angle-item">
+            <span class="angle-item-icon">🚀</span>
+            <p><strong>Vision 2030 context</strong> You are coming of age in a country actively transforming. Being part of that — or watching it happen around you — is a compelling lens.</p>
+          </div>
+
+          <div class="angle-item">
+            <span class="angle-item-icon">🤖</span>
+            <p><strong>STEM in a Saudi context</strong> Robotics club in Medina. Coding competition in Riyadh. Science Olympiad. Regional firsts are powerful — "first in my city/school/family to..."</p>
+          </div>
+        </div>
+
+        <!-- Warnings -->
+        <div class="info-card" style="border-color:#fee2e2;background:#fff5f5;">
+          <h4 style="color:#991b1b;" data-i18n="essay.warnTitle">⚠️ Common Mistakes to Avoid</h4>
+          <ul style="font-size:.82rem;color:var(--text-body);line-height:1.65;padding-inline-start:18px;margin-top:8px;">
+            <li style="margin-bottom:8px;"><strong>Over-explaining Islamic concepts</strong> — Don't define what Ramadan is or explain the five pillars. Admissions officers can Google it. Write as if they already know.</li>
+            <li style="margin-bottom:8px;"><strong>Apologizing for your culture</strong> — Never write as if your background needs justification. Saudi identity is an asset, not a liability.</li>
+            <li style="margin-bottom:8px;"><strong>Performative Mecca/Medina references</strong> — Writing about the Haramain to impress or signal religiosity reads as hollow. If Mecca is in your story, it must be earned and specific.</li>
+            <li style="margin-bottom:8px;"><strong>Generic "my country is changing" essays</strong> — Every Saudi applicant can write about Vision 2030. Your story needs to be personal and specific, not a policy brief.</li>
+            <li><strong>Translation-sounding prose</strong> — If you're thinking in Arabic and translating, get a native English reader to review your draft before submitting.</li>
+          </ul>
+        </div>
+
+        <!-- Common App structure note -->
+        <div class="info-card">
+          <h4>📋 Common App Structure</h4>
+          <p style="font-size:.82rem;color:var(--text-body);line-height:1.65;">The Common App personal statement is <strong>650 words maximum</strong>. Supplemental essays (Why School? Why Major? Additional info) are separate. The personal statement should reveal who you are — not list your achievements. Your activities section and transcript do that already. Use this space for something the rest of your application can't say.</p>
+        </div>
+
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="container">
+    <div class="footer-top">
+      <div class="footer-brand">
+        <span class="logo-arabic">دليل</span>
+        <p data-i18n="footer.tagline">دليل is built for Saudi students, by a Saudi student.</p>
+      </div>
+      <div class="footer-col">
+        <h4 data-i18n="footer.linksTitle">Tools</h4>
+        <a href="college-list.html" data-i18n="footer.collegeList">College List Builder</a>
+        <a href="scholarships.html" data-i18n="footer.scholarships">Scholarship Finder</a>
+        <a href="sat-guide.html" data-i18n="footer.satGuide">Test Guide</a>
+        <a href="essay-advisor.html" data-i18n="footer.essayAdvisor">Essay Advisor</a>
+      </div>
+      <div class="footer-col">
+        <h4 data-i18n="footer.resourcesTitle">Resources</h4>
+        <a href="scholarships.html" data-i18n="footer.res2">How CPP Works</a>
+        <a href="sat-guide.html" data-i18n="footer.res3">Saudi Universities</a>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p data-i18n="footer.copy">Made with Grok AI · 2025</p>
+      <div class="footer-sponsors">
+        <span data-i18n="footer.sponsor">🏎️ Sponsored by ANAQ Racing</span>
+        <span class="sponsor-badge" data-i18n="footer.sponsorSub">Medina's #1 STEM Racing Team</span>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<script src="js/translations.js"></script>
+<script src="js/app.js"></script>
+</body>
+</html>
