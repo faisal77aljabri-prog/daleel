@@ -18,10 +18,10 @@ export default async function handler(req) {
     });
   }
 
-  const apiKey = process.env.GROK_API_KEY;
+  const apiKey = process.env.GROQ_API_KEY;
   if (!apiKey) {
     return new Response(
-      JSON.stringify({ error: 'GROK_API_KEY environment variable is not set. Please configure it in your Vercel project settings.' }),
+      JSON.stringify({ error: 'GROQ_API_KEY environment variable is not set. Please configure it in your Vercel project settings.' }),
       { status: 500, headers: { 'Content-Type': 'application/json' } }
     );
   }
@@ -44,14 +44,14 @@ export default async function handler(req) {
     });
   }
 
-  const grokRes = await fetch('https://api.x.ai/v1/chat/completions', {
+  const groqRes = await fetch('https://api.groq.com/openai/v1/chat/completions', {
     method: 'POST',
     headers: {
       Authorization: `Bearer ${apiKey}`,
       'Content-Type': 'application/json',
     },
     body: JSON.stringify({
-      model: 'grok-3',
+      model: 'llama-3.3-70b-versatile',
       messages,
       stream: true,
       temperature: 0.7,
@@ -59,15 +59,15 @@ export default async function handler(req) {
     }),
   });
 
-  if (!grokRes.ok) {
-    const errText = await grokRes.text();
-    return new Response(JSON.stringify({ error: `Grok API error: ${errText}` }), {
-      status: grokRes.status,
+  if (!groqRes.ok) {
+    const errText = await groqRes.text();
+    return new Response(JSON.stringify({ error: `Groq API error: ${errText}` }), {
+      status: groqRes.status,
       headers: { 'Content-Type': 'application/json' },
     });
   }
 
-  return new Response(grokRes.body, {
+  return new Response(groqRes.body, {
     headers: {
       'Content-Type': 'text/event-stream',
       'Cache-Control': 'no-cache',

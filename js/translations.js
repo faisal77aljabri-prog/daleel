@@ -47,7 +47,7 @@ const T = {
       s1Title: 'Enter Your Profile',
       s1Desc: 'GPA, test scores, school type, major, budget — the things that actually matter in Saudi admissions.',
       s2Title: 'Get AI Analysis',
-      s2Desc: 'Grok AI analyzes your profile through a Saudi lens — not an American one. Every recommendation is Saudi-specific.',
+      s2Desc: 'Llama 3.3 analyzes your profile through a Saudi lens — not an American one. Every recommendation is Saudi-specific.',
       s3Title: 'Take Action',
       s3Desc: 'Use your college list, scholarship plan, and essay feedback to apply with confidence.',
     },
@@ -64,7 +64,7 @@ const T = {
       res3: 'Saudi Universities',
       sponsor: '🏎️ Sponsored by ANAQ Racing',
       sponsorSub: "Medina's #1 STEM Racing Team",
-      copy: 'Made with Grok AI · 2025',
+      copy: 'Powered by Llama 3.3 · Groq · 2025',
     },
     // College List page
     collegeList: {
@@ -243,7 +243,7 @@ const T = {
       s1Title: 'أدخل ملفك الشخصي',
       s1Desc: 'معدلك ودرجاتك ونوع مدرستك وتخصصك وميزانيتك — كل ما يهم في القبول الجامعي السعودي.',
       s2Title: 'احصل على تحليل الذكاء الاصطناعي',
-      s2Desc: 'يحلل Grok AI ملفك من منظور سعودي وليس أمريكياً. كل توصية مخصصة للطلاب السعوديين.',
+      s2Desc: 'يحلل Llama 3.3 ملفك من منظور سعودي وليس أمريكياً. كل توصية مخصصة للطلاب السعوديين.',
       s3Title: 'اتخذ الإجراء',
       s3Desc: 'استخدم قائمة جامعاتك وخطة المنح وتقييم مقالتك للتقديم بثقة.',
     },
@@ -260,7 +260,7 @@ const T = {
       res3: 'الجامعات السعودية',
       sponsor: '🏎️ برعاية فريق ANAQ Racing',
       sponsorSub: 'فريق STEM للسباقات رقم ١ في المدينة المنورة',
-      copy: 'مصنوع بـ Grok AI · ٢٠٢٥',
+      copy: 'مشغّل بـ Llama 3.3 · Groq · ٢٠٢٥',
     },
     collegeList: {
       pageTitle: 'بناء قائمة الجامعات',
