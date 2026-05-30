@@ -562,16 +562,16 @@ function openScholarshipModal(cardEl) {
   }).join('');
 
   const body = document.getElementById('cardModalBody');
+  const badgeHtml = BADGE[s.eligibility]
+    ? `<span class="card-badge ${badge.cls}" style="display:inline-flex;vertical-align:middle;margin-inline-end:6px">${badge.label}</span>`
+    : '';
   body.innerHTML = `
     <button class="card-modal-close" onclick="closeCardModal()">✕</button>
     <div class="card-modal-header">
       <div class="card-modal-flag">${s.icon || '💰'}</div>
       <div>
         <div class="card-modal-title">${s.name}</div>
-        <div class="card-modal-sub">
-          <span class="card-badge ${badge.cls}" style="display:inline-flex;vertical-align:middle;margin-inline-end:6px">${badge.label}</span>
-          ${s.fundingType || ''}
-        </div>
+        <div class="card-modal-sub">${badgeHtml}${s.fundingType || ''}</div>
       </div>
     </div>
     <div class="modal-steps" dir="ltr">${stepsHtml}</div>
