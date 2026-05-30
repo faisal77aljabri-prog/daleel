@@ -110,7 +110,159 @@ const COUNTRY_ACCENTS = {
   'UAE':'#00732F','Singapore':'#EF3340','Japan':'#BC002D',
 };
 
+let currentCardSize = localStorage.getItem('daleel_cardSize') || 'md';
+
+function ensureOverlay() {
+  if (document.getElementById('hoverOverlay')) return;
+  const el = document.createElement('div');
+  el.id = 'hoverOverlay';
+  el.className = 'hover-overlay';
+  document.body.appendChild(el);
+}
+
+function ensureModal() {
+  if (document.getElementById('cardModalOverlay')) return;
+  const el = document.createElement('div');
+  el.id = 'cardModalOverlay';
+  el.className = 'card-modal-overlay';
+  el.innerHTML = '<div class="card-modal" id="cardModalBody"></div>';
+  document.body.appendChild(el);
+  el.addEventListener('click', e => { if (e.target === el) closeCardModal(); });
+  document.addEventListener('keydown', e => { if (e.key === 'Escape') closeCardModal(); });
+}
+
+function closeCardModal() {
+  document.getElementById('cardModalOverlay')?.classList.remove('open');
+}
+
+function openCardModal(cardEl) {
+  ensureModal();
+  const c = JSON.parse(cardEl.dataset.college);
+  const accent = COUNTRY_ACCENTS[c.country] || '#C9A84C';
+  const isSaved = getMyList().some(s => s.name === c.name);
+  const saveLabel = isSaved
+    ? (currentLang === 'ar' ? '✓ في قائمتك' : '✓ In Your List')
+    : (currentLang === 'ar' ? '+ أضف لقائمتي' : '+ Add to My List');
+
+  const steps = [
+    { icon: '📋', title: currentLang === 'ar' ? 'الاشتراطات' : 'Requirements',
+      desc: [c.acceptanceRate ? `Accept: ${c.acceptanceRate}` : '', c.medianSAT ? `SAT: ${c.medianSAT}` : ''].filter(Boolean).join(' · ') || '—' },
+    { icon: '📅', title: currentLang === 'ar' ? 'المواعيد' : 'Deadlines',
+      desc: [c.earlyDeadline ? `Early: ${c.earlyDeadline}` : '', c.regularDeadline ? `RD: ${c.regularDeadline}` : ''].filter(Boolean).join(' · ') || '—' },
+    { icon: '✍️', title: currentLang === 'ar' ? 'التقديم' : 'Apply',
+      desc: c.applyThrough || '—' },
+    { icon: '💰', title: currentLang === 'ar' ? 'التمويل' : 'Funding',
+      desc: c.financialAid || '—' },
+  ];
+
+  const stepsHtml = steps.map((s, i) => {
+    const connector = i < steps.length - 1 ? `<div class="modal-step-connector">→</div>` : '';
+    return `<div class="modal-step">
+      <div class="modal-step-num">${i + 1}</div>
+      <div class="modal-step-icon">${s.icon}</div>
+      <div class="modal-step-title">${s.title}</div>
+      <div class="modal-step-desc">${s.desc}</div>
+    </div>${connector}`;
+  }).join('');
+
+  const body = document.getElementById('cardModalBody');
+  body.dataset.college = cardEl.dataset.college;
+  body.innerHTML = `
+    <button class="card-modal-close" onclick="closeCardModal()">✕</button>
+    <div class="card-modal-header">
+      <div class="card-modal-flag">${c.flag || '🎓'}</div>
+      <div>
+        <div class="card-modal-title">${c.name}</div>
+        <div class="card-modal-sub">${c.location || ''}</div>
+      </div>
+    </div>
+    <div class="modal-steps">${stepsHtml}</div>
+    <div class="location-banner" style="--loc-accent:${accent}">
+      <span class="location-flag">${c.flag || '🌍'}</span>
+      <div class="location-info">
+        <div class="location-city">${c.location || ''}</div>
+        <div class="location-country">${c.country || ''}</div>
+      </div>
+    </div>
+    ${c.annualCost ? `<div class="modal-section"><div class="modal-section-title">${currentLang === 'ar' ? 'التكلفة السنوية' : 'Annual Cost'}</div><div class="ccard-fit-box">${c.annualCost}</div></div>` : ''}
+    ${c.bestMajors?.length ? `<div class="modal-section"><div class="modal-section-title">🎯 ${currentLang === 'ar' ? 'أفضل التخصصات' : 'Best Majors'}</div><div class="chips-row">${c.bestMajors.map(m => `<span class="chip">${m}</span>`).join('')}</div></div>` : ''}
+    ${c.saudiNotes ? `<div class="modal-section"><div class="modal-section-title">🇸🇦 ${currentLang === 'ar' ? 'ملاحظات سعودية' : 'Saudi Notes'}</div><p style="font-size:.82rem;color:var(--text-body);line-height:1.6">${c.saudiNotes}</p></div>` : ''}
+    ${c.fitReason ? `<div class="modal-section"><div class="modal-section-title">✨ ${currentLang === 'ar' ? 'لماذا تناسبك' : 'Why This Fits You'}</div><div class="ccard-fit-box">${c.fitReason}</div></div>` : ''}
+    <div style="margin-top:20px">
+      <button class="btn btn-primary modal-save-btn ${isSaved ? 'saved' : ''}" onclick="handleModalSave(this)">${saveLabel}</button>
+    </div>`;
+
+  document.getElementById('cardModalOverlay').classList.add('open');
+}
+
+function handleModalSave(btn) {
+  const body = document.getElementById('cardModalBody');
+  const college = JSON.parse(body.dataset.college);
+  handleSave(college, btn);
+  const isSaved = getMyList().some(s => s.name === college.name);
+  // Sync card in grid
+  document.querySelectorAll('.card').forEach(card => {
+    try {
+      if (JSON.parse(card.dataset.college).name === college.name) {
+        const saveBtn = card.querySelector('.card-save-btn');
+        if (saveBtn) {
+          saveBtn.textContent = isSaved ? (currentLang === 'ar' ? '✓ محفوظ' : '✓ Saved') : (currentLang === 'ar' ? '+ قائمتي' : '+ My List');
+          saveBtn.classList.toggle('saved', isSaved);
+        }
+      }
+    } catch {}
+  });
+  btn.textContent = isSaved
+    ? (currentLang === 'ar' ? '✓ في قائمتك' : '✓ In Your List')
+    : (currentLang === 'ar' ? '+ أضف لقائمتي' : '+ Add to My List');
+  btn.classList.toggle('saved', isSaved);
+}
+
+function setCardSize(size) {
+  currentCardSize = size;
+  localStorage.setItem('daleel_cardSize', size);
+  document.querySelectorAll('.college-cards-grid').forEach(grid => {
+    grid.classList.remove('grid--sm', 'grid--lg');
+    if (size !== 'md') grid.classList.add(`grid--${size}`);
+  });
+  document.querySelectorAll('.card').forEach(card => {
+    card.classList.remove('card--sm', 'card--md', 'card--lg');
+    card.classList.add(`card--${size}`);
+  });
+  document.querySelectorAll('.size-btn').forEach(btn => {
+    btn.classList.toggle('active', btn.dataset.size === size);
+  });
+}
+
+function buildCard(c, saved, i) {
+  const isSaved = saved.includes(c.name);
+  const saveLabel = isSaved
+    ? (currentLang === 'ar' ? '✓ محفوظ' : '✓ Saved')
+    : (currentLang === 'ar' ? '+ قائمتي' : '+ My List');
+
+  const statsHtml = [
+    c.acceptanceRate ? `Accept: ${c.acceptanceRate}` : '',
+    c.annualCost     ? `${c.annualCost}` : '',
+    c.medianSAT      ? `SAT: ${c.medianSAT}` : '',
+  ].filter(Boolean).map(s => `<span class="card-stat-pill">${s}</span>`).join('');
+
+  return `<div class="card card--${currentCardSize}" style="animation-delay:${i * .06}s" data-college='${JSON.stringify(c).replace(/'/g, "&#39;")}'>
+    <div class="card-badge card-badge--${c.type}">${c.type}</div>
+    <div class="card-icon">${c.flag || '🎓'}</div>
+    <div class="card-title">${c.name}</div>
+    <div class="card-subtitle">${c.location || ''}</div>
+    ${statsHtml ? `<div class="card-stats-row">${statsHtml}</div>` : ''}
+    ${c.fitReason ? `<div class="card-expand-text">${c.fitReason}</div>` : ''}
+    <div class="card-hover-actions">
+      <button class="card-more-btn">More Info →</button>
+      <button class="card-save-btn ${isSaved ? 'saved' : ''}">${saveLabel}</button>
+    </div>
+  </div>`;
+}
+
 function renderCollegeCards(data, container) {
+  ensureOverlay();
+  ensureModal();
   const { assessment, colleges } = data;
   const saved = getMyList().map(c => c.name);
 
@@ -118,6 +270,14 @@ function renderCollegeCards(data, container) {
   if (assessment) {
     html += `<div class="college-assessment-box">${assessment}</div>`;
   }
+
+  html += `<div class="card-controls">
+    <div class="card-size-toggle">
+      <button class="size-btn ${currentCardSize === 'sm' ? 'active' : ''}" data-size="sm" onclick="setCardSize('sm')">S</button>
+      <button class="size-btn ${currentCardSize === 'md' ? 'active' : ''}" data-size="md" onclick="setCardSize('md')">M</button>
+      <button class="size-btn ${currentCardSize === 'lg' ? 'active' : ''}" data-size="lg" onclick="setCardSize('lg')">L</button>
+    </div>
+  </div>`;
 
   const groups = [
     { key: 'reach',  label: currentLang === 'ar' ? '🔴 جامعات الطموح' : '🔴 Reach',  cls: 'cgl-reach' },
@@ -130,7 +290,7 @@ function renderCollegeCards(data, container) {
     if (!list.length) continue;
     html += `<div class="college-group">
       <div class="college-group-label ${g.cls}">${g.label}</div>
-      <div class="college-cards-grid">`;
+      <div class="college-cards-grid${currentCardSize !== 'md' ? ' grid--' + currentCardSize : ''}">`;
     list.forEach((c, i) => { html += buildCard(c, saved, i); });
     html += `</div></div>`;
   }
@@ -140,121 +300,28 @@ function renderCollegeCards(data, container) {
 }
 
 function _bindCardEvents(container) {
-  container.querySelectorAll('.ccard-header').forEach(h => {
-    h.addEventListener('click', () => toggleCard(h.closest('.ccard')));
-  });
-  container.querySelectorAll('.ccard-more-btn').forEach(btn => {
-    btn.addEventListener('click', e => {
-      e.stopPropagation();
-      toggleCard(btn.closest('.ccard'));
+  const overlay = document.getElementById('hoverOverlay');
+  container.querySelectorAll('.card').forEach(card => {
+    card.addEventListener('mouseenter', () => overlay?.classList.add('active'));
+    card.addEventListener('mouseleave', () => overlay?.classList.remove('active'));
+    card.addEventListener('click', e => {
+      if (e.target.closest('.card-save-btn') || e.target.closest('.card-more-btn')) return;
+      openCardModal(card);
     });
   });
-  container.querySelectorAll('.ccard-save-btn').forEach(btn => {
+  container.querySelectorAll('.card-more-btn').forEach(btn => {
     btn.addEventListener('click', e => {
       e.stopPropagation();
-      const college = JSON.parse(btn.closest('.ccard').dataset.college);
+      openCardModal(btn.closest('.card'));
+    });
+  });
+  container.querySelectorAll('.card-save-btn').forEach(btn => {
+    btn.addEventListener('click', e => {
+      e.stopPropagation();
+      const college = JSON.parse(btn.closest('.card').dataset.college);
       handleSave(college, btn);
     });
   });
-}
-
-function buildCard(c, saved, i) {
-  const isSaved = saved.includes(c.name);
-  const accent = COUNTRY_ACCENTS[c.country] || '#C9A84C';
-  const saveLabel = isSaved
-    ? (currentLang === 'ar' ? '✓ محفوظ' : '✓ Saved')
-    : (currentLang === 'ar' ? '+ قائمتي' : '+ My List');
-  const moreLabel = currentLang === 'ar' ? 'تفاصيل ←' : 'More Info →';
-
-  const statsLine = [
-    c.acceptanceRate ? `Accept: ${c.acceptanceRate}` : '',
-    c.annualCost     ? `${c.annualCost}`             : '',
-  ].filter(Boolean).join(' · ');
-
-  return `<div class="ccard" data-college='${JSON.stringify(c).replace(/'/g, "&#39;")}'>
-    <div class="ccard-header">
-      <div class="ccard-header-top">
-        <span class="ccard-type ${c.type}">${c.type}</span>
-        <span class="ccard-chevron">▼</span>
-      </div>
-      <div class="ccard-flag-wrap">${c.flag || '🎓'}</div>
-      <div class="ccard-name">${c.name}</div>
-      <div class="ccard-loc">${c.location || ''}</div>
-      ${statsLine ? `<div class="ccard-peek">${statsLine}</div>` : ''}
-      <div class="ccard-actions">
-        <button class="ccard-save-btn ${isSaved ? 'saved' : ''}">${saveLabel}</button>
-        <button class="ccard-more-btn">${moreLabel}</button>
-      </div>
-    </div>
-    <div class="ccard-body" hidden>
-      <div class="location-banner" style="--loc-accent:${accent}">
-        <span class="location-flag">${c.flag || '🌍'}</span>
-        <div class="location-info">
-          <div class="location-city">${c.location || ''}</div>
-          <div class="location-country">${c.country || ''}</div>
-        </div>
-      </div>
-      <div class="ccard-details-grid">
-        <div class="ccard-detail">
-          <span class="detail-label">${currentLang === 'ar' ? 'نسبة القبول' : 'Acceptance'}</span>
-          <span class="detail-value">${c.acceptanceRate || '—'}</span>
-        </div>
-        <div class="ccard-detail">
-          <span class="detail-label">${currentLang === 'ar' ? 'التكلفة السنوية' : 'Cost / yr'}</span>
-          <span class="detail-value">${c.annualCost || '—'}</span>
-        </div>
-        <div class="ccard-detail">
-          <span class="detail-label">SAT Median</span>
-          <span class="detail-value">${c.medianSAT || '—'}</span>
-        </div>
-        <div class="ccard-detail">
-          <span class="detail-label">💰 ${currentLang === 'ar' ? 'مساعدة مالية' : 'Financial Aid'}</span>
-          <span class="detail-value">${c.financialAid || '—'}</span>
-        </div>
-        <div class="ccard-detail">
-          <span class="detail-label">📅 ${currentLang === 'ar' ? 'موعد مبكر' : 'Early Deadline'}</span>
-          <span class="detail-value">${c.earlyDeadline || 'N/A'}</span>
-        </div>
-        <div class="ccard-detail">
-          <span class="detail-label">📅 ${currentLang === 'ar' ? 'موعد عادي' : 'Regular Deadline'}</span>
-          <span class="detail-value">${c.regularDeadline || '—'}</span>
-        </div>
-        <div class="ccard-detail">
-          <span class="detail-label">🖊 ${currentLang === 'ar' ? 'التقديم عبر' : 'Apply Through'}</span>
-          <span class="detail-value">${c.applyThrough || '—'}</span>
-        </div>
-      </div>
-      ${c.bestMajors?.length ? `
-      <div class="ccard-section">
-        <div class="ccard-section-label">🎯 ${currentLang === 'ar' ? 'أفضل التخصصات' : 'Best Majors'}</div>
-        <div class="chips-row">${c.bestMajors.map(m => `<span class="chip">${m}</span>`).join('')}</div>
-      </div>` : ''}
-      ${c.saudiNotes ? `
-      <div class="ccard-section">
-        <div class="ccard-section-label">🇸🇦 ${currentLang === 'ar' ? 'ملاحظات سعودية' : 'Saudi Notes'}</div>
-        <p class="ccard-note">${c.saudiNotes}</p>
-      </div>` : ''}
-      ${c.fitReason ? `
-      <div class="ccard-section">
-        <div class="ccard-section-label">✨ ${currentLang === 'ar' ? 'لماذا تناسبك' : 'Why This Fits You'}</div>
-        <div class="ccard-fit-box">${c.fitReason}</div>
-      </div>` : ''}
-      <div class="ccard-body-actions">
-        <button class="btn btn-primary ccard-save-btn ${isSaved ? 'saved' : ''}">
-          ${isSaved
-            ? (currentLang === 'ar' ? '✓ في قائمتك' : '✓ In Your List')
-            : (currentLang === 'ar' ? '+ أضف لقائمتي' : '+ Add to My List')}
-        </button>
-      </div>
-    </div>
-  </div>`;
-}
-
-function toggleCard(card) {
-  const body = card.querySelector('.ccard-body');
-  const isOpen = !body.hidden;
-  body.hidden = isOpen;
-  card.classList.toggle('expanded', !isOpen);
 }
 
 /* ── My List (localStorage) ────────────────────────────────── */
@@ -271,19 +338,10 @@ function handleSave(college, btn) {
     list.push(college);
     btn.textContent = currentLang === 'ar' ? '✓ محفوظ' : '✓ Saved';
     btn.classList.add('saved');
-    // sync sibling save buttons for same card
-    btn.closest('.ccard')?.querySelectorAll('.ccard-save-btn').forEach(b => {
-      b.textContent = currentLang === 'ar' ? '✓ محفوظ' : '✓ Saved';
-      b.classList.add('saved');
-    });
   } else {
     list.splice(idx, 1);
     btn.textContent = currentLang === 'ar' ? '+ قائمتي' : '+ My List';
     btn.classList.remove('saved');
-    btn.closest('.ccard')?.querySelectorAll('.ccard-save-btn').forEach(b => {
-      b.textContent = currentLang === 'ar' ? '+ قائمتي' : '+ My List';
-      b.classList.remove('saved');
-    });
   }
   saveMyList(list);
   updateListBadge();
@@ -359,27 +417,17 @@ function renderMyListPage() {
     const items = list.filter(c => c.type === g.key);
     if (!items.length) continue;
     html += `<div class="college-group"><div class="college-group-label ${g.cls}">${g.label}</div>
-      <div class="college-cards-grid">`;
+      <div class="college-cards-grid${currentCardSize !== 'md' ? ' grid--' + currentCardSize : ''}">`;
     items.forEach((c, i) => { html += buildCard(c, saved, i); });
     html += `</div></div>`;
   }
   contentEl.innerHTML = html;
-  contentEl.querySelectorAll('.ccard-header').forEach(h => {
-    h.addEventListener('click', () => toggleCard(h.closest('.ccard')));
-  });
-  contentEl.querySelectorAll('.ccard-more-btn').forEach(btn => {
-    btn.addEventListener('click', e => {
-      e.stopPropagation();
-      toggleCard(btn.closest('.ccard'));
-    });
-  });
-  contentEl.querySelectorAll('.ccard-save-btn').forEach(btn => {
-    btn.addEventListener('click', e => {
-      e.stopPropagation();
-      const college = JSON.parse(btn.closest('.ccard').dataset.college);
-      handleSave(college, btn);
-      setTimeout(renderMyListPage, 300);
-    });
+  ensureOverlay();
+  ensureModal();
+  _bindCardEvents(contentEl);
+  // On My List page, unsaving a card removes it — re-render after save
+  contentEl.querySelectorAll('.card-save-btn').forEach(btn => {
+    btn.addEventListener('click', () => setTimeout(renderMyListPage, 300), { once: true });
   });
   initScrollAnimations();
 }
