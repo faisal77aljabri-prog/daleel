@@ -508,6 +508,132 @@ function submitCollegeList(event) {
   );
 }
 
+/* ── Scholarship card rendering ────────────────────────────── */
+function buildScholarshipCard(s, i) {
+  const isAr = currentLang === 'ar';
+  const BADGE = {
+    eligible:     { cls: 'card-badge--safety', label: isAr ? 'مؤهل'       : 'Eligible' },
+    borderline:   { cls: 'card-badge--target', label: isAr ? 'محتمل'      : 'Borderline' },
+    not_eligible: { cls: 'card-badge--reach',  label: isAr ? 'غير مؤهل'  : 'Not Eligible' },
+  };
+  const badge = BADGE[s.eligibility] || BADGE.borderline;
+  const moreLabel = isAr ? 'تفاصيل ←' : 'More Info →';
+
+  return `<div class="card card--${currentCardSize}" style="animation-delay:${i * .07}s"
+      data-scholarship='${JSON.stringify(s).replace(/'/g, "&#39;")}'>
+    <div class="card-badge ${badge.cls}">${badge.label}</div>
+    <div class="card-icon">${s.icon || '💰'}</div>
+    <div class="card-title">${s.name}</div>
+    <div class="card-subtitle">${s.fundingType || ''}</div>
+    ${s.amount ? `<div class="card-stats-row"><span class="card-stat-pill">${s.amount}</span></div>` : ''}
+    ${s.reason ? `<div class="card-expand-text">${s.reason}</div>` : ''}
+    <div class="card-hover-actions">
+      <button class="card-more-btn sch-more-btn">${moreLabel}</button>
+    </div>
+  </div>`;
+}
+
+function openScholarshipModal(cardEl) {
+  ensureModal();
+  const s = JSON.parse(cardEl.dataset.scholarship);
+  const isAr = currentLang === 'ar';
+  const BADGE = {
+    eligible:     { cls: 'card-badge--safety', label: isAr ? 'مؤهل'      : 'Eligible' },
+    borderline:   { cls: 'card-badge--target', label: isAr ? 'محتمل'     : 'Borderline' },
+    not_eligible: { cls: 'card-badge--reach',  label: isAr ? 'غير مؤهل' : 'Not Eligible' },
+  };
+  const badge = BADGE[s.eligibility] || BADGE.borderline;
+
+  const steps = [
+    { icon: '📋', title: isAr ? 'الشروط'    : 'Requirements', desc: s.requirements || '—' },
+    { icon: '📅', title: isAr ? 'الموعد'    : 'Deadline',     desc: s.deadline     || '—' },
+    { icon: '📝', title: isAr ? 'التقديم'   : 'Apply Via',    desc: s.applyVia     || '—' },
+    { icon: '💰', title: isAr ? 'التمويل'   : 'Funding',      desc: s.amount       || '—' },
+  ];
+
+  const stepsHtml = steps.map((st, i) => {
+    const connector = i < steps.length - 1 ? `<div class="modal-step-connector">→</div>` : '';
+    return `<div class="modal-step">
+      <div class="modal-step-num">${i + 1}</div>
+      <div class="modal-step-icon">${st.icon}</div>
+      <div class="modal-step-title">${st.title}</div>
+      <div class="modal-step-desc">${st.desc}</div>
+    </div>${connector}`;
+  }).join('');
+
+  const body = document.getElementById('cardModalBody');
+  body.innerHTML = `
+    <button class="card-modal-close" onclick="closeCardModal()">✕</button>
+    <div class="card-modal-header">
+      <div class="card-modal-flag">${s.icon || '💰'}</div>
+      <div>
+        <div class="card-modal-title">${s.name}</div>
+        <div class="card-modal-sub">
+          <span class="card-badge ${badge.cls}" style="display:inline-flex;vertical-align:middle;margin-inline-end:6px">${badge.label}</span>
+          ${s.fundingType || ''}
+        </div>
+      </div>
+    </div>
+    <div class="modal-steps" dir="ltr">${stepsHtml}</div>
+    ${s.reason ? `<div class="modal-section">
+      <div class="modal-section-title">✨ ${isAr ? 'لماذا هذا ينطبق عليك' : 'Why This Applies to You'}</div>
+      <div class="ccard-fit-box">${s.reason}</div>
+    </div>` : ''}
+    ${s.website ? `<div style="margin-top:20px">
+      <a href="${s.website}" target="_blank" rel="noopener" class="btn btn-primary" style="text-decoration:none;display:inline-flex;align-items:center;gap:6px">
+        🌐 ${isAr ? 'زيارة الموقع الرسمي' : 'Visit Official Website'}
+      </a>
+    </div>` : ''}`;
+
+  document.getElementById('cardModalOverlay').classList.add('open');
+}
+
+function renderScholarshipCards(data, container) {
+  ensureOverlay();
+  ensureModal();
+  const { assessment, scholarships } = data;
+  const isAr = currentLang === 'ar';
+
+  let html = '';
+  if (assessment) {
+    html += `<div class="college-assessment-box">${assessment}</div>`;
+  }
+
+  const groups = [
+    { key: 'eligible',     label: isAr ? '✅ مؤهل'      : '✅ Eligible',     cls: 'cgl-safety' },
+    { key: 'borderline',   label: isAr ? '⚠️ محتمل'    : '⚠️ Borderline',   cls: 'cgl-target' },
+    { key: 'not_eligible', label: isAr ? '❌ غير مؤهل' : '❌ Not Eligible',  cls: 'cgl-reach'  },
+  ];
+
+  for (const g of groups) {
+    const list = scholarships.filter(s => s.eligibility === g.key);
+    if (!list.length) continue;
+    html += `<div class="college-group">
+      <div class="college-group-label ${g.cls}">${g.label}</div>
+      <div class="college-cards-grid${currentCardSize !== 'md' ? ' grid--' + currentCardSize : ''}">`;
+    list.forEach((s, i) => { html += buildScholarshipCard(s, i); });
+    html += `</div></div>`;
+  }
+
+  container.innerHTML = html;
+
+  const overlay = document.getElementById('hoverOverlay');
+  container.querySelectorAll('.card').forEach(card => {
+    card.addEventListener('mouseenter', () => overlay?.classList.add('active'));
+    card.addEventListener('mouseleave', () => overlay?.classList.remove('active'));
+    card.addEventListener('click', e => {
+      if (e.target.closest('.sch-more-btn')) return;
+      openScholarshipModal(card);
+    });
+  });
+  container.querySelectorAll('.sch-more-btn').forEach(btn => {
+    btn.addEventListener('click', e => {
+      e.stopPropagation();
+      openScholarshipModal(btn.closest('.card'));
+    });
+  });
+}
+
 /* ── Scholarships form ─────────────────────────────────────── */
 function submitScholarships(event) {
   event.preventDefault();
@@ -526,14 +652,37 @@ function submitScholarships(event) {
     get('schMajor')   ? `Major: ${get('schMajor')}` : '',
   ].filter(Boolean).join('\n');
   const userMsg = currentLang === 'ar'
-    ? `ملفي:\n${profile}\n\nقيّم أهليتي لكل منحة متاحة للطلاب السعوديين.`
-    : `My profile:\n${profile}\n\nAssess my eligibility for every scholarship available to Saudi students.`;
-  streamToElement(
+    ? `ملفي:\n${profile}\n\nقيّم أهليتي لكل منحة متاحة للطلاب السعوديين. أعطني JSON فقط.`
+    : `My profile:\n${profile}\n\nAssess my eligibility for every scholarship available to Saudi students. Return JSON only.`;
+
+  const loadingEl = document.getElementById('aiLoading');
+  const resultEl  = document.getElementById('aiResult');
+  const outputEl  = document.getElementById('aiOutput');
+
+  loadingEl.classList.add('visible');
+  resultEl.classList.remove('visible');
+  outputEl.innerHTML = '';
+
+  callAI(
     [{ role: 'system', content: SYSTEM_PROMPTS.scholarships(currentLang) },
      { role: 'user',   content: userMsg }],
-    document.getElementById('aiOutput'),
-    document.getElementById('aiLoading'),
-    document.getElementById('aiResult')
+    () => {},
+    (full) => {
+      loadingEl.classList.remove('visible');
+      resultEl.classList.add('visible');
+      outputEl.innerHTML = '';
+      try {
+        const jsonMatch = full.match(/\{[\s\S]*\}/);
+        const data = JSON.parse(jsonMatch[0]);
+        if (data.scholarships) { renderScholarshipCards(data, outputEl); return; }
+      } catch {}
+      outputEl.textContent = full;
+    },
+    (err) => {
+      loadingEl.classList.remove('visible');
+      resultEl.classList.add('visible');
+      outputEl.textContent = `❌ ${err.message}`;
+    }
   );
 }
 
@@ -786,14 +935,18 @@ CRITICAL: Return ONLY valid JSON matching this schema exactly, no markdown, no c
 ${JSON_COLLEGE_SCHEMA}`,
 
   scholarships: (lang) => `You are Daleel, a scholarship advisor for Saudi students. Know all Saudi scholarships:
-Aramco CPP: SAT Math 630+ OR Qudurat 90+, GPA 85%+ cumulative AND 85%+ in Math & Science. International school graduates only. Application Feb/March, screening tests May 1-2, career fair June 3-4, orientation Aug 2. CPP Waiver for Top-30 admits.
-KASP: Government scholarship, full funding, approved international universities.
-Mawhiba: Gifted students, national/international competition achievers.
-SABIC: Chemistry, chemical engineering, materials science.
-STC: Technology, telecommunications, CS.
-University merit/need-based aid.
+Aramco CPP: SAT Math 630+ OR Qudurat 90+, GPA 85%+ cumulative AND 85%+ in Math/Science, International school graduates ONLY. Dates: application Feb/March, screening tests May 1-2, career fair June 3-4, orientation Aug 2. CPP Waiver: unconditional Top-30 offer skips prep year. Icon: 🏢
+KASP (King Abdulaziz Scholarship): Government full scholarship for Saudi nationals. Approved international universities. GPA 85%+. Icon: 🏛️
+Mawhiba: Gifted program for national/international competition achievers. Requires documented awards. Icon: 🌟
+SABIC Scholarship: Chemistry, chemical engineering, materials science majors only. Icon: ⚗️
+STC Scholarship: Technology, telecommunications, CS majors only. Icon: 📡
+University Merit Aid: Based on GPA + standardized tests, varies by institution. Icon: 🎓
+
 ${lang === 'ar' ? 'Respond in Arabic only.' : 'Respond in English only.'}
-Be direct: tell them ELIGIBLE, BORDERLINE, or NOT ELIGIBLE for each scholarship with specific numbers.`,
+Be HONEST — use exact numbers from the profile to justify each eligibility decision.
+
+CRITICAL: Return ONLY valid JSON, no markdown, no code fences, no text outside JSON:
+{"assessment":"2-3 sentence honest overview","scholarships":[{"name":"Aramco CPP","icon":"🏢","eligibility":"eligible|borderline|not_eligible","fundingType":"Full Scholarship","amount":"Full tuition + monthly stipend + housing","deadline":"Feb–March annually","requirements":"GPA 85%+, Math/Science GPA 85%+, SAT Math 630+ OR Qudurat 90+, International school only","applyVia":"aramco.com / Aramco Career Fair","website":"https://www.aramco.com/en/careers/students-and-graduates/cpp","reason":"One sentence: why eligible or not, using their exact numbers"}]}`,
 
   satGuide: (lang) => `You are Daleel, a test strategy advisor for Saudi students.
 Qudurat: out of 100, required for Saudi public unis.
