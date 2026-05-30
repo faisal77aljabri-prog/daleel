@@ -144,14 +144,17 @@ function openCardModal(cardEl) {
     ? (currentLang === 'ar' ? '✓ في قائمتك' : '✓ In Your List')
     : (currentLang === 'ar' ? '+ أضف لقائمتي' : '+ Add to My List');
 
+  const ar = currentLang === 'ar';
   const steps = [
-    { icon: '📋', title: currentLang === 'ar' ? 'الاشتراطات' : 'Requirements',
-      desc: [c.acceptanceRate ? `Accept: ${c.acceptanceRate}` : '', c.medianSAT ? `SAT: ${c.medianSAT}` : ''].filter(Boolean).join(' · ') || '—' },
-    { icon: '📅', title: currentLang === 'ar' ? 'المواعيد' : 'Deadlines',
-      desc: [c.earlyDeadline ? `Early: ${c.earlyDeadline}` : '', c.regularDeadline ? `RD: ${c.regularDeadline}` : ''].filter(Boolean).join(' · ') || '—' },
-    { icon: '✍️', title: currentLang === 'ar' ? 'التقديم' : 'Apply',
+    { icon: '📋', title: ar ? 'الاشتراطات' : 'Requirements',
+      desc: [c.acceptanceRate ? `${ar ? 'القبول' : 'Accept'}: ${c.acceptanceRate}` : '',
+             c.medianSAT      ? `SAT: ${c.medianSAT}` : ''].filter(Boolean).join(' · ') || '—' },
+    { icon: '📅', title: ar ? 'المواعيد' : 'Deadlines',
+      desc: [c.earlyDeadline   ? `${ar ? 'مبكر' : 'Early'}: ${c.earlyDeadline}` : '',
+             c.regularDeadline ? `${ar ? 'عادي' : 'RD'}: ${c.regularDeadline}` : ''].filter(Boolean).join(' · ') || '—' },
+    { icon: '✍️', title: ar ? 'التقديم' : 'Apply',
       desc: c.applyThrough || '—' },
-    { icon: '💰', title: currentLang === 'ar' ? 'التمويل' : 'Funding',
+    { icon: '💰', title: ar ? 'التمويل' : 'Funding',
       desc: c.financialAid || '—' },
   ];
 
@@ -176,7 +179,7 @@ function openCardModal(cardEl) {
         <div class="card-modal-sub">${c.location || ''}</div>
       </div>
     </div>
-    <div class="modal-steps">${stepsHtml}</div>
+    <div class="modal-steps" dir="ltr">${stepsHtml}</div>
     <div class="location-banner" style="--loc-accent:${accent}">
       <span class="location-flag">${c.flag || '🌍'}</span>
       <div class="location-info">
@@ -240,21 +243,28 @@ function buildCard(c, saved, i) {
     ? (currentLang === 'ar' ? '✓ محفوظ' : '✓ Saved')
     : (currentLang === 'ar' ? '+ قائمتي' : '+ My List');
 
+  const isAr = currentLang === 'ar';
+  const BADGE_LABELS = {
+    reach:  isAr ? 'طموح'  : 'Reach',
+    target: isAr ? 'مناسب' : 'Target',
+    safety: isAr ? 'آمن'   : 'Safety',
+  };
   const statsHtml = [
-    c.acceptanceRate ? `Accept: ${c.acceptanceRate}` : '',
+    c.acceptanceRate ? `${isAr ? 'القبول' : 'Accept'}: ${c.acceptanceRate}` : '',
     c.annualCost     ? `${c.annualCost}` : '',
     c.medianSAT      ? `SAT: ${c.medianSAT}` : '',
   ].filter(Boolean).map(s => `<span class="card-stat-pill">${s}</span>`).join('');
+  const moreLabel = isAr ? 'تفاصيل ←' : 'More Info →';
 
   return `<div class="card card--${currentCardSize}" style="animation-delay:${i * .06}s" data-college='${JSON.stringify(c).replace(/'/g, "&#39;")}'>
-    <div class="card-badge card-badge--${c.type}">${c.type}</div>
+    <div class="card-badge card-badge--${c.type}">${BADGE_LABELS[c.type] || c.type}</div>
     <div class="card-icon">${c.flag || '🎓'}</div>
     <div class="card-title">${c.name}</div>
     <div class="card-subtitle">${c.location || ''}</div>
     ${statsHtml ? `<div class="card-stats-row">${statsHtml}</div>` : ''}
     ${c.fitReason ? `<div class="card-expand-text">${c.fitReason}</div>` : ''}
     <div class="card-hover-actions">
-      <button class="card-more-btn">More Info →</button>
+      <button class="card-more-btn">${moreLabel}</button>
       <button class="card-save-btn ${isSaved ? 'saved' : ''}">${saveLabel}</button>
     </div>
   </div>`;
