@@ -906,68 +906,145 @@ function submitECAdvisor(event) {
 }
 
 function renderECResult(data, container) {
-  const strengthColors = {
-    exceptional: { fill: 'fill-exceptional', pct: 100, color: '#059669' },
-    strong:      { fill: 'fill-strong',      pct: 80,  color: '#C9A84C' },
-    moderate:    { fill: 'fill-moderate',    pct: 55,  color: '#f59e0b' },
-    developing:  { fill: 'fill-developing',  pct: 35,  color: '#f97316' },
-    minimal:     { fill: 'fill-minimal',     pct: 15,  color: '#ef4444' },
+  const isAr = currentLang === 'ar';
+  const SC = {
+    exceptional: { pct:100, color:'#059669', badgeCls:'card-badge--safety'  },
+    strong:      { pct:80,  color:'#C9A84C', badgeCls:'card-badge--target'  },
+    moderate:    { pct:55,  color:'#f59e0b', badgeCls:'card-badge--target'  },
+    developing:  { pct:35,  color:'#f97316', badgeCls:'card-badge--reach'   },
+    minimal:     { pct:15,  color:'#ef4444', badgeCls:'card-badge--reach'   },
   };
-  const s = strengthColors[data.overallStrength] || strengthColors.moderate;
+  const s = SC[data.overallStrength] || SC.moderate;
 
+  // ── Assessment header (compact dark box) ──
   let html = `
-    <div class="ec-result-section">
-      <span class="ec-tier-pill" style="background:${s.color}22;color:${s.color};border:1px solid ${s.color}44">
-        ⚡ ${data.tier || data.overallStrength}
-      </span>
-      <div class="ec-strength-meter">
-        <div class="ec-strength-label">
-          <span>${currentLang === 'ar' ? 'قوة الأنشطة' : 'EC Strength'}</span>
-          <span style="color:${s.color};font-weight:700">${data.overallStrength}</span>
-        </div>
-        <div class="strength-bar">
-          <div class="strength-fill ${s.fill}" style="width:${s.pct}%"></div>
+    <div class="college-assessment-box" style="margin-bottom:20px">
+      <div style="display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:12px">
+        <span class="card-badge ${s.badgeCls}">⚡ ${data.tier || data.overallStrength}</span>
+        <div style="flex:1;min-width:160px">
+          <div style="display:flex;justify-content:space-between;margin-bottom:6px;font-size:.72rem;color:rgba(255,255,255,.6)">
+            <span>${isAr ? 'قوة الأنشطة' : 'EC Strength'}</span>
+            <span style="color:${s.color};font-weight:700;text-transform:capitalize">${data.overallStrength}</span>
+          </div>
+          <div style="height:5px;background:rgba(255,255,255,.1);border-radius:99px;overflow:hidden">
+            <div id="ecStrengthBar" style="height:100%;width:0%;background:${s.color};border-radius:99px;transition:width 1.1s cubic-bezier(.4,0,.2,1) .2s;box-shadow:0 0 10px ${s.color}88"></div>
+          </div>
         </div>
       </div>
-      <p style="font-size:.9rem;color:var(--text-body);line-height:1.7;margin-top:14px">${data.summary || ''}</p>
+      <p style="font-size:.87rem;color:rgba(255,255,255,.75);line-height:1.75;margin:0">${data.summary || ''}</p>
     </div>`;
 
+  // helper: truncate text to N words for card title
+  const shortTitle = (text, n = 7) => {
+    const words = text.split(' ');
+    return words.slice(0, n).join(' ') + (words.length > n ? '…' : '');
+  };
+
+  // ── Strengths cards ──
   if (data.strengths?.length) {
-    html += `<div class="ec-result-section">
-      <div class="ccard-section-label">✅ ${currentLang === 'ar' ? 'نقاط القوة' : 'Strengths'}</div>
-      <ul style="padding-inline-start:20px;font-size:.88rem;color:var(--text-body);line-height:1.8">
-        ${data.strengths.map(s => `<li>${s}</li>`).join('')}
-      </ul>
-    </div>`;
-  }
-
-  if (data.improvements?.length) {
-    html += `<div class="ec-result-section">
-      <div class="ccard-section-label">💡 ${currentLang === 'ar' ? 'كيف تحسّن' : 'How to Improve'}</div>
-      <ul style="padding-inline-start:20px;font-size:.88rem;color:var(--text-body);line-height:1.8">
-        ${data.improvements.map(i => `<li>${i}</li>`).join('')}
-      </ul>
-    </div>`;
-  }
-
-  if (data.collegeMatches?.length) {
-    html += `<div class="ec-result-section">
-      <div class="ccard-section-label">🎓 ${currentLang === 'ar' ? 'أفضل جامعة تناسب أنشطتك' : 'Best College Fits for Your ECs'}</div>`;
-    data.collegeMatches.forEach((m, i) => {
-      html += `<div class="ec-match-card" style="animation-delay:${i * .08}s">
-        <div class="ec-match-name">${m.name}</div>
-        <div class="ec-match-reason">${m.reason}</div>
+    html += `<div class="college-group">
+      <div class="college-group-label cgl-safety">✅ ${isAr ? 'نقاط القوة' : 'Strengths'}</div>
+      <div class="college-cards-grid${currentCardSize !== 'md' ? ' grid--' + currentCardSize : ''}">`;
+    data.strengths.forEach((item, i) => {
+      html += `<div class="card card--${currentCardSize}" style="animation-delay:${i * .07}s">
+        <div class="card-badge card-badge--safety">${isAr ? 'قوة' : 'Strength'}</div>
+        <div class="card-icon">✅</div>
+        <div class="card-title">${shortTitle(item)}</div>
+        <div class="card-expand-text">${item}</div>
       </div>`;
     });
-    html += `</div>`;
+    html += `</div></div>`;
+  }
+
+  // ── Improvements cards ──
+  if (data.improvements?.length) {
+    html += `<div class="college-group">
+      <div class="college-group-label cgl-target">💡 ${isAr ? 'كيف تحسّن' : 'How to Improve'}</div>
+      <div class="college-cards-grid${currentCardSize !== 'md' ? ' grid--' + currentCardSize : ''}">`;
+    data.improvements.forEach((item, i) => {
+      html += `<div class="card card--${currentCardSize}" style="animation-delay:${i * .07}s">
+        <div class="card-badge card-badge--target">${isAr ? 'تحسين' : 'Action'}</div>
+        <div class="card-icon">💡</div>
+        <div class="card-title">${shortTitle(item)}</div>
+        <div class="card-expand-text">${item}</div>
+      </div>`;
+    });
+    html += `</div></div>`;
+  }
+
+  // ── College match cards ──
+  if (data.collegeMatches?.length) {
+    html += `<div class="college-group">
+      <div class="college-group-label cgl-target">🎓 ${isAr ? 'أفضل الجامعات لأنشطتك' : 'Best College Fits'}</div>
+      <div class="college-cards-grid${currentCardSize !== 'md' ? ' grid--' + currentCardSize : ''}">`;
+    data.collegeMatches.forEach((m, i) => {
+      html += `<div class="card card--${currentCardSize}" style="animation-delay:${i * .07}s"
+          data-ec-college='${JSON.stringify(m).replace(/'/g, "&#39;")}'>
+        <div class="card-badge card-badge--target">${isAr ? 'مناسب' : 'EC Match'}</div>
+        <div class="card-icon">🎓</div>
+        <div class="card-title">${m.name}</div>
+        <div class="card-expand-text">${m.reason}</div>
+        <div class="card-hover-actions">
+          <button class="card-more-btn ec-college-btn">${isAr ? 'تفاصيل ←' : 'More Info →'}</button>
+        </div>
+      </div>`;
+    });
+    html += `</div></div>`;
   }
 
   container.innerHTML = html;
-  // Animate strength bar
-  setTimeout(() => {
-    container.querySelector('.strength-fill')?.style.setProperty('width', `${s.pct}%`);
-  }, 100);
+
+  // Animate strength bar after paint
+  requestAnimationFrame(() => requestAnimationFrame(() => {
+    const bar = document.getElementById('ecStrengthBar');
+    if (bar) bar.style.width = `${s.pct}%`;
+  }));
+
+  // Hover overlay + modal for all cards
+  ensureOverlay();
+  ensureModal();
+  const overlay = document.getElementById('hoverOverlay');
+  container.querySelectorAll('.card').forEach(card => {
+    card.addEventListener('mouseenter', () => overlay?.classList.add('active'));
+    card.addEventListener('mouseleave', () => overlay?.classList.remove('active'));
+  });
+
+  // College match click → modal
+  container.querySelectorAll('[data-ec-college]').forEach(card => {
+    card.addEventListener('click', e => {
+      if (e.target.closest('.ec-college-btn')) return;
+      openECCollegeModal(card);
+    });
+  });
+  container.querySelectorAll('.ec-college-btn').forEach(btn => {
+    btn.addEventListener('click', e => {
+      e.stopPropagation();
+      openECCollegeModal(btn.closest('[data-ec-college]'));
+    });
+  });
+
   initScrollAnimations();
+}
+
+function openECCollegeModal(cardEl) {
+  ensureModal();
+  const m = JSON.parse(cardEl.dataset.ecCollege);
+  const isAr = currentLang === 'ar';
+  const body = document.getElementById('cardModalBody');
+  body.innerHTML = `
+    <button class="card-modal-close" onclick="closeCardModal()">✕</button>
+    <div class="card-modal-header">
+      <div class="card-modal-flag">🎓</div>
+      <div>
+        <div class="card-modal-title">${m.name}</div>
+        <div class="card-modal-sub">${isAr ? 'ملاءمة الأنشطة اللاصفية' : 'EC Fit Analysis'}</div>
+      </div>
+    </div>
+    <div class="modal-section">
+      <div class="modal-section-title">✨ ${isAr ? 'لماذا تناسب أنشطتك هذه الجامعة' : 'Why Your ECs Fit Here'}</div>
+      <div class="ccard-fit-box">${m.reason}</div>
+    </div>`;
+  document.getElementById('cardModalOverlay').classList.add('open');
 }
 
 /* ── Shared stream-to-text helper ──────────────────────────── */
