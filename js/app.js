@@ -11,6 +11,8 @@ document.addEventListener('DOMContentLoaded', () => {
   updateFAB();
   // Results page bootstrap
   if (document.getElementById('resultsOutput')) initResultsPage();
+  // Floating countdown widget (countdown.js loaded separately on all pages)
+  if (typeof initUrgentWidget === 'function') initUrgentWidget();
 });
 
 /* ── Language ──────────────────────────────────────────────── */

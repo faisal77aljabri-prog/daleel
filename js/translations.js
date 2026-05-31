@@ -455,3 +455,118 @@ T.ar.results = {
   pageSubtitle: 'جامعات طموح ومناسبة وآمنة مصممة للطالب السعودي.',
   backBtn: 'بناء قائمة جديدة',
 };
+
+/* ── New feature nav keys ── */
+T.en.nav.tracker      = 'App Tracker';
+T.en.nav.countdown    = 'Countdown';
+T.en.nav.cppCalc      = 'CPP Calculator';
+T.en.nav.profileScore = 'Profile Score';
+T.en.nav.essayVault   = 'Essay Vault';
+T.en.nav.tips         = 'Weekly Tips';
+T.en.nav.community    = 'Community';
+T.en.nav.applyGroup   = 'Apply';
+T.en.nav.resourcesGroup = 'Resources';
+
+T.ar.nav.tracker      = 'متابعة الطلبات';
+T.ar.nav.countdown    = 'العد التنازلي';
+T.ar.nav.cppCalc      = 'حاسبة CPP';
+T.ar.nav.profileScore = 'درجة ملفك';
+T.ar.nav.essayVault   = 'مخزن المقالات';
+T.ar.nav.tips         = 'نصائح أسبوعية';
+T.ar.nav.community    = 'المجتمع';
+T.ar.nav.applyGroup   = 'التقديم';
+T.ar.nav.resourcesGroup = 'الموارد';
+
+/* ── CPP Calculator ── */
+T.en.cpp = {
+  pageTitle: 'Aramco CPP Eligibility Calculator',
+  pageSubtitle: 'Instant eligibility check — pure logic, no AI. Share your result with friends.',
+  formTitle: 'Your Academic Profile',
+  gpaLabel: 'Cumulative GPA (%)', gpaHint: 'Saudi percentage e.g. 91.5',
+  mathGpaLabel: 'Math & Science GPA (%)', mathGpaHint: 'e.g. 88.0',
+  schoolLabel: 'School Type',
+  schoolOpts: ['— Select —','Saudi Public School','International School in KSA','Out-of-Kingdom School'],
+  testToggleSAT: 'I have SAT Math', testToggleQ: 'I have Qudurat',
+  satLabel: 'SAT Math Score', satHint: 'Score out of 800',
+  qLabel: 'Qudurat Score', qHint: 'Score out of 100',
+  waiverLabel: 'I have an unconditional offer from a Top-30 university',
+  checkBtn: 'Check My CPP Eligibility',
+  eligibleTitle: '✅ You Appear Eligible for Aramco CPP',
+  eligibleSub: 'Your profile meets all CPP requirements. Apply during the February–March window.',
+  borderlineTitle: '⚠️ Borderline — Some Criteria Not Met',
+  borderlineSub: 'You meet some but not all CPP requirements. See the gaps below.',
+  notEligibleTitle: '❌ Not Currently Eligible for Aramco CPP',
+  notEligibleSub: 'Your profile does not currently meet CPP requirements. Here\'s what\'s missing:',
+  waiverTitle: '🎓 CPP Prep-Year Waiver Available',
+  waiverText: 'Since you have an unconditional offer from a Top-30 university, you may qualify to skip the CPP prep year and go directly to university. Inform Saudi Aramco HR of your offer during the application process.',
+  criteriaGPA: 'Cumulative GPA 85%+',
+  criteriaMathGPA: 'Math & Science GPA 85%+',
+  criteriaTest: 'SAT Math 630+ OR Qudurat 90+',
+  criteriaSchool: 'International school graduate',
+  improveTitle: 'What You Can Do to Improve',
+  shareBtn: '📤 Share My Result',
+  timelineTitle: 'The CPP Journey',
+};
+T.ar.cpp = {
+  pageTitle: 'حاسبة أهلية أرامكو CPP',
+  pageSubtitle: 'فحص أهلية فوري — منطق صريح، بدون ذكاء اصطناعي. شارك نتيجتك مع أصدقائك.',
+  formTitle: 'ملفك الأكاديمي',
+  gpaLabel: 'المعدل التراكمي (%)', gpaHint: 'النسبة السعودية مثل 91.5',
+  mathGpaLabel: 'معدل الرياضيات والعلوم (%)', mathGpaHint: 'مثل 88.0',
+  schoolLabel: 'نوع المدرسة',
+  schoolOpts: ['— اختر —','مدرسة حكومية سعودية','مدرسة دولية داخل المملكة','مدرسة خارج المملكة'],
+  testToggleSAT: 'لديّ SAT Math', testToggleQ: 'لديّ قدرات',
+  satLabel: 'درجة SAT Math', satHint: 'من 800',
+  qLabel: 'درجة القدرات', qHint: 'من 100',
+  waiverLabel: 'لديّ عرض قبول غير مشروط من جامعة ضمن أفضل 30',
+  checkBtn: 'تحقق من أهليتي لـ CPP',
+  eligibleTitle: '✅ يبدو أنك مؤهل لبرنامج أرامكو CPP',
+  eligibleSub: 'ملفك يستوفي جميع متطلبات CPP. قدّم خلال فترة فبراير–مارس.',
+  borderlineTitle: '⚠️ حدود — بعض المعايير غير مستوفاة',
+  borderlineSub: 'تستوفي بعض متطلبات CPP لكن ليس كلها. راجع الفجوات أدناه.',
+  notEligibleTitle: '❌ غير مؤهل حالياً لبرنامج أرامكو CPP',
+  notEligibleSub: 'ملفك لا يستوفي متطلبات CPP حالياً. إليك ما ينقصك:',
+  waiverTitle: '🎓 إعفاء من السنة التحضيرية CPP متاح',
+  waiverText: 'بما أن لديك عرض قبول غير مشروط من جامعة ضمن أفضل 30، يمكنك التأهل لتخطي السنة التحضيرية والذهاب مباشرة للجامعة. أخبر قسم الموارد البشرية في أرامكو بعرضك خلال عملية التقديم.',
+  criteriaGPA: 'المعدل التراكمي 85%+',
+  criteriaMathGPA: 'معدل الرياضيات والعلوم 85%+',
+  criteriaTest: 'SAT Math 630+ أو قدرات 90+',
+  criteriaSchool: 'خريج مدرسة دولية',
+  improveTitle: 'ما يمكنك فعله للتحسين',
+  shareBtn: '📤 شارك نتيجتي',
+  timelineTitle: 'رحلة CPP',
+};
+
+/* ── Countdown ── */
+T.en.countdown = {
+  pageTitle: 'Deadline Countdown',
+  pageSubtitle: 'Track every key date. Check it daily.',
+  heroTitle: 'Your Most Urgent Deadlines',
+  addBtn: '+ Add Deadline',
+  addTitle: 'Add a New Deadline',
+  titleLabel: 'Deadline Name', datLabel: 'Date', catLabel: 'Category', notesLabel: 'Notes (optional)',
+  cats: ['College App','Test Date','Aramco CPP','Custom'],
+  saveBtn: 'Add Deadline',
+  doneBtn: '✓ Done', undoneBtn: 'Unmark',
+  daysLabel: 'days', hoursLabel: 'hrs', minsLabel: 'min', secsLabel: 'sec',
+  todayLabel: 'TODAY', overdueLabel: 'Overdue',
+  emptyTitle: 'No upcoming deadlines', emptyDesc: 'Add your key dates to start the countdown.',
+  presetLabel: 'Pre-set Saudi deadlines added',
+  widgetLabel: 'days', widgetSub: 'next deadline',
+};
+T.ar.countdown = {
+  pageTitle: 'العد التنازلي للمواعيد',
+  pageSubtitle: 'تتبّع كل تاريخ مهم. افحصه يومياً.',
+  heroTitle: 'أكثر مواعيدك إلحاحاً',
+  addBtn: '+ أضف موعداً',
+  addTitle: 'أضف موعداً جديداً',
+  titleLabel: 'اسم الموعد', datLabel: 'التاريخ', catLabel: 'الفئة', notesLabel: 'ملاحظات (اختياري)',
+  cats: ['طلب جامعة','موعد اختبار','أرامكو CPP','مخصص'],
+  saveBtn: 'أضف الموعد',
+  doneBtn: '✓ تم', undoneBtn: 'إلغاء',
+  daysLabel: 'يوم', hoursLabel: 'ساعة', minsLabel: 'دقيقة', secsLabel: 'ثانية',
+  todayLabel: 'اليوم', overdueLabel: 'منتهٍ',
+  emptyTitle: 'لا مواعيد قادمة', emptyDesc: 'أضف تواريخك الرئيسية لبدء العد التنازلي.',
+  presetLabel: 'تم إضافة المواعيد السعودية المحددة مسبقاً',
+  widgetLabel: 'يوم', widgetSub: 'الموعد القادم',
+};

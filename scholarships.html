@@ -17,26 +17,53 @@
     </a>
     <div class="nav-links">
       <a href="index.html" data-i18n="nav.home">Home</a>
-      <a href="college-list.html" data-i18n="nav.collegeList">College List</a>
-      <a href="my-list.html" data-i18n="nav.myList">My List <span class="nav-list-badge"></span></a>
-      <a href="scholarships.html" data-i18n="nav.scholarships">Scholarships</a>
-      <a href="sat-guide.html" data-i18n="nav.satGuide">Test Guide</a>
-      <a href="essay-advisor.html" data-i18n="nav.essayAdvisor">Essay Advisor</a>
-      <a href="ec-advisor.html" data-i18n="nav.ecAdvisor">EC Advisor</a>
+      <div class="nav-dropdown">
+        <button class="nav-dropdown-btn" data-i18n="nav.applyGroup">Apply</button>
+        <div class="dropdown-menu">
+          <a href="college-list.html" data-i18n="nav.collegeList">College List</a>
+          <a href="application-tracker.html" data-i18n="nav.tracker">App Tracker <span class="dropdown-new">NEW</span></a>
+          <a href="my-list.html" data-i18n="nav.myList">My List <span class="nav-list-badge"></span></a>
+          <a href="countdown.html" data-i18n="nav.countdown">Countdown <span class="dropdown-new">NEW</span></a>
+        </div>
+      </div>
+      <div class="nav-dropdown">
+        <button class="nav-dropdown-btn" data-i18n="nav.resourcesGroup">Resources</button>
+        <div class="dropdown-menu">
+          <a href="scholarships.html" data-i18n="nav.scholarships">Scholarships</a>
+          <a href="cpp-calculator.html" data-i18n="nav.cppCalc">CPP Calculator <span class="dropdown-new">NEW</span></a>
+          <a href="profile-score.html" data-i18n="nav.profileScore">Profile Score <span class="dropdown-new">NEW</span></a>
+          <div class="dropdown-divider"></div>
+          <a href="sat-guide.html" data-i18n="nav.satGuide">Test Guide</a>
+          <a href="essay-advisor.html" data-i18n="nav.essayAdvisor">Essay Advisor</a>
+          <a href="essay-vault.html" data-i18n="nav.essayVault">Essay Vault <span class="dropdown-new">NEW</span></a>
+          <a href="ec-advisor.html" data-i18n="nav.ecAdvisor">EC Advisor</a>
+          <a href="tips-feed.html" data-i18n="nav.tips">Weekly Tips <span class="dropdown-new">NEW</span></a>
+        </div>
+      </div>
+      <a href="community.html" data-i18n="nav.community">Community <span class="dropdown-new">NEW</span></a>
     </div>
     <div class="nav-right">
       <button class="lang-toggle" onclick="toggleLanguage()">عربي</button>
-      <button class="hamburger" aria-label="Menu"><span></span><span></span><span></span></button>
+      <button class="hamburger" aria-label="Menu">
+        <span></span><span></span><span></span>
+      </button>
     </div>
   </div>
   <div class="mobile-menu">
     <a href="index.html" data-i18n="nav.home">Home</a>
     <a href="college-list.html" data-i18n="nav.collegeList">College List</a>
+    <a href="application-tracker.html" data-i18n="nav.tracker">App Tracker</a>
     <a href="my-list.html" data-i18n="nav.myList">My List</a>
+    <a href="countdown.html" data-i18n="nav.countdown">Countdown</a>
     <a href="scholarships.html" data-i18n="nav.scholarships">Scholarships</a>
+    <a href="cpp-calculator.html" data-i18n="nav.cppCalc">CPP Calculator</a>
+    <a href="profile-score.html" data-i18n="nav.profileScore">Profile Score</a>
     <a href="sat-guide.html" data-i18n="nav.satGuide">Test Guide</a>
     <a href="essay-advisor.html" data-i18n="nav.essayAdvisor">Essay Advisor</a>
+    <a href="essay-vault.html" data-i18n="nav.essayVault">Essay Vault</a>
     <a href="ec-advisor.html" data-i18n="nav.ecAdvisor">EC Advisor</a>
+    <a href="tips-feed.html" data-i18n="nav.tips">Weekly Tips</a>
+    <a href="community.html" data-i18n="nav.community">Community</a>
   </div>
 </nav>
 
@@ -295,5 +322,6 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 });
 </script>
+<script src="js/countdown.js"></script>
 </body>
 </html>
