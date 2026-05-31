@@ -1,0 +1,91 @@
+{
+  "tips": [
+    {
+      "id": "t001", "category": "app",
+      "titleEn": "Start your Common App account before August",
+      "titleAr": "افتح حساب Common App قبل أغسطس",
+      "textEn": "The Common App resets every August 1. Create your account in July to explore the essay prompts and activity list format before the rush. Your previous year's essays won't carry over — start fresh.",
+      "textAr": "يُعاد تعيين Common App في أول أغسطس كل عام. أنشئ حسابك في يوليو لاستكشاف تعليمات المقالات قبل موسم الازدحام.",
+      "dateEn": "Week of May 26, 2025", "dateAr": "أسبوع 26 مايو 2025", "featured": true
+    },
+    {
+      "id": "t002", "category": "aramco",
+      "titleEn": "CPP application opens February — prepare in January",
+      "titleAr": "تقديم CPP يفتح في فبراير — جهّز نفسك في يناير",
+      "textEn": "Aramco CPP applications open in February and close quickly. Have your transcript, SAT Math score (630+), and school counselor contact ready before the window opens. The screening tests need separate registration.",
+      "textAr": "تفتح تقديمات CPP في فبراير وتغلق بسرعة. جهّز كشف درجاتك ودرجة SAT Math (630+) وجهة الاتصال بمرشدك قبل الفتح.",
+      "dateEn": "Week of May 26, 2025", "dateAr": "أسبوع 26 مايو 2025", "featured": false
+    },
+    {
+      "id": "t003", "category": "essay",
+      "titleEn": "Write 5 drafts before you show anyone",
+      "titleAr": "اكتب 5 مسودات قبل أن تريها لأحد",
+      "textEn": "The first draft is for you to find what you actually want to say. Draft two is for structure. Draft three is where real writing starts. Most Saudi students share their first draft too early and get generic feedback that flattens their voice.",
+      "textAr": "المسودة الأولى لك لتكتشف ما تريد قوله. الثانية للهيكل. الثالثة حيث يبدأ الكتابة الحقيقية. معظم الطلاب يشاركون مسودتهم الأولى مبكراً جداً.",
+      "dateEn": "Week of May 26, 2025", "dateAr": "أسبوع 26 مايو 2025", "featured": false
+    },
+    {
+      "id": "t004", "category": "test",
+      "titleEn": "SAT Math 630 = Qudurat 90 for CPP purposes",
+      "titleAr": "SAT Math 630 = قدرات 90 لأهداف CPP",
+      "textEn": "Aramco accepts either SAT Math 630+ OR Qudurat 90+ for CPP eligibility. If your Qudurat is already 92+, you may not need the SAT for CPP — but most international universities still want it.",
+      "textAr": "أرامكو تقبل إما SAT Math 630+ أو قدرات 90+ لأهلية CPP. إذا كانت قدراتك 92+ فقد لا تحتاج SAT لـ CPP — لكنك لا تزال تحتاجه لمعظم الجامعات الدولية.",
+      "dateEn": "Week of May 19, 2025", "dateAr": "أسبوع 19 مايو 2025", "featured": false
+    },
+    {
+      "id": "t005", "category": "schol",
+      "titleEn": "Top US universities can be cheaper than private Saudi schools",
+      "titleAr": "أفضل الجامعات الأمريكية قد تكون أرخص من المدارس الخاصة السعودية",
+      "textEn": "MIT, Harvard, Princeton, and Yale meet 100% of demonstrated financial need for international students. A Saudi family earning under $75,000/year often pays less than tuition at a private school in KSA. Apply for aid — the sticker price is not the real price.",
+      "textAr": "MIT وهارفارد وبرينستون وييل تلبي 100% من الاحتياج المالي للطلاب الدوليين. عائلة تكسب أقل من 75,000 دولار كثيراً ما تدفع أقل من رسوم مدرسة خاصة في المملكة.",
+      "dateEn": "Week of May 12, 2025", "dateAr": "أسبوع 12 مايو 2025", "featured": false
+    },
+    {
+      "id": "t006", "category": "saudi",
+      "titleEn": "Saudi student communities at top US universities",
+      "titleAr": "مجتمعات الطلاب السعوديين في أفضل الجامعات الأمريكية",
+      "textEn": "MIT, Stanford, Harvard, Carnegie Mellon, UT Austin, and most large state schools have active Saudi Student Associations. Search '[University name] Saudi Student Association' before you apply — it tells you a lot about campus life.",
+      "textAr": "معظم الجامعات الكبرى لديها جمعيات للطلاب السعوديين. ابحث عن '[اسم الجامعة] Saudi Student Association' قبل التقديم — يخبرك كثيراً عن الحياة الجامعية.",
+      "dateEn": "Week of May 5, 2025", "dateAr": "أسبوع 5 مايو 2025", "featured": false
+    },
+    {
+      "id": "t007", "category": "app",
+      "titleEn": "Request transcripts in October, not December",
+      "titleAr": "اطلب كشف الدرجات في أكتوبر، ليس ديسمبر",
+      "textEn": "Saudi schools — especially government schools — can take 3–6 weeks to process official transcript requests. If you need a notarized, translated transcript for January deadlines, start in October. Late transcripts have derailed strong applications.",
+      "textAr": "المدارس السعودية — وخاصة الحكومية — قد تستغرق 3–6 أسابيع. إذا كنت بحاجة لكشف مُوثَّق ومترجم لمواعيد يناير، ابدأ في أكتوبر.",
+      "dateEn": "Week of April 28, 2025", "dateAr": "أسبوع 28 أبريل 2025", "featured": false
+    },
+    {
+      "id": "t008", "category": "essay",
+      "titleEn": "The activity you're most embarrassed by is often your best essay",
+      "titleAr": "النشاط الذي تشعر بالحرج منه غالباً هو أفضل مقالة",
+      "textEn": "Students always want to write about their most prestigious achievement. Admissions officers read 40,000 essays about winning competitions. The student who writes about learning to cook their grandmother's kabsa — with genuine intellectual curiosity — stands out every time.",
+      "textAr": "الطلاب يريدون دائماً الكتابة عن أكثر إنجازاتهم هيبة. ضباط القبول يقرؤون 40,000 مقالة عن الفوز. الطالب الذي يكتب عن تعلم طهي كبسة جدته — بفضول فكري حقيقي — يتميز دائماً.",
+      "dateEn": "Week of April 21, 2025", "dateAr": "أسبوع 21 أبريل 2025", "featured": false
+    },
+    {
+      "id": "t009", "category": "test",
+      "titleEn": "Take the SAT in March or May of Grade 11",
+      "titleAr": "خذ SAT في مارس أو مايو من الصف الحادي عشر",
+      "textEn": "Taking the SAT in Grade 11 gives you time to retake it in October or November if you want to improve. Most students who wait until Grade 12 feel rushed. Khan Academy's free SAT prep is officially endorsed by College Board.",
+      "textAr": "أخذ SAT في الصف الحادي عشر يمنحك وقتاً لإعادته في أكتوبر أو نوفمبر إذا أردت التحسين. تحضير Khan Academy مجاني ومعتمد رسمياً من College Board.",
+      "dateEn": "Week of April 14, 2025", "dateAr": "أسبوع 14 أبريل 2025", "featured": false
+    },
+    {
+      "id": "t010", "category": "schol",
+      "titleEn": "KASP applications go through the Ministry of Education",
+      "titleAr": "تقديمات KASP تمر عبر وزارة التعليم",
+      "textEn": "The King Abdullah Scholarship Program (KASP) is administered through the Saudi Ministry of Education (moe.gov.sa), not through universities directly. Check the MoE portal regularly — the application window varies each year and can open and close quickly.",
+      "textAr": "برنامج منحة الملك عبدالله (KASP) تديره وزارة التعليم السعودية (moe.gov.sa)، ليس الجامعات مباشرة. راقب بوابة الوزارة — نافذة التقديم تتغير كل عام.",
+      "dateEn": "Week of April 7, 2025", "dateAr": "أسبوع 7 أبريل 2025", "featured": false
+    }
+  ],
+  "spotlight": {
+    "titleEn": "Student Spotlight",
+    "titleAr": "تميّز طالب",
+    "textEn": "A student from Jeddah (anonymous) was rejected from all 8 ED/EA schools in December. Instead of giving up, they rewrote their essay around their father's engineering firm — honest, specific, unglamorous. They were accepted to Carnegie Mellon Engineering in March.",
+    "textAr": "طالب من جدة (مجهول) رُفض من جميع مدارسه الـ 8 في ديسمبر. أمضى يناير في إعادة كتابة مقالته حول عمل والده الهندسي — صادق ومحدد. قُبل في كارنيجي ميلون للهندسة في مارس.",
+    "dateEn": "May 2025", "dateAr": "مايو 2025"
+  }
+}

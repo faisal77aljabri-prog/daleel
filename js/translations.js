@@ -646,3 +646,95 @@ T.ar.score = {
   recsLabel:'رسائل التوصية', recsOpts:['0','1','2','3'],
   apLabel:'مواد AP / متقدمة', apOpts:['لا يوجد','بعض (1–3)','كثير (4+)'],
 };
+
+/* ── Essay Vault ── */
+T.en.vault = {
+  pageTitle:'Essay Vault', pageSubtitle:'8 proven essay frameworks for Saudi students + AI essay analyzer.',
+  tab1:'Framework Library', tab2:'AI Essay Analyzer',
+  analyzeBtn:'🔍 Analyze My Essay', analyzeLoading:'Analyzing your essay...',
+  promptLabel:'Common App Prompt', frameworkLabel:'Essay Type',
+  draftLabel:'Your Essay Draft', draftHint:'Paste your essay (250–650 words)',
+  tierMemorable:'Memorable', tierStrong:'Strong', tierNeedsWork:'Needs Work', tierStartOver:'Start Over',
+  strengthsLabel:'Strengths', weaknessesLabel:'Weaknesses',
+  saudiLensLabel:'Saudi Lens — How a Western Adcom Reads This',
+  rewritesLabel:'Rewrite Suggestions',
+  moreInfoBtn:'Full Framework →',
+  whenLabel:'When to use', dontLabel:'❌ What NOT to do',
+  outlineLabel:'Structure', openingLabel:'Strong Opening Line',
+  mistakesLabel:'Common Saudi Student Mistakes',
+};
+T.ar.vault = {
+  pageTitle:'مخزن المقالات', pageSubtitle:'8 أطر مجربة لمقالات الطلاب السعوديين + محلل مقالات AI.',
+  tab1:'مكتبة الأطر', tab2:'محلل المقالات AI',
+  analyzeBtn:'🔍 حلّل مقالتي', analyzeLoading:'تحليل مقالتك...',
+  promptLabel:'سؤال Common App', frameworkLabel:'نوع المقالة',
+  draftLabel:'مسودة مقالتك', draftHint:'الصق مقالتك (250–650 كلمة)',
+  tierMemorable:'لا تُنسى', tierStrong:'قوية', tierNeedsWork:'تحتاج عمل', tierStartOver:'ابدأ من جديد',
+  strengthsLabel:'نقاط القوة', weaknessesLabel:'نقاط الضعف',
+  saudiLensLabel:'المنظور السعودي — كيف يقرأها مسؤول القبول الغربي',
+  rewritesLabel:'اقتراحات إعادة الكتابة',
+  moreInfoBtn:'الإطار الكامل →',
+  whenLabel:'متى تستخدمها', dontLabel:'❌ ما لا تفعله',
+  outlineLabel:'الهيكل', openingLabel:'جملة افتتاحية قوية',
+  mistakesLabel:'أخطاء الطلاب السعوديين الشائعة',
+};
+
+/* ── Tips Feed ── */
+T.en.tips = {
+  pageTitle:'Weekly Tips', pageSubtitle:'New guidance every week. Tailored to Saudi students.',
+  thisWeekLabel:'This Week on دليل',
+  tipFeaturedLabel:'Featured Tip', tipDeadlineLabel:'Upcoming Deadline', tipSpotlightLabel:'Student Spotlight',
+  filterAll:'All', filterApp:'Application', filterTest:'Test Prep',
+  filterSchol:'Scholarships', filterSaudi:'Saudi-Specific', filterEssay:'Essay',
+  saveBtn:'Save', savedBtn:'Saved ✓',
+  quickQTitle:'Ask a Quick Question', quickQSub:'Get a focused answer in under 3 sentences. No generic advice.',
+  quickQBtn:'Get Answer', quickQPlaceholder:'e.g. When does CPP application open?',
+  loadingQ:'Getting your answer...', savedSection:'Saved Tips',
+};
+T.ar.tips = {
+  pageTitle:'نصائح أسبوعية', pageSubtitle:'توجيهات جديدة كل أسبوع. مصممة للطلاب السعوديين.',
+  thisWeekLabel:'هذا الأسبوع في دليل',
+  tipFeaturedLabel:'نصيحة مميزة', tipDeadlineLabel:'موعد قادم', tipSpotlightLabel:'تميّز طالب',
+  filterAll:'الكل', filterApp:'الطلبات', filterTest:'التحضير للاختبار',
+  filterSchol:'المنح', filterSaudi:'سعودية', filterEssay:'المقالات',
+  saveBtn:'احفظ', savedBtn:'محفوظ ✓',
+  quickQTitle:'اسأل سؤالاً سريعاً', quickQSub:'احصل على إجابة مركّزة في أقل من 3 جمل.',
+  quickQBtn:'احصل على إجابة', quickQPlaceholder:'مثال: متى يفتح تسجيل CPP؟',
+  loadingQ:'جاري الإجابة...', savedSection:'النصائح المحفوظة',
+};
+
+/* ── Community Q&A ── */
+T.en.community = {
+  pageTitle:'Community Q&A', pageSubtitle:'Ask anything about applying from Saudi Arabia. Real answers from students and AI.',
+  postBtn:'Ask a Question', searchPlaceholder:'Search questions...',
+  catAll:'All', catCollege:'College', catAramco:'Aramco CPP', catEssays:'Essays',
+  catTests:'Tests', catSchol:'Scholarships', catGeneral:'General',
+  pinnedLabel:'📌 Frequently Asked Questions',
+  yourQsLabel:'Community Questions',
+  postFormTitle:'Post Your Question',
+  nameLabel:'Your name (optional)', namePlaceholder:'Anonymous',
+  qLabel:'Your question', qPlaceholder:'Be specific — specific questions get better answers.',
+  catLabel:'Category', postBtn2:'Post Question', cancelBtn:'Cancel',
+  answerBtn:'Answer', aiAnswerBtn:'🤖 Ask دليل AI', upvoteBtn:'Helpful',
+  postAnsBtn:'Post Answer', anonLabel:'Anonymous',
+  aiSuggTitle:'دليل has a tool for this:',
+  emptyQ:'No questions yet. Be the first to ask!',
+  emptySearch:'No questions match your search.',
+};
+T.ar.community = {
+  pageTitle:'أسئلة وأجوبة المجتمع', pageSubtitle:'اسأل أي شيء عن التقديم من المملكة. إجابات حقيقية من طلاب والذكاء الاصطناعي.',
+  postBtn:'اسأل سؤالاً', searchPlaceholder:'ابحث في الأسئلة...',
+  catAll:'الكل', catCollege:'جامعات', catAramco:'أرامكو CPP', catEssays:'المقالات',
+  catTests:'الاختبارات', catSchol:'المنح', catGeneral:'عام',
+  pinnedLabel:'📌 الأسئلة الشائعة',
+  yourQsLabel:'أسئلة المجتمع',
+  postFormTitle:'انشر سؤالك',
+  nameLabel:'اسمك (اختياري)', namePlaceholder:'مجهول',
+  qLabel:'سؤالك', qPlaceholder:'كن محدداً — الأسئلة المحددة تحصل على إجابات أفضل.',
+  catLabel:'الفئة', postBtn2:'انشر السؤال', cancelBtn:'إلغاء',
+  answerBtn:'أجب', aiAnswerBtn:'🤖 اسأل دليل AI', upvoteBtn:'مفيد',
+  postAnsBtn:'انشر الإجابة', anonLabel:'مجهول',
+  aiSuggTitle:'لدى دليل أداة لهذا:',
+  emptyQ:'لا أسئلة بعد. كن أول من يسأل!',
+  emptySearch:'لا أسئلة تطابق بحثك.',
+};
