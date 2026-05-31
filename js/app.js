@@ -9,6 +9,8 @@ document.addEventListener('DOMContentLoaded', () => {
   initScrollAnimations();
   updateListBadge();
   updateFAB();
+  // Results page bootstrap
+  if (document.getElementById('resultsOutput')) initResultsPage();
 });
 
 /* ── Language ──────────────────────────────────────────────── */
@@ -471,39 +473,125 @@ function submitCollegeList(event) {
     ? `ملفي الأكاديمي:\n${profile}\n\nابنِ قائمة جامعاتي كـ JSON.`
     : `My profile:\n${profile}\n\nBuild my college list as JSON.`;
 
-  const loadingEl = document.getElementById('aiLoading');
-  const resultEl  = document.getElementById('aiResult');
-  const outputEl  = document.getElementById('aiOutput');
+  // Save query + metadata to sessionStorage, then navigate to results page
+  sessionStorage.setItem('daleel_result_query', JSON.stringify({
+    userMsg,
+    lang: currentLang,
+    major: major || '',
+    country: get('country') || '',
+  }));
+  window.location.href = 'results.html';
+}
 
-  loadingEl.classList.add('visible');
-  resultEl.classList.remove('visible');
-  outputEl.innerHTML = '';
+/* ── Results page bootstrap ────────────────────────────────── */
+function initResultsPage() {
+  const raw = sessionStorage.getItem('daleel_result_query');
+  if (!raw) { window.location.href = 'college-list.html'; return; }
 
-  // Show skeletons while loading
-  outputEl.innerHTML = `
-    <div class="skeleton skeleton-card"></div>
-    <div class="skeleton skeleton-card"></div>
-    <div class="skeleton skeleton-card"></div>`;
+  const { userMsg, lang, major, country } = JSON.parse(raw);
 
+  // Apply saved language
+  currentLang = lang || currentLang;
+  applyLanguage(currentLang);
+
+  // Populate loading screen labels
+  const isAr = currentLang === 'ar';
+  const majorEl = document.getElementById('rlMajor');
+  const titleEl = document.getElementById('rlTitle');
+  if (majorEl) majorEl.textContent = major || (isAr ? 'ملفك الأكاديمي' : 'Your Profile');
+  if (titleEl) titleEl.textContent = isAr ? 'نبني قائمة جامعاتك...' : 'Building Your College List';
+
+  // Cycle loading stage text
+  const stages = isAr ? [
+    'تحليل ملفك الأكاديمي...',
+    'المقارنة مع أكثر من 500 جامعة...',
+    'فحص أهلية برنامج أرامكو...',
+    'بناء قائمتك الشخصية...',
+  ] : [
+    'Analyzing your academic profile...',
+    'Comparing with 500+ universities...',
+    'Checking Aramco CPP eligibility...',
+    'Building your personalized list...',
+  ];
+
+  const stageEl = document.getElementById('rlStage');
+  const barEl   = document.getElementById('rlBar');
+  if (stageEl) stageEl.textContent = stages[0];
+  if (barEl)   barEl.style.width = '18%';
+
+  let stageIdx = 0;
+  const stageInterval = setInterval(() => {
+    if (stageIdx >= stages.length - 1) return;
+    stageIdx++;
+    if (stageEl) {
+      stageEl.classList.add('fade');
+      setTimeout(() => {
+        stageEl.textContent = stages[stageIdx];
+        stageEl.classList.remove('fade');
+      }, 300);
+    }
+    const pct = [18, 42, 64, 80][stageIdx] || 80;
+    if (barEl) barEl.style.width = `${pct}%`;
+  }, 2000);
+
+  // Call AI
   callAI(
     [{ role: 'system', content: SYSTEM_PROMPTS.collegeList(currentLang) },
      { role: 'user',   content: userMsg }],
-    (_token, _full) => { /* streaming — wait for done */ },
+    () => {},
     (full) => {
-      loadingEl.classList.remove('visible');
-      resultEl.classList.add('visible');
-      outputEl.innerHTML = '';
-      try {
-        const jsonMatch = full.match(/\{[\s\S]*\}/);
-        const data = JSON.parse(jsonMatch[0]);
-        if (data.colleges) { renderCollegeCards(data, outputEl); return; }
-      } catch {}
-      outputEl.textContent = full;
+      clearInterval(stageInterval);
+      if (barEl) barEl.style.width = '100%';
+
+      setTimeout(() => {
+        // Fade out loading screen
+        const loadingEl = document.getElementById('resultsLoading');
+        const contentEl = document.getElementById('resultsContent');
+        if (loadingEl) loadingEl.classList.add('fade-out');
+        if (contentEl) {
+          contentEl.style.display = '';
+          requestAnimationFrame(() => requestAnimationFrame(() => contentEl.classList.add('visible')));
+        }
+
+        // Set timestamp
+        const ts = document.getElementById('resultsTimestamp');
+        if (ts) ts.textContent = isAr ? `تم الإنشاء للتو · ${major}` : `Generated just now · ${major}`;
+
+        // Render cards
+        const outputEl = document.getElementById('resultsOutput');
+        try {
+          const jsonMatch = full.match(/\{[\s\S]*\}/);
+          const data = JSON.parse(jsonMatch[0]);
+          if (data.colleges) { renderCollegeCards(data, outputEl); }
+          else { outputEl.textContent = full; }
+        } catch {
+          outputEl.textContent = full;
+        }
+
+        updateListBadge();
+        updateFAB();
+        initScrollAnimations();
+      }, 700);
     },
     (err) => {
-      loadingEl.classList.remove('visible');
-      resultEl.classList.add('visible');
-      outputEl.textContent = `❌ ${err.message}`;
+      clearInterval(stageInterval);
+      const loadingEl = document.getElementById('resultsLoading');
+      const contentEl = document.getElementById('resultsContent');
+      if (loadingEl) loadingEl.classList.add('fade-out');
+      if (contentEl) {
+        contentEl.style.display = '';
+        requestAnimationFrame(() => requestAnimationFrame(() => contentEl.classList.add('visible')));
+      }
+      const outputEl = document.getElementById('resultsOutput');
+      if (outputEl) outputEl.innerHTML = `
+        <div class="callout callout-danger" style="margin-top:24px">
+          <span class="callout-icon">❌</span>
+          <div class="callout-content">
+            <h4>Something went wrong</h4>
+            <p>${err.message}</p>
+            <a href="college-list.html" class="btn btn-primary" style="margin-top:10px">← Try Again</a>
+          </div>
+        </div>`;
     }
   );
 }

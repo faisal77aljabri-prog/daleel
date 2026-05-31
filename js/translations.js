@@ -442,3 +442,16 @@ T.ar.ec = {
   loadingText: 'جاري تحليل ملفك اللاصفي...',
   resultHeader: 'تقييم أنشطتك',
 };
+
+T.en.results = {
+  buildingTitle: 'Building Your College List',
+  pageTitle: 'Your Personalized College List',
+  pageSubtitle: 'AI-matched reaches, targets & safeties — built for Saudi students.',
+  backBtn: 'Build a New List',
+};
+T.ar.results = {
+  buildingTitle: 'نبني قائمة جامعاتك',
+  pageTitle: 'قائمة جامعاتك الشخصية',
+  pageSubtitle: 'جامعات طموح ومناسبة وآمنة مصممة للطالب السعودي.',
+  backBtn: 'بناء قائمة جديدة',
+};
