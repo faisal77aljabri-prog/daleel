@@ -96,14 +96,14 @@
             <div class="form-group">
               <label for="cppGpa" data-i18n="cpp.gpaLabel">Cumulative GPA (%)</label>
               <small data-i18n="cpp.gpaHint">Saudi percentage e.g. 91.5</small>
-              <input type="number" id="cppGpa" min="50" max="100" step="0.1" placeholder="e.g. 91.5" />
+              <input type="text" inputmode="decimal" id="cppGpa" placeholder="e.g. 91.5" />
             </div>
 
             <!-- Math & Science GPA -->
             <div class="form-group">
               <label for="cppMathGpa" data-i18n="cpp.mathGpaLabel">Math &amp; Science GPA (%)</label>
               <small data-i18n="cpp.mathGpaHint">e.g. 88.0</small>
-              <input type="number" id="cppMathGpa" min="50" max="100" step="0.1" placeholder="e.g. 88.0" />
+              <input type="text" inputmode="decimal" id="cppMathGpa" placeholder="e.g. 88.0" />
             </div>
 
             <!-- School Type -->
@@ -129,11 +129,11 @@
             </div>
             <div id="satField">
               <small data-i18n="cpp.satHint">Score out of 800 — CPP needs 630+</small>
-              <input type="number" id="cppSat" min="200" max="800" step="10" placeholder="e.g. 680" style="margin-top:6px" />
+              <input type="text" inputmode="numeric" id="cppSat" placeholder="e.g. 680" style="margin-top:6px" />
             </div>
             <div id="qField" style="display:none">
               <small data-i18n="cpp.qHint">Score out of 100 — CPP needs 90+</small>
-              <input type="number" id="cppQudurat" min="1" max="100" step="1" placeholder="e.g. 92" style="margin-top:6px" />
+              <input type="text" inputmode="numeric" id="cppQudurat" placeholder="e.g. 92" style="margin-top:6px" />
             </div>
           </div>
 

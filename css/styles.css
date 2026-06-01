@@ -1426,11 +1426,11 @@ footer {
   display: flex;
   flex-direction: column;
   animation: scaleIn .3s ease both;
+  will-change: transform;
   transition: transform .32s cubic-bezier(.34,1.56,.64,1),
               box-shadow .25s ease,
               border-color .25s ease,
-              opacity .25s ease,
-              filter .25s ease;
+              opacity .25s ease;
 }
 .card:nth-child(2) { animation-delay:.06s; }
 .card:nth-child(3) { animation-delay:.12s; }
@@ -1446,7 +1446,6 @@ footer {
 .college-cards-grid:has(.card:hover) .card:not(:hover) {
   opacity: 0.4;
   transform: scale(0.97);
-  filter: blur(.5px);
 }
 
 /* Size variants */
@@ -1978,27 +1977,29 @@ footer {
 }
 
 /* Enhanced hero – animated orbs */
-.hero { position: relative; }
+.hero { position: relative; contain: layout style; }
 .hero-orb {
   position: absolute; border-radius: 50%; pointer-events: none;
   animation: orbFloat var(--dur,10s) ease-in-out infinite;
   animation-delay: var(--delay,0s);
+  will-change: transform;
+  contain: strict;
 }
 .hero-orb-1 {
   width:560px; height:560px;
-  background: radial-gradient(circle, rgba(201,168,76,.10) 0%, transparent 65%);
+  background: radial-gradient(circle, rgba(201,168,76,.14) 0%, transparent 65%);
   top:-140px; right:-120px; filter:blur(40px);
   --dur:12s;
 }
 .hero-orb-2 {
   width:380px; height:380px;
-  background: radial-gradient(circle, rgba(201,168,76,.07) 0%, transparent 65%);
+  background: radial-gradient(circle, rgba(201,168,76,.10) 0%, transparent 65%);
   bottom:-100px; left:-80px; filter:blur(50px);
   --dur:9s; --delay:-4s;
 }
 .hero-orb-3 {
   width:220px; height:220px;
-  background: radial-gradient(circle, rgba(26,48,80,.6) 0%, rgba(201,168,76,.06) 100%);
+  background: radial-gradient(circle, rgba(26,48,80,.6) 0%, rgba(201,168,76,.08) 100%);
   top:30%; left:15%; filter:blur(30px);
   --dur:14s; --delay:-7s;
 }
@@ -2050,6 +2051,8 @@ footer {
   animation: orbFloat var(--dur,10s) ease-in-out infinite;
   animation-delay: var(--delay,0s);
   pointer-events: none;
+  will-change: transform;
+  contain: strict;
 }
 .rl-orb-1 { width:600px; height:600px; top:-150px; right:-150px; --dur:13s; --delay:0s;  background:radial-gradient(circle,rgba(201,168,76,.13) 0%,transparent 65%); }
 .rl-orb-2 { width:440px; height:440px; bottom:-120px; left:-100px; --dur:10s; --delay:-4s; background:radial-gradient(circle,rgba(201,168,76,.09) 0%,transparent 65%); }
@@ -2332,9 +2335,9 @@ footer {
 .tracker-section-label::after { content:''; flex:1; height:1px; background:rgba(201,168,76,.2); }
 
 /* Tracker card — inherits from .card but with tracker-specific additions */
-.tracker-card { background:var(--white); border:1.5px solid var(--border); border-radius:var(--radius-md); padding:18px 20px; cursor:pointer; position:relative; z-index:1; display:flex; flex-direction:column; gap:9px; transition:transform .32s cubic-bezier(.34,1.56,.64,1), box-shadow .25s, border-color .25s, opacity .25s, filter .25s; animation:scaleIn .3s ease both; }
+.tracker-card { background:var(--white); border:1.5px solid var(--border); border-radius:var(--radius-md); padding:18px 20px; cursor:pointer; position:relative; z-index:1; display:flex; flex-direction:column; gap:9px; will-change:transform; transition:transform .32s cubic-bezier(.34,1.56,.64,1), box-shadow .25s, border-color .25s, opacity .25s; animation:scaleIn .3s ease both; }
 .tracker-card:hover { transform:scale(1.04); box-shadow:0 12px 40px rgba(11,25,41,.16); border-color:var(--gold); z-index:52; }
-.college-cards-grid:has(.tracker-card:hover) .tracker-card:not(:hover) { opacity:.4; transform:scale(.97); filter:blur(.5px); }
+.college-cards-grid:has(.tracker-card:hover) .tracker-card:not(:hover) { opacity:.4; transform:scale(.97); }
 .tracker-card.pinned { border-color:rgba(201,168,76,.35); background:linear-gradient(135deg,#fff 0%,rgba(201,168,76,.03) 100%); }
 
 .tracker-card-top { display:flex; align-items:flex-start; justify-content:space-between; gap:10px; }
@@ -2468,9 +2471,9 @@ footer {
 
 /* Framework cards — same .card hover system, slight tweak */
 .vault-cards-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:16px; }
-.vault-card { background:var(--white); border:1.5px solid var(--border); border-radius:var(--radius-md); padding:18px 20px; cursor:pointer; position:relative; z-index:1; display:flex; flex-direction:column; gap:8px; transition:transform .32s cubic-bezier(.34,1.56,.64,1), box-shadow .25s, border-color .25s, opacity .25s, filter .25s; animation:scaleIn .3s ease both; }
+.vault-card { background:var(--white); border:1.5px solid var(--border); border-radius:var(--radius-md); padding:18px 20px; cursor:pointer; position:relative; z-index:1; display:flex; flex-direction:column; gap:8px; will-change:transform; transition:transform .32s cubic-bezier(.34,1.56,.64,1), box-shadow .25s, border-color .25s, opacity .25s; animation:scaleIn .3s ease both; }
 .vault-card:hover { transform:scale(1.05); box-shadow:0 12px 36px rgba(11,25,41,.18); border-color:var(--gold); z-index:52; }
-.vault-cards-grid:has(.vault-card:hover) .vault-card:not(:hover) { opacity:.4; transform:scale(.97); filter:blur(.5px); }
+.vault-cards-grid:has(.vault-card:hover) .vault-card:not(:hover) { opacity:.4; transform:scale(.97); }
 .vault-card-icon   { font-size:1.6rem; line-height:1; }
 .vault-card-title  { font-size:.9rem; font-weight:800; color:var(--navy-deep); line-height:1.3; }
 .vault-card-when   { font-size:.73rem; color:var(--text-muted); line-height:1.5; }

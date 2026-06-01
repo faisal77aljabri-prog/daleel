@@ -99,12 +99,12 @@
         <div class="form-group">
           <label for="gpa" data-i18n="collegeList.gpaLabel">Cumulative GPA (%)</label>
           <small data-i18n="collegeList.gpaHint">Saudi system percentage (e.g., 91.5)</small>
-          <input type="number" id="gpa" min="50" max="100" step="0.1" placeholder="e.g., 91.5" required />
+          <input type="text" inputmode="decimal" id="gpa" placeholder="e.g., 91.5" required />
         </div>
         <div class="form-group">
           <label for="gpaMath" data-i18n="collegeList.gpaMathLabel">Math &amp; Science GPA (%)</label>
           <small data-i18n="collegeList.gpaMathHint">Required for Aramco CPP eligibility</small>
-          <input type="number" id="gpaMath" min="50" max="100" step="0.1" placeholder="e.g., 88.0" />
+          <input type="text" inputmode="decimal" id="gpaMath" placeholder="e.g., 88.0" />
         </div>
         <div class="form-group">
           <label for="schoolType" data-i18n="collegeList.schoolTypeLabel">School Type</label>
@@ -130,22 +130,22 @@
         <div class="form-group">
           <label for="satMath" data-i18n="collegeList.satMathLabel">SAT Math Score</label>
           <small data-i18n="collegeList.satMathHint">Leave blank if not taken</small>
-          <input type="number" id="satMath" min="200" max="800" step="10" placeholder="e.g., 720" />
+          <input type="text" inputmode="numeric" id="satMath" placeholder="e.g., 720" />
         </div>
         <div class="form-group">
           <label for="satTotal" data-i18n="collegeList.satTotalLabel">SAT Total Score</label>
           <small data-i18n="collegeList.satTotalHint">Leave blank if not taken</small>
-          <input type="number" id="satTotal" min="400" max="1600" step="10" placeholder="e.g., 1400" />
+          <input type="text" inputmode="numeric" id="satTotal" placeholder="e.g., 1400" />
         </div>
         <div class="form-group">
           <label for="qudurat" data-i18n="collegeList.qudurLabel">Qudurat / GAT Score</label>
           <small data-i18n="collegeList.qudurHint">Score out of 100 (percentile)</small>
-          <input type="number" id="qudurat" min="1" max="100" step="1" placeholder="e.g., 88" />
+          <input type="text" inputmode="numeric" id="qudurat" placeholder="e.g., 88" />
         </div>
         <div class="form-group">
           <label for="tahsili" data-i18n="collegeList.tahsiliLabel">Tahsili Score</label>
           <small data-i18n="collegeList.tahsiliHint">Score out of 100</small>
-          <input type="number" id="tahsili" min="1" max="100" step="1" placeholder="e.g., 90" />
+          <input type="text" inputmode="numeric" id="tahsili" placeholder="e.g., 90" />
         </div>
       </div>
 
