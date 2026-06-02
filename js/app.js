@@ -107,6 +107,131 @@ async function callAI(messages, onToken, onDone, onError) {
   }
 }
 
+/* ── Robust AI JSON parsing (handles code fences + truncation) ── */
+function parseAIJSON(text) {
+  if (!text || typeof text !== 'string') return null;
+  let s = text.replace(/```json/gi, '').replace(/```/g, '');
+  const start = s.indexOf('{');
+  if (start < 0) return null;
+  s = s.slice(start);
+  // 1. straight parse, then 2. trim to last closing brace
+  const lastBrace = s.lastIndexOf('}');
+  for (const cand of [s, lastBrace > 0 ? s.slice(0, lastBrace + 1) : null]) {
+    if (!cand) continue;
+    try { return JSON.parse(cand); } catch { /* fall through */ }
+  }
+  // 3. repair a truncated response: cut to the last complete element, rebalance
+  return repairTruncatedJSON(s);
+}
+
+function repairTruncatedJSON(s) {
+  let inStr = false, esc = false, lastSafe = -1;
+  for (let k = 0; k < s.length; k++) {
+    const ch = s[k];
+    if (inStr) {
+      if (esc) esc = false; else if (ch === '\\') esc = true; else if (ch === '"') inStr = false;
+      continue;
+    }
+    if (ch === '"') { inStr = true; continue; }
+    if (ch === '}' || ch === ']') lastSafe = k; // end of a complete value
+  }
+  if (lastSafe < 0) return null;
+  let prefix = s.slice(0, lastSafe + 1).replace(/,\s*$/, '');
+  // recompute open brackets for the prefix and close them
+  inStr = false; esc = false; const stack = [];
+  for (let k = 0; k < prefix.length; k++) {
+    const ch = prefix[k];
+    if (inStr) {
+      if (esc) esc = false; else if (ch === '\\') esc = true; else if (ch === '"') inStr = false;
+      continue;
+    }
+    if (ch === '"') { inStr = true; continue; }
+    if (ch === '{' || ch === '[') stack.push(ch === '{' ? '}' : ']');
+    else if (ch === '}' || ch === ']') stack.pop();
+  }
+  let repaired = prefix;
+  while (stack.length) repaired += stack.pop();
+  try { return JSON.parse(repaired); } catch { return null; }
+}
+
+function aiErrorHtml(onRetry) {
+  const isAr = currentLang === 'ar';
+  return `<div class="callout callout-danger" style="margin-top:16px">
+    <span class="callout-icon">⚠️</span>
+    <div class="callout-content">
+      <h4>${isAr ? 'تعذّرت قراءة رد الذكاء الاصطناعي' : 'Couldn\'t read the AI response'}</h4>
+      <p>${isAr ? 'قد يكون الرد قد انقطع. حاول مرة أخرى.' : 'The response may have been interrupted. Please try again.'}</p>
+      ${onRetry ? `<button class="btn btn-primary" style="margin-top:10px" onclick="${onRetry}">${isAr ? '↻ إعادة المحاولة' : '↻ Try Again'}</button>` : ''}
+    </div>
+  </div>`;
+}
+
+/* ── University visuals via Wikipedia (keyless, CORS-enabled) ─── */
+const _uniVisualCache = {};
+// Campus keywords, ranked best → acceptable; we pick the highest-ranked match.
+const _UNI_GOOD_KW = ['campus', 'aerial', 'panorama', 'skyline', 'quad', 'tower', 'gate', 'library', 'hall', 'chapel', 'dome', 'court', 'college', 'building', 'university', 'view'];
+// Never use as a banner (logos, people, maps, diagrams…)
+const _UNI_BAD_KW = ['seal', 'logo', '_coa', 'coat', 'arms', 'crest', 'wordmark', 'map', 'flag', 'portrait', 'signature', 'diagram', 'chart', 'graph', 'icon', 'plaque', 'medal', 'banner', 'football', 'basketball', 'team'];
+
+function _isBadImageName(t) {
+  return t.includes('.svg') || t.includes(',') || _UNI_BAD_KW.some(k => t.includes(k));
+}
+
+async function fetchUniVisual(name) {
+  if (!name) return { image: null, extract: null };
+  if (_uniVisualCache[name]) return _uniVisualCache[name];
+  const out = { image: null, extract: null };
+  const title = encodeURIComponent(name);
+  try {
+    const s = await fetch(`https://en.wikipedia.org/api/rest_v1/page/summary/${title}`)
+      .then(r => r.ok ? r.json() : null);
+    if (s) {
+      out.extract = s.extract || null;
+      // Use the curated lead image only if it's a real raster photo (not a seal/coa)
+      const lead = s.originalimage?.source || s.thumbnail?.source;
+      if (lead && /\.(jpg|jpeg|png)$/i.test(lead) && !_isBadImageName(lead.toLowerCase())) {
+        out.image = lead;
+      }
+    }
+    if (!out.image) {
+      const ml = await fetch(`https://en.wikipedia.org/api/rest_v1/page/media-list/${title}`)
+        .then(r => r.ok ? r.json() : null);
+      const photos = (ml?.items || []).filter(it => {
+        const t = (it.title || '').toLowerCase();
+        return it.type === 'image' && /\.(jpg|jpeg|png)$/i.test(t) && !_isBadImageName(t);
+      });
+      // Rank by strongest campus keyword; only accept a clearly campus-like shot.
+      let best = null, bestRank = Infinity;
+      for (const p of photos) {
+        const t = (p.title || '').toLowerCase();
+        const rank = _UNI_GOOD_KW.findIndex(k => t.includes(k));
+        if (rank >= 0 && rank < bestRank) { bestRank = rank; best = p; }
+      }
+      const src = best?.srcset?.[0]?.src;
+      if (src) out.image = src.startsWith('//') ? 'https:' + src : src;
+    }
+  } catch { /* offline / no page — leave nulls */ }
+  _uniVisualCache[name] = out;
+  return out;
+}
+
+/* Lazily set campus photos on rendered cards */
+function hydrateCardVisuals(container) {
+  if (!container) return;
+  container.querySelectorAll('.card-photo[data-uni]').forEach(ph => {
+    const name = ph.getAttribute('data-uni');
+    fetchUniVisual(name).then(v => {
+      if (!v.image) return;
+      const img = new Image();
+      img.onload = () => {
+        ph.style.backgroundImage = `url("${v.image}")`;
+        ph.classList.add('has-photo');
+      };
+      img.src = v.image;
+    });
+  });
+}
+
 /* ── College card rendering ────────────────────────────────── */
 const COUNTRY_ACCENTS = {
   'USA':'#B22234','UK':'#C8102E','Canada':'#FF0000',
@@ -176,13 +301,14 @@ function openCardModal(cardEl) {
   body.dataset.college = cardEl.dataset.college;
   body.innerHTML = `
     <button class="card-modal-close" onclick="closeCardModal()">✕</button>
-    <div class="card-modal-header">
-      <div class="card-modal-flag">${c.flag || '🎓'}</div>
-      <div>
+    <div class="card-modal-hero" id="modalHero">
+      <span class="card-modal-hero-flag">${c.flag || '🎓'}</span>
+      <div class="card-modal-hero-overlay">
         <div class="card-modal-title">${c.name}</div>
         <div class="card-modal-sub">${c.location || ''}</div>
       </div>
     </div>
+    <div class="modal-section" id="modalAbout" style="display:none"></div>
     <div class="modal-steps" dir="ltr">${stepsHtml}</div>
     <div class="location-banner" style="--loc-accent:${accent}">
       <span class="location-flag">${c.flag || '🌍'}</span>
@@ -202,7 +328,26 @@ function openCardModal(cardEl) {
     </div>`;
 
   document.getElementById('cardModalOverlay').classList.add('open');
+  loadModalVisual(c);
   loadUniversityEnrichment(c);
+}
+
+/* Hydrate the modal hero photo + "About" blurb from Wikipedia */
+async function loadModalVisual(c) {
+  const v = await fetchUniVisual(c.name);
+  const hero = document.getElementById('modalHero');
+  if (hero && v.image) {
+    const img = new Image();
+    img.onload = () => { hero.style.backgroundImage = `url("${v.image}")`; hero.classList.add('has-photo'); };
+    img.src = v.image;
+  }
+  const about = document.getElementById('modalAbout');
+  if (about && v.extract) {
+    const isAr = currentLang === 'ar';
+    about.style.display = '';
+    about.innerHTML = `<div class="modal-section-title">📖 ${isAr ? 'نبذة' : 'About'}</div>
+      <p style="font-size:.84rem;color:var(--text-body);line-height:1.7">${escapeHtml(v.extract)}</p>`;
+  }
 }
 
 /* Render the Right-Fit breakdown bars from c.fitBreakdown */
@@ -273,7 +418,11 @@ async function loadUniversityEnrichment(c) {
         <div class="uni-nb-row"><span class="uni-nb-cat">🍽️ ${isAr ? 'مطاعم ومقاهٍ' : 'Food & cafes'}</span><div class="chips-row">${chips(nb.restaurants)}</div></div>
         <div class="uni-nb-row"><span class="uni-nb-cat">🚉 ${isAr ? 'محطات نقل' : 'Transit stations'}</span><div class="chips-row">${chips(nb.transit)}</div></div>
         <div class="uni-nb-note">${isAr ? 'الحي عبر OpenStreetMap ضمن ~1.5 كم من الحرم.' : 'Neighborhood via OpenStreetMap, within ~1.5km of campus.'}</div>
-      </div>` : ''}`;
+      </div>` : ''}
+    ${(data.lat != null && data.lon != null) ? `
+      <a class="uni-map-link" href="https://www.openstreetmap.org/?mlat=${data.lat}&mlon=${data.lon}#map=15/${data.lat}/${data.lon}" target="_blank" rel="noopener">
+        🗺️ ${isAr ? 'افتح الحرم على الخريطة' : 'View campus on the map'} →
+      </a>` : ''}`;
 }
 
 function handleModalSave(btn) {
@@ -339,10 +488,14 @@ function buildCard(c, saved, i) {
       <span class="card-fit-label">${isAr ? 'ملاءمة' : 'fit'}</span>
     </div>` : '';
 
-  return `<div class="card card--${currentCardSize}" style="animation-delay:${i * .06}s" data-college='${JSON.stringify(c).replace(/'/g, "&#39;")}'>
-    <div class="card-badge card-badge--${c.type}">${BADGE_LABELS[c.type] || c.type}</div>
-    ${fitHtml}
-    <div class="card-icon">${c.flag || '🎓'}</div>
+  const uniName = (c.name || '').replace(/"/g, '&quot;');
+
+  return `<div class="card card--${currentCardSize} card--photo" style="animation-delay:${i * .06}s" data-college='${JSON.stringify(c).replace(/'/g, "&#39;")}'>
+    <div class="card-photo" data-uni="${uniName}">
+      <span class="card-photo-flag">${c.flag || '🎓'}</span>
+      <div class="card-badge card-badge--${c.type}">${BADGE_LABELS[c.type] || c.type}</div>
+      ${fitHtml}
+    </div>
     <div class="card-title">${c.name}</div>
     <div class="card-subtitle">${c.location || ''}</div>
     ${statsHtml ? `<div class="card-stats-row">${statsHtml}</div>` : ''}
@@ -391,6 +544,7 @@ function renderCollegeCards(data, container) {
 
   container.innerHTML = html;
   _bindCardEvents(container);
+  hydrateCardVisuals(container);
 }
 
 function _bindCardEvents(container) {
@@ -519,6 +673,7 @@ function renderMyListPage() {
   ensureOverlay();
   ensureModal();
   _bindCardEvents(contentEl);
+  hydrateCardVisuals(contentEl);
   // On My List page, unsaving a card removes it — re-render after save
   contentEl.querySelectorAll('.card-save-btn').forEach(btn => {
     btn.addEventListener('click', () => setTimeout(renderMyListPage, 300), { once: true });
@@ -646,14 +801,9 @@ function initResultsPage() {
 
         // Render cards
         const outputEl = document.getElementById('resultsOutput');
-        try {
-          const jsonMatch = full.match(/\{[\s\S]*\}/);
-          const data = JSON.parse(jsonMatch[0]);
-          if (data.colleges) { renderCollegeCards(data, outputEl); }
-          else { outputEl.textContent = full; }
-        } catch {
-          outputEl.textContent = full;
-        }
+        const data = parseAIJSON(full);
+        if (data && data.colleges) { renderCollegeCards(data, outputEl); }
+        else { outputEl.innerHTML = aiErrorHtml("location.href='college-list.html'"); }
 
         updateListBadge();
         updateFAB();
@@ -846,12 +996,9 @@ function submitScholarships(event) {
       loadingEl.classList.remove('visible');
       resultEl.classList.add('visible');
       outputEl.innerHTML = '';
-      try {
-        const jsonMatch = full.match(/\{[\s\S]*\}/);
-        const data = JSON.parse(jsonMatch[0]);
-        if (data.scholarships) { renderScholarshipCards(data, outputEl); return; }
-      } catch {}
-      outputEl.textContent = full;
+      const data = parseAIJSON(full);
+      if (data && data.scholarships) { renderScholarshipCards(data, outputEl); return; }
+      outputEl.innerHTML = aiErrorHtml('document.querySelector(".form-card")?.requestSubmit?.()');
     },
     (err) => {
       loadingEl.classList.remove('visible');
@@ -914,14 +1061,9 @@ function submitEssay(event) {
     () => {},
     (full) => {
       loadingEl.classList.remove('visible');
-      try {
-        const jsonMatch = full.match(/\{[\s\S]*\}/);
-        const data = JSON.parse(jsonMatch[0]);
-        renderEssayFeedback(data, _essayLastDraft, outputEl);
-      } catch {
-        // Fallback: show raw text if JSON parse fails
-        outputEl.textContent = full;
-      }
+      const data = parseAIJSON(full);
+      if (data && (data.highlights || data.overall)) renderEssayFeedback(data, _essayLastDraft, outputEl);
+      else outputEl.innerHTML = aiErrorHtml('document.querySelector(".form-card")?.requestSubmit?.()');
     },
     (err) => {
       loadingEl.classList.remove('visible');
@@ -1135,13 +1277,9 @@ function submitECAdvisor(event) {
     (full) => {
       if (loadingEl) loadingEl.classList.remove('visible');
       if (resultEl)  resultEl.classList.add('visible');
-      try {
-        const jsonMatch = full.match(/\{[\s\S]*\}/);
-        const data = JSON.parse(jsonMatch[0]);
-        renderECResult(data, outputEl);
-      } catch {
-        outputEl.textContent = full;
-      }
+      const data = parseAIJSON(full);
+      if (data && data.overallStrength) renderECResult(data, outputEl);
+      else outputEl.innerHTML = aiErrorHtml('document.querySelector(".form-card")?.requestSubmit?.()');
     },
     (err) => {
       if (loadingEl) loadingEl.classList.remove('visible');
