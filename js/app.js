@@ -1289,6 +1289,11 @@ function submitECAdvisor(event) {
   );
 }
 
+/* Click-to-expand for EC strength/improvement cards */
+function toggleECCard(el) {
+  el.classList.toggle('expanded');
+}
+
 function renderECResult(data, container) {
   const isAr = currentLang === 'ar';
   const SC = {
@@ -1324,18 +1329,34 @@ function renderECResult(data, container) {
     return words.slice(0, n).join(' ') + (words.length > n ? '…' : '');
   };
 
+  // Click-to-expand card: short headline → fuller explanation on tap.
+  // Accepts a string (legacy) or { point, detail }.
+  const expandCard = (item, { badgeCls, badgeLabel, icon }, i) => {
+    let point, detail;
+    if (item && typeof item === 'object') {
+      point = item.point || item.title || '';
+      detail = item.detail || item.reason || item.point || '';
+    } else {
+      point = shortTitle(String(item || ''), 6);
+      detail = String(item || '');
+    }
+    const tapHint = isAr ? 'اضغط للتفاصيل' : 'Tap to expand';
+    return `<div class="card card--${currentCardSize} ec-expand-card" style="animation-delay:${i * .07}s" onclick="toggleECCard(this)">
+      <div class="card-badge ${badgeCls}">${badgeLabel}</div>
+      <div class="card-icon">${icon}</div>
+      <div class="card-title">${point}</div>
+      <div class="ec-detail">${detail}</div>
+      <div class="ec-expand-hint"><span class="ec-expand-hint-show">${tapHint}</span><span class="ec-expand-hint-hide">${isAr ? 'إخفاء' : 'Show less'}</span> <span class="ec-chevron">⌄</span></div>
+    </div>`;
+  };
+
   // ── Strengths cards ──
   if (data.strengths?.length) {
     html += `<div class="college-group">
       <div class="college-group-label cgl-safety">✅ ${isAr ? 'نقاط القوة' : 'Strengths'}</div>
       <div class="college-cards-grid${currentCardSize !== 'md' ? ' grid--' + currentCardSize : ''}">`;
     data.strengths.forEach((item, i) => {
-      html += `<div class="card card--${currentCardSize}" style="animation-delay:${i * .07}s">
-        <div class="card-badge card-badge--safety">${isAr ? 'قوة' : 'Strength'}</div>
-        <div class="card-icon">✅</div>
-        <div class="card-title">${shortTitle(item)}</div>
-        <div class="card-expand-text">${item}</div>
-      </div>`;
+      html += expandCard(item, { badgeCls: 'card-badge--safety', badgeLabel: isAr ? 'قوة' : 'Strength', icon: '✅' }, i);
     });
     html += `</div></div>`;
   }
@@ -1346,12 +1367,7 @@ function renderECResult(data, container) {
       <div class="college-group-label cgl-target">💡 ${isAr ? 'كيف تحسّن' : 'How to Improve'}</div>
       <div class="college-cards-grid${currentCardSize !== 'md' ? ' grid--' + currentCardSize : ''}">`;
     data.improvements.forEach((item, i) => {
-      html += `<div class="card card--${currentCardSize}" style="animation-delay:${i * .07}s">
-        <div class="card-badge card-badge--target">${isAr ? 'تحسين' : 'Action'}</div>
-        <div class="card-icon">💡</div>
-        <div class="card-title">${shortTitle(item)}</div>
-        <div class="card-expand-text">${item}</div>
-      </div>`;
+      html += expandCard(item, { badgeCls: 'card-badge--target', badgeLabel: isAr ? 'تحسين' : 'Action', icon: '💡' }, i);
     });
     html += `</div></div>`;
   }
@@ -1415,11 +1431,11 @@ function renderECResult(data, container) {
     if (bar) bar.style.width = `${s.pct}%`;
   }));
 
-  // Hover overlay + modal for all cards
+  // Hover overlay only for cards that open a modal (not the click-to-expand cards)
   ensureOverlay();
   ensureModal();
   const overlay = document.getElementById('hoverOverlay');
-  container.querySelectorAll('.card').forEach(card => {
+  container.querySelectorAll('.card[data-ec-college]').forEach(card => {
     card.addEventListener('mouseenter', () => overlay?.classList.add('active'));
     card.addEventListener('mouseleave', () => overlay?.classList.remove('active'));
   });
@@ -1561,7 +1577,8 @@ Consider Saudi context: STEM competitions, Islamic leadership, community buildin
 The Common App allows a MAXIMUM of 10 activities and 5 honors. Rank every activity and honor the student gave you by admissions impact. In activityRanking, set keep:true for the strongest 10 (or all of them if they have ≤10) and keep:false for the rest, with a short reason for each — especially WHY a cut activity is weak/redundant. Do the same for honorsRanking (best 5 keep:true). Use the EXACT name/title the student provided.
 ${lang === 'ar' ? 'Respond in Arabic only.' : 'Respond in English only.'}
 Be honest — tell them exactly where they stand and what would move them up a tier.
+For each strength and improvement, give a SHORT headline "point" (3-6 words) AND a distinct, fuller "detail" (2-3 sentences) that genuinely explains it — for strengths, why it matters and how an admissions officer reads it; for improvements, a concrete step and its impact. The detail must add real information, never just repeat the headline.
 
 CRITICAL: Return ONLY valid JSON, no markdown, no text outside:
-{"overallStrength":"exceptional|strong|moderate|developing|minimal","tier":"e.g. Tier 2 — Regional Level","summary":"2-3 honest sentences","strengths":["..."],"improvements":["..."],"activityRanking":[{"name":"exact activity name","keep":true,"rank":1,"reason":"why it ranks here / why to keep or cut"}],"honorsRanking":[{"title":"exact honor title","keep":true,"rank":1,"reason":"why keep or cut"}],"collegeMatches":[{"name":"University Name","reason":"Why your ECs are a strong fit here"}]}`,
+{"overallStrength":"exceptional|strong|moderate|developing|minimal","tier":"e.g. Tier 2 — Regional Level","summary":"2-3 honest sentences","strengths":[{"point":"short headline","detail":"2-3 sentence explanation of why this matters and how admissions reads it"}],"improvements":[{"point":"short action","detail":"2-3 sentence concrete step and the impact it would have"}],"activityRanking":[{"name":"exact activity name","keep":true,"rank":1,"reason":"why it ranks here / why to keep or cut"}],"honorsRanking":[{"title":"exact honor title","keep":true,"rank":1,"reason":"why keep or cut"}],"collegeMatches":[{"name":"University Name","reason":"Why your ECs are a strong fit here"}]}`,
 };

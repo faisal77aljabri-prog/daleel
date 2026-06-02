@@ -2789,3 +2789,28 @@ html[lang="ar"] .ob-field input, html[lang="ar"] .ob-field select { direction: r
 /* Campus map link */
 .uni-map-link { display: inline-flex; align-items: center; gap: 6px; margin-top: 12px; font-size: .82rem; font-weight: 700; color: var(--gold-dim); text-decoration: none; }
 .uni-map-link:hover { color: var(--gold); text-decoration: underline; }
+
+/* ── EC click-to-expand cards (strengths / improvements) ── */
+.ec-expand-card { cursor: pointer; }
+.ec-expand-card .card-title { transition: color .2s; }
+.ec-expand-card:hover .card-title { color: var(--gold-dim); }
+/* keep these informational cards stable (no hover-scale / sibling-dim) */
+.ec-expand-card:hover { transform: none; box-shadow: 0 6px 22px rgba(11,25,41,.12); border-color: var(--gold); }
+.college-cards-grid:has(.ec-expand-card:hover) .ec-expand-card:not(:hover) { opacity: 1; transform: none; }
+.ec-expand-card .ec-detail {
+  max-height: 0; overflow: hidden; opacity: 0;
+  font-size: .84rem; color: var(--text-body); line-height: 1.7;
+  transition: max-height .38s ease, opacity .3s ease, margin-top .3s ease;
+}
+.ec-expand-card.expanded { box-shadow: 0 10px 32px rgba(11,25,41,.16); border-color: var(--gold); }
+.ec-expand-card.expanded .ec-detail { max-height: 420px; opacity: 1; margin-top: 10px; }
+.ec-expand-hint {
+  display: flex; align-items: center; gap: 5px; margin-top: 12px;
+  font-size: .7rem; font-weight: 700; letter-spacing: .3px; color: var(--gold-dim);
+  text-transform: uppercase;
+}
+.ec-expand-hint-hide { display: none; }
+.ec-expand-card.expanded .ec-expand-hint-show { display: none; }
+.ec-expand-card.expanded .ec-expand-hint-hide { display: inline; }
+.ec-chevron { transition: transform .3s ease; font-size: .95rem; line-height: 1; }
+.ec-expand-card.expanded .ec-chevron { transform: rotate(180deg); }
