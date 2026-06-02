@@ -465,6 +465,7 @@ function submitCollegeList(event) {
     get('gpaMath') ? `Math & Science GPA: ${get('gpaMath')}%` : '',
     get('satMath') ? `SAT Math: ${get('satMath')}` : 'SAT Math: not taken',
     get('satTotal') ? `SAT Total: ${get('satTotal')}` : '',
+    get('act') ? `ACT Composite: ${get('act')}/36` : '',
     get('qudurat') ? `Qudurat: ${get('qudurat')}/100` : 'Qudurat: not taken',
     get('tahsili') ? `Tahsili: ${get('tahsili')}/100` : '',
     `Major: ${major}`, `Country: ${get('country') || 'No preference'}`,
@@ -801,25 +802,143 @@ function selectPrompt(el, promptText) {
   selectedPrompt = promptText;
 }
 
+let _essayLastDraft = '';
 function submitEssay(event) {
   event.preventDefault();
   const draft   = event.target.querySelector('#draft')?.value?.trim();
   const context = event.target.querySelector('#essayContext')?.value?.trim();
   if (!draft) return;
+  _essayLastDraft = draft;
   const parts = [];
   if (selectedPrompt) parts.push(`Prompt: ${selectedPrompt}`);
   parts.push(`Draft:\n${draft}`);
   if (context) parts.push(`Context: ${context}`);
   const userMsg = currentLang === 'ar'
-    ? `${parts.join('\n\n')}\n\nأريد تقييماً تفصيلياً.`
-    : `${parts.join('\n\n')}\n\nPlease give me detailed feedback.`;
-  streamToElement(
-    [{ role: 'system', content: SYSTEM_PROMPTS.essay(currentLang) },
+    ? `${parts.join('\n\n')}\n\nأعطني تقييماً مع ملاحظات مضمّنة كـ JSON فقط.`
+    : `${parts.join('\n\n')}\n\nGive feedback with inline highlights as JSON only.`;
+
+  const loadingEl = document.getElementById('aiLoading');
+  const resultEl  = document.getElementById('aiResult');
+  const outputEl  = document.getElementById('aiOutput');
+  resultEl.classList.add('visible');
+  loadingEl.classList.add('visible');
+  outputEl.innerHTML = '';
+
+  callAI(
+    [{ role: 'system', content: SYSTEM_PROMPTS.essayInline(currentLang) },
      { role: 'user',   content: userMsg }],
-    document.getElementById('aiOutput'),
-    document.getElementById('aiLoading'),
-    document.getElementById('aiResult')
+    () => {},
+    (full) => {
+      loadingEl.classList.remove('visible');
+      try {
+        const jsonMatch = full.match(/\{[\s\S]*\}/);
+        const data = JSON.parse(jsonMatch[0]);
+        renderEssayFeedback(data, _essayLastDraft, outputEl);
+      } catch {
+        // Fallback: show raw text if JSON parse fails
+        outputEl.textContent = full;
+      }
+    },
+    (err) => {
+      loadingEl.classList.remove('visible');
+      outputEl.textContent = `❌ ${err.message}`;
+    }
   );
+}
+
+/* ── Essay feedback renderer (inline highlights) ───────────────── */
+function escapeHtml(s) {
+  return String(s).replace(/[&<>"']/g, c =>
+    ({ '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;' }[c]));
+}
+
+function renderEssayFeedback(data, draft, container) {
+  const isAr = currentLang === 'ar';
+  const highlights = Array.isArray(data.highlights) ? data.highlights : [];
+  const strengths  = Array.isArray(data.strengths)  ? data.strengths  : [];
+
+  // Match each highlight quote to a position in the draft (exact substring).
+  const matched = [];
+  highlights.forEach((h, i) => {
+    if (!h || !h.quote) return;
+    const idx = draft.indexOf(h.quote);
+    matched.push({ ...h, idx, sev: ['high','medium','low'].includes(h.severity) ? h.severity : 'medium', _i: i });
+  });
+  const placed = matched.filter(m => m.idx >= 0).sort((a, b) => a.idx - b.idx);
+  const unplaced = matched.filter(m => m.idx < 0);
+
+  // Build highlighted draft, avoiding overlaps
+  let html = '', cursor = 0;
+  placed.forEach(m => {
+    if (m.idx < cursor) return; // skip overlapping
+    html += escapeHtml(draft.slice(cursor, m.idx));
+    const payload = encodeURIComponent(JSON.stringify({ quote: m.quote, issue: m.issue || '', fix: m.fix || '', sev: m.sev }));
+    html += `<mark class="essay-hl essay-hl--${m.sev}" data-note="${payload}" onclick="openEssayNote(this)">${escapeHtml(draft.slice(m.idx, m.idx + m.quote.length))}</mark>`;
+    cursor = m.idx + m.quote.length;
+  });
+  html += escapeHtml(draft.slice(cursor));
+
+  const sevLabel = s => t('essayFb.sev' + s.charAt(0).toUpperCase() + s.slice(1));
+
+  // Notes list (all highlights, placed + unplaced)
+  const allNotes = [...placed, ...unplaced];
+  const notesHtml = allNotes.length ? allNotes.map(m => `
+    <div class="essay-note-card sev-${m.sev}">
+      <span class="essay-sev-pill sev-${m.sev}">${sevLabel(m.sev)}</span>
+      <div class="essay-note-quote">“${escapeHtml(m.quote)}”</div>
+      ${m.issue ? `<div class="essay-note-row"><b>${t('essayFb.issueLabel')}:</b> ${escapeHtml(m.issue)}</div>` : ''}
+      ${m.fix ? `<div class="essay-note-row"><b>${t('essayFb.fixLabel')}:</b> ${escapeHtml(m.fix)}</div>` : ''}
+    </div>`).join('') : `<p class="essay-fb-hint">${t('essayFb.noHighlights')}</p>`;
+
+  const strengthsHtml = strengths.length ? `
+    <div class="essay-strengths">
+      <div class="form-section-title">${t('essayFb.strengthsTitle')}</div>
+      ${strengths.map(s => `<div class="essay-strength-item"><span class="es-check">✓</span><span>${escapeHtml(s)}</span></div>`).join('')}
+    </div>` : '';
+
+  container.innerHTML = `
+    ${data.overall ? `<div class="essay-overall-box"><div class="essay-overall-title">${t('essayFb.overallTitle')}</div>${escapeHtml(data.overall)}</div>` : ''}
+    <div class="essay-fb-toggle">
+      <button class="active" data-view="hl" onclick="switchEssayView(this,'hl')">${t('essayFb.viewHighlighted')}</button>
+      <button data-view="notes" onclick="switchEssayView(this,'notes')">${t('essayFb.viewNotes')}</button>
+    </div>
+    <p class="essay-fb-hint">${t('essayFb.hint')}</p>
+    <div id="essayHlView">
+      <div class="form-section-title">${t('essayFb.highlightsTitle')}</div>
+      <div class="essay-draft-view" dir="auto">${html}</div>
+    </div>
+    <div id="essayNotesView" style="display:none">
+      <div class="essay-notes-list">${notesHtml}</div>
+    </div>
+    ${strengthsHtml}`;
+}
+
+function switchEssayView(btn, view) {
+  document.querySelectorAll('.essay-fb-toggle button').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  document.getElementById('essayHlView').style.display    = view === 'hl' ? '' : 'none';
+  document.getElementById('essayNotesView').style.display = view === 'notes' ? '' : 'none';
+}
+
+function openEssayNote(el) {
+  ensureModal();
+  const n = JSON.parse(decodeURIComponent(el.dataset.note));
+  const isAr = currentLang === 'ar';
+  const sevLabel = t('essayFb.sev' + n.sev.charAt(0).toUpperCase() + n.sev.slice(1));
+  const body = document.getElementById('cardModalBody');
+  body.innerHTML = `
+    <button class="card-modal-close" onclick="closeCardModal()">✕</button>
+    <div class="card-modal-header">
+      <div class="card-modal-flag">🖍️</div>
+      <div>
+        <div class="card-modal-title"><span class="essay-sev-pill sev-${n.sev}">${sevLabel}</span></div>
+        <div class="card-modal-sub">${t('essayFb.highlightsTitle')}</div>
+      </div>
+    </div>
+    <div class="essay-note-quote" style="margin-bottom:14px">“${escapeHtml(n.quote)}”</div>
+    ${n.issue ? `<div class="modal-section"><div class="modal-section-title">⚠️ ${t('essayFb.issueLabel')}</div><p style="font-size:.88rem;line-height:1.7;color:var(--text-body)">${escapeHtml(n.issue)}</p></div>` : ''}
+    ${n.fix ? `<div class="modal-section"><div class="modal-section-title">✨ ${t('essayFb.fixLabel')}</div><div class="ccard-fit-box">${escapeHtml(n.fix)}</div></div>` : ''}`;
+  document.getElementById('cardModalOverlay').classList.add('open');
 }
 
 /* ── EC Advisor ────────────────────────────────────────────── */
@@ -857,6 +976,35 @@ function addECRow() {
 
 function removeECRow(btn) { btn.closest('.ec-row').remove(); }
 
+function addHonorRow() {
+  const container = document.getElementById('honorRows');
+  if (!container) return;
+  const row = document.createElement('div');
+  row.className = 'honor-row';
+  row.innerHTML = `
+    <div class="form-group">
+      <label>${t('ec.honorTitleLabel')}</label>
+      <input type="text" class="honor-title" placeholder="${t('ec.honorTitleHint')}" />
+    </div>
+    <div class="form-group">
+      <label>${t('ec.honorLevelLabel')}</label>
+      <select class="honor-level">
+        <option value="International">International</option>
+        <option value="National">National</option>
+        <option value="Regional">Regional / State</option>
+        <option value="School">School</option>
+      </select>
+    </div>
+    <div class="form-group">
+      <label>${t('ec.honorGradeLabel')}</label>
+      <input type="text" class="honor-grade" placeholder="e.g., Grade 11" />
+    </div>
+    <button type="button" class="ec-remove-btn" onclick="removeHonorRow(this)">✕</button>`;
+  container.appendChild(row);
+}
+
+function removeHonorRow(btn) { btn.closest('.honor-row').remove(); }
+
 function submitECAdvisor(event) {
   event.preventDefault();
   const rows = document.querySelectorAll('.ec-row');
@@ -871,11 +1019,23 @@ function submitECAdvisor(event) {
     alert(currentLang === 'ar' ? 'أضف نشاطاً واحداً على الأقل.' : 'Add at least one activity.');
     return;
   }
+  // Collect honors
+  const honors = [];
+  document.querySelectorAll('.honor-row').forEach(row => {
+    const title = row.querySelector('.honor-title')?.value?.trim();
+    const level = row.querySelector('.honor-level')?.value;
+    const grade = row.querySelector('.honor-grade')?.value?.trim();
+    if (title) honors.push({ title, level, grade });
+  });
+
   const targetColleges = document.getElementById('ecTargetColleges')?.value?.trim();
   const ecList = ecs.map(e => `- ${e.name} (${e.type}${e.role ? ', ' + e.role : ''})`).join('\n');
+  const honorsList = honors.length
+    ? honors.map(h => `- ${h.title} (${h.level}${h.grade ? ', ' + h.grade : ''})`).join('\n')
+    : '(none provided)';
   const userMsg = currentLang === 'ar'
-    ? `أنشطتي اللاصفية:\n${ecList}${targetColleges ? '\n\nجامعاتي المستهدفة: ' + targetColleges : ''}\n\nقيّم قوة أنشطتي وأخبرني بأفضل الجامعات المناسبة لها. أعطني JSON فقط.`
-    : `My extracurricular activities:\n${ecList}${targetColleges ? '\n\nTarget colleges: ' + targetColleges : ''}\n\nAssess my EC strength and best college fits. Return JSON only.`;
+    ? `أنشطتي اللاصفية (${ecs.length}):\n${ecList}\n\nجوائزي (${honors.length}):\n${honorsList}${targetColleges ? '\n\nجامعاتي المستهدفة: ' + targetColleges : ''}\n\nقيّم قوة أنشطتي، ورتّب الأنشطة (أفضل 10 لـ Common App) والجوائز (أفضل 5)، وأخبرني بما يجب حذفه، وأفضل الجامعات المناسبة. أعطني JSON فقط.`
+    : `My extracurricular activities (${ecs.length}):\n${ecList}\n\nMy honors (${honors.length}):\n${honorsList}${targetColleges ? '\n\nTarget colleges: ' + targetColleges : ''}\n\nAssess my EC strength, rank my activities (best 10 for Common App) and honors (best 5), tell me what to cut, and best college fits. Return JSON only.`;
 
   const loadingEl = document.getElementById('ecLoading');
   const resultEl  = document.getElementById('ecResult');
@@ -972,6 +1132,37 @@ function renderECResult(data, container) {
       </div>`;
     });
     html += `</div></div>`;
+  }
+
+  // ── Activity ranking: Keep 10 vs Cut ──
+  const renderRankGroup = (items, labelKey, cls, badgeText, keep, nameKey) => {
+    const list = (items || []).filter(x => !!x.keep === keep)
+      .sort((a, b) => (a.rank || 99) - (b.rank || 99));
+    if (!list.length) return '';
+    let g = `<div class="college-group">
+      <div class="college-group-label ${cls}">${t('ec.' + labelKey)}</div>
+      <div class="college-cards-grid${currentCardSize !== 'md' ? ' grid--' + currentCardSize : ''}">`;
+    list.forEach((x, i) => {
+      g += `<div class="card card--${currentCardSize} ec-cut-card" style="animation-delay:${i * .06}s">
+        <div class="ec-rank-badge">${x.rank || (i + 1)}</div>
+        <div class="card-badge ${keep ? 'card-badge--safety' : 'card-badge--reach'}">${badgeText}</div>
+        <div class="card-icon">${keep ? '✅' : '✂️'}</div>
+        <div class="card-title">${shortTitle(x[nameKey] || '', 6)}</div>
+        ${x.reason ? `<div class="card-expand-text">${x.reason}</div>` : ''}
+      </div>`;
+    });
+    return g + `</div></div>`;
+  };
+
+  if (data.activityRanking?.length) {
+    const kept = data.activityRanking.filter(x => x.keep).length;
+    html += `<div class="ec-rank-header form-section-title" style="margin-top:8px">📋 ${isAr ? 'قائمة Common App' : 'Common App Activity List'} <span style="font-weight:400;color:var(--text-muted);font-size:.8rem">(${kept}/10)</span></div>`;
+    html += renderRankGroup(data.activityRanking, 'keepTitle', 'cgl-keep', isAr ? 'احتفظ' : 'Keep', true, 'name');
+    html += renderRankGroup(data.activityRanking, 'cutTitle', 'cgl-cut', isAr ? 'احذف' : 'Cut', false, 'name');
+  }
+  if (data.honorsRanking?.length) {
+    html += renderRankGroup(data.honorsRanking, 'honorsKeepTitle', 'cgl-keep', isAr ? 'احتفظ' : 'Keep', true, 'title');
+    html += renderRankGroup(data.honorsRanking, 'honorsCutTitle', 'cgl-cut', isAr ? 'احذف' : 'Cut', false, 'title');
   }
 
   // ── College match cards ──
@@ -1089,6 +1280,7 @@ const JSON_COLLEGE_SCHEMA = `{"assessment":"2-3 sentence honest profile assessme
 const SYSTEM_PROMPTS = {
   collegeList: (lang) => `You are Daleel, an AI college advisor for Saudi students. Deep knowledge of:
 - Saudi GPA system (percentages), Qudurat (out of 100), Scientific Qudurat, Tahsili (out of 100)
+- ACT (out of 36) as an SAT alternative: ACT 36≈SAT 1600, 34≈1500, 31≈1390, 27≈1260, 24≈1160. Treat whichever test the student supplied as their strongest signal. CPP uses SAT Math / Qudurat, so ACT is informational for CPP but valid for university admissions.
 - Saudi school types and their impact on applications
 - Aramco CPP eligibility: SAT Math 630+ OR Qudurat 90+, GPA 85%+ cumulative and in Math & Science, international school graduates only. CPP Waiver: unconditional Top-30 offer skips prep year.
 - KASP, Mawhiba, SABIC, STC scholarships
@@ -1129,12 +1321,23 @@ Warn against: over-explaining Islam, apologizing for culture, performative Mecca
 ${lang === 'ar' ? 'Respond in Arabic only.' : 'Respond in English only.'}
 Give specific, actionable feedback. Quote the draft. Be honest.`,
 
+  essayInline: (lang) => `You are Daleel, an essay coach for Saudi students applying to Western universities.
+Know what resonates: Islamic identity with confidence (not apology), Arabic as intellectual passion, Vision 2030 entrepreneurship, generational firsts, STEM in Saudi context, building something in your city.
+Warn against: over-explaining Islam, apologizing for culture, performative Mecca references, generic Vision 2030 essays, clichés, telling-not-showing, weak openings, vague conclusions, passive voice.
+${lang === 'ar' ? 'Write all issue/fix/overall/strengths text in Arabic.' : 'Write all text in English.'}
+
+Analyze the student's DRAFT and return inline feedback. For each problem area, the "quote" MUST be copied VERBATIM (character-for-character) from the draft so it can be located — copy an exact phrase or sentence, do not paraphrase. Give 4–10 highlights covering the most important issues. severity: "high" = hurts the essay significantly, "medium" = worth fixing, "low" = minor polish.
+
+CRITICAL: Return ONLY valid JSON, no markdown, no code fences, no text outside JSON:
+{"overall":"2-4 sentence honest overall assessment","strengths":["specific thing that works","..."],"highlights":[{"quote":"exact text copied from the draft","issue":"what is wrong with this part","fix":"specific, concrete rewrite or how to fix it","severity":"high|medium|low"}]}`,
+
   ec: (lang) => `You are Daleel, an extracurricular advisor for Saudi students. Evaluate EC profiles with US admissions knowledge.
 Tiers: Exceptional (national/intl awards, published research, company founded), Strong (regional leadership, significant impact), Moderate (school leadership, consistent involvement), Developing (some activities, limited leadership), Minimal (few or no meaningful ECs).
 Consider Saudi context: STEM competitions, Islamic leadership, community building, Vision 2030 entrepreneurship are valued.
+The Common App allows a MAXIMUM of 10 activities and 5 honors. Rank every activity and honor the student gave you by admissions impact. In activityRanking, set keep:true for the strongest 10 (or all of them if they have ≤10) and keep:false for the rest, with a short reason for each — especially WHY a cut activity is weak/redundant. Do the same for honorsRanking (best 5 keep:true). Use the EXACT name/title the student provided.
 ${lang === 'ar' ? 'Respond in Arabic only.' : 'Respond in English only.'}
 Be honest — tell them exactly where they stand and what would move them up a tier.
 
 CRITICAL: Return ONLY valid JSON, no markdown, no text outside:
-{"overallStrength":"exceptional|strong|moderate|developing|minimal","tier":"e.g. Tier 2 — Regional Level","summary":"2-3 honest sentences","strengths":["..."],"improvements":["..."],"collegeMatches":[{"name":"University Name","reason":"Why your ECs are a strong fit here"}]}`,
+{"overallStrength":"exceptional|strong|moderate|developing|minimal","tier":"e.g. Tier 2 — Regional Level","summary":"2-3 honest sentences","strengths":["..."],"improvements":["..."],"activityRanking":[{"name":"exact activity name","keep":true,"rank":1,"reason":"why it ranks here / why to keep or cut"}],"honorsRanking":[{"title":"exact honor title","keep":true,"rank":1,"reason":"why keep or cut"}],"collegeMatches":[{"name":"University Name","reason":"Why your ECs are a strong fit here"}]}`,
 };

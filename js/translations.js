@@ -17,7 +17,7 @@ const T = {
       subtitle: 'Built specifically for Saudi students — not adapted from an American tool. Qudurat, Tahsili, Aramco CPP, and all the things that actually matter to you.',
       ctaPrimary: 'Build My College List',
       ctaSecondary: 'Explore Features',
-      stat1Number: '4',
+      stat1Number: '12',
       stat1Label: 'AI Tools',
       stat2Number: 'CPP',
       stat2Label: 'Aramco Ready',
@@ -25,7 +25,7 @@ const T = {
       stat3Label: 'Saudi-Specific',
     },
     features: {
-      title: 'Four tools. One goal.',
+      title: 'Twelve tools. One goal.',
       subtitle: 'Everything a Saudi student needs to navigate international university admissions — from college lists to essays.',
       label: 'Features',
       f1Badge: 'AI-Powered',
@@ -213,7 +213,7 @@ const T = {
       subtitle: 'مبني خصيصاً للطلاب السعوديين — وليس مجرد أداة أمريكية معدّلة. القدرات والتحصيلي وبرنامج أرامكو وكل ما يهمك فعلاً.',
       ctaPrimary: 'ابنِ قائمة جامعاتي',
       ctaSecondary: 'استكشف الأدوات',
-      stat1Number: '٤',
+      stat1Number: '١٢',
       stat1Label: 'أدوات ذكاء اصطناعي',
       stat2Number: 'CPP',
       stat2Label: 'مؤهّل لأرامكو',
@@ -221,7 +221,7 @@ const T = {
       stat3Label: 'للطلاب السعوديين',
     },
     features: {
-      title: 'أربع أدوات. هدف واحد.',
+      title: 'اثنتا عشرة أداة. هدف واحد.',
       subtitle: 'كل ما يحتاجه الطالب السعودي للتقديم على الجامعات الدولية — من قائمة الجامعات إلى المقالة.',
       label: 'الأدوات',
       f1Badge: 'ذكاء اصطناعي',
@@ -738,3 +738,99 @@ T.ar.community = {
   emptyQ:'لا أسئلة بعد. كن أول من يسأل!',
   emptySearch:'لا أسئلة تطابق بحثك.',
 };
+
+/* ── Phase 1: Onboarding quiz ── */
+T.en.onboarding = {
+  welcome: 'Welcome to دليل',
+  intro: 'Answer a few quick questions and we\'ll pre-fill your profile across every tool. Takes 30 seconds.',
+  step: 'Step', of: 'of',
+  q_gpa: 'Cumulative GPA (%)', q_gpaHint: 'Saudi percentage, e.g. 91.5',
+  q_gpaMath: 'Math & Science GPA (%)', q_gpaMathHint: 'Needed for Aramco CPP',
+  q_school: 'School Type',
+  q_satMath: 'SAT Math', q_satTotal: 'SAT Total',
+  q_act: 'ACT Composite', q_actHint: 'Out of 36 — leave blank if not taken',
+  q_qudurat: 'Qudurat', q_tahsili: 'Tahsili',
+  q_major: 'Intended Major', q_majorHint: 'e.g. Computer Science',
+  q_country: 'Preferred Country', q_funding: 'Funding Situation',
+  sectionAcademic: 'Your Academics', sectionTests: 'Your Test Scores', sectionGoals: 'Your Goals',
+  next: 'Next →', back: '← Back', skip: 'Skip for now', finish: '✓ Save & Start',
+  done: 'Profile saved! Your tools are now personalized.',
+  optional: 'All fields optional — fill what you have.',
+};
+T.ar.onboarding = {
+  welcome: 'مرحباً بك في دليل',
+  intro: 'أجب عن بعض الأسئلة السريعة وسنملأ ملفك في جميع الأدوات. يستغرق 30 ثانية.',
+  step: 'خطوة', of: 'من',
+  q_gpa: 'المعدل التراكمي (%)', q_gpaHint: 'نسبة مئوية سعودية، مثال 91.5',
+  q_gpaMath: 'معدل الرياضيات والعلوم (%)', q_gpaMathHint: 'مطلوب لبرنامج أرامكو',
+  q_school: 'نوع المدرسة',
+  q_satMath: 'SAT رياضيات', q_satTotal: 'SAT إجمالي',
+  q_act: 'ACT المجمّع', q_actHint: 'من 36 — اتركه فارغاً إن لم تختبر',
+  q_qudurat: 'القدرات', q_tahsili: 'التحصيلي',
+  q_major: 'التخصص المرغوب', q_majorHint: 'مثال: علوم الحاسب',
+  q_country: 'الدولة المفضلة', q_funding: 'وضع التمويل',
+  sectionAcademic: 'معدلاتك', sectionTests: 'درجات اختباراتك', sectionGoals: 'أهدافك',
+  next: 'التالي →', back: '→ رجوع', skip: 'تخطٍّ الآن', finish: '✓ احفظ وابدأ',
+  done: 'تم حفظ ملفك! أدواتك الآن مخصصة لك.',
+  optional: 'جميع الحقول اختيارية — املأ ما لديك.',
+};
+
+/* ── Phase 1: ACT labels ── */
+T.en.collegeList.actLabel = 'ACT Composite';
+T.en.collegeList.actHint  = 'Out of 36 — leave blank if not taken';
+T.ar.collegeList.actLabel = 'ACT المجمّع';
+T.ar.collegeList.actHint  = 'من 36 — اتركه فارغاً إن لم تختبر';
+T.en.common.actLabel = 'ACT Composite';
+T.ar.common.actLabel = 'ACT المجمّع';
+
+/* ── Phase 1: Essay inline feedback ── */
+T.en.essayFb = {
+  overallTitle: '📋 Overall Assessment',
+  highlightsTitle: '🖍️ Inline Feedback',
+  strengthsTitle: '✅ What\'s Working',
+  viewHighlighted: 'Highlighted', viewNotes: 'Notes List',
+  hint: 'Click any highlighted phrase to see what\'s wrong and how to fix it.',
+  issueLabel: 'Issue', fixLabel: 'Suggested Fix',
+  noHighlights: 'No specific line-level issues flagged — see the overall notes above.',
+  sevHigh: 'Major', sevMedium: 'Moderate', sevLow: 'Minor',
+};
+T.ar.essayFb = {
+  overallTitle: '📋 التقييم العام',
+  highlightsTitle: '🖍️ ملاحظات على النص',
+  strengthsTitle: '✅ ما ينجح',
+  viewHighlighted: 'النص المميّز', viewNotes: 'قائمة الملاحظات',
+  hint: 'انقر على أي عبارة مميّزة لمعرفة الخطأ وكيفية إصلاحه.',
+  issueLabel: 'المشكلة', fixLabel: 'الإصلاح المقترح',
+  noHighlights: 'لا توجد مشاكل محددة على مستوى الأسطر — راجع الملاحظات العامة أعلاه.',
+  sevHigh: 'جوهري', sevMedium: 'متوسط', sevLow: 'بسيط',
+};
+
+/* ── Phase 1: EC honors + cut-list ── */
+T.en.ec.honorsTitle = 'Honors & Awards';
+T.en.ec.honorsHint = 'Common App allows up to 5 honors. Add all of them — the AI picks your best 5.';
+T.en.ec.addHonor = '+ Add Another Honor';
+T.en.ec.honorTitleLabel = 'Honor / Award';
+T.en.ec.honorTitleHint = 'e.g., National Math Olympiad — Silver';
+T.en.ec.honorLevelLabel = 'Level';
+T.en.ec.honorGradeLabel = 'Grade / Year';
+T.en.ec.keepTitle = '✅ Your Common App 10';
+T.en.ec.keepSub = 'Keep these — ranked by impact';
+T.en.ec.cutTitle = '✂️ Consider Cutting';
+T.en.ec.cutSub = 'These add the least — drop them if you\'re over the limit';
+T.en.ec.honorsKeepTitle = '🏅 Your Top 5 Honors';
+T.en.ec.honorsCutTitle = '✂️ Honors to Cut';
+T.en.ec.rankLabel = 'Rank';
+T.ar.ec.honorsTitle = 'الجوائز والتكريمات';
+T.ar.ec.honorsHint = 'يسمح Common App بـ 5 جوائز. أضفها كلها — والذكاء الاصطناعي يختار أفضل 5.';
+T.ar.ec.addHonor = '+ أضف جائزة أخرى';
+T.ar.ec.honorTitleLabel = 'الجائزة / التكريم';
+T.ar.ec.honorTitleHint = 'مثال: أولمبياد الرياضيات الوطني — فضية';
+T.ar.ec.honorLevelLabel = 'المستوى';
+T.ar.ec.honorGradeLabel = 'الصف / السنة';
+T.ar.ec.keepTitle = '✅ قائمة Common App العشرة';
+T.ar.ec.keepSub = 'احتفظ بها — مرتبة حسب الأثر';
+T.ar.ec.cutTitle = '✂️ فكّر في حذفها';
+T.ar.ec.cutSub = 'هذه أقل فائدة — احذفها إن تجاوزت الحد';
+T.ar.ec.honorsKeepTitle = '🏅 أفضل 5 جوائز';
+T.ar.ec.honorsCutTitle = '✂️ جوائز للحذف';
+T.ar.ec.rankLabel = 'الترتيب';
