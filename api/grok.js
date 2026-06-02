@@ -55,7 +55,7 @@ export default async function handler(req) {
       messages,
       stream: true,
       temperature: 0.7,
-      max_tokens: 2500,
+      max_tokens: 4096,
     }),
   });
 
