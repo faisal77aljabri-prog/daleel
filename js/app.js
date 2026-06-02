@@ -195,11 +195,85 @@ function openCardModal(cardEl) {
     ${c.bestMajors?.length ? `<div class="modal-section"><div class="modal-section-title">🎯 ${currentLang === 'ar' ? 'أفضل التخصصات' : 'Best Majors'}</div><div class="chips-row">${c.bestMajors.map(m => `<span class="chip">${m}</span>`).join('')}</div></div>` : ''}
     ${c.saudiNotes ? `<div class="modal-section"><div class="modal-section-title">🇸🇦 ${currentLang === 'ar' ? 'ملاحظات سعودية' : 'Saudi Notes'}</div><p style="font-size:.82rem;color:var(--text-body);line-height:1.6">${c.saudiNotes}</p></div>` : ''}
     ${c.fitReason ? `<div class="modal-section"><div class="modal-section-title">✨ ${currentLang === 'ar' ? 'لماذا تناسبك' : 'Why This Fits You'}</div><div class="ccard-fit-box">${c.fitReason}</div></div>` : ''}
+    ${buildFitBreakdown(c)}
+    <div class="modal-section" id="uniEnrichment" style="display:none"></div>
     <div style="margin-top:20px">
       <button class="btn btn-primary modal-save-btn ${isSaved ? 'saved' : ''}" onclick="handleModalSave(this)">${saveLabel}</button>
     </div>`;
 
   document.getElementById('cardModalOverlay').classList.add('open');
+  loadUniversityEnrichment(c);
+}
+
+/* Render the Right-Fit breakdown bars from c.fitBreakdown */
+function buildFitBreakdown(c) {
+  const fb = c.fitBreakdown;
+  if (!fb || typeof fb !== 'object') return '';
+  const isAr = currentLang === 'ar';
+  const dims = [
+    { k: 'academics', label: isAr ? '🎓 المستوى الأكاديمي' : '🎓 Academics' },
+    { k: 'cost',      label: isAr ? '💰 التكلفة'          : '💰 Affordability' },
+    { k: 'location',  label: isAr ? '📍 الموقع'           : '📍 Location' },
+    { k: 'culture',   label: isAr ? '🕌 المجتمع المسلم'   : '🕌 Muslim community' },
+    { k: 'size',      label: isAr ? '🏛️ حجم الحرم'        : '🏛️ Campus size' },
+  ];
+  const rows = dims.filter(d => fb[d.k] != null).map(d => {
+    const v = Math.max(0, Math.min(100, Number(fb[d.k]) || 0));
+    return `<div class="fit-bar-row">
+      <span class="fit-bar-label">${d.label}</span>
+      <span class="fit-bar-track"><span class="fit-bar-fill" style="width:${v}%"></span></span>
+      <span class="fit-bar-val">${Math.round(v)}</span>
+    </div>`;
+  }).join('');
+  if (!rows) return '';
+  return `<div class="modal-section"><div class="modal-section-title">📊 ${isAr ? 'تحليل الملاءمة' : 'Fit Breakdown'}</div>${rows}</div>`;
+}
+
+/* Fetch + render real US university enrichment (Scorecard + OSM neighborhood).
+   Falls back silently for non-US schools or when the API has no data. */
+async function loadUniversityEnrichment(c) {
+  const el = document.getElementById('uniEnrichment');
+  if (!el) return;
+  const isAr = currentLang === 'ar';
+  el.style.display = '';
+  el.innerHTML = `<div class="modal-section-title">📍 ${isAr ? 'إحصاءات والحي' : 'Stats & Neighborhood'}</div>
+    <div class="uni-enrich-loading">${isAr ? 'جاري جلب البيانات الحقيقية…' : 'Fetching real data…'}</div>`;
+
+  let data;
+  try {
+    const res = await fetch(`/api/university?name=${encodeURIComponent(c.name)}`);
+    data = await res.json();
+  } catch { data = { found: false }; }
+
+  // Guard: modal may have closed/changed while awaiting
+  const cur = document.getElementById('uniEnrichment');
+  if (!cur) return;
+  if (!data || !data.found) { cur.style.display = 'none'; cur.innerHTML = ''; return; }
+
+  const stat = (label, val) => val != null && val !== '' ?
+    `<div class="uni-stat"><span class="uni-stat-num">${val}</span><span class="uni-stat-label">${label}</span></div>` : '';
+  const nb = data.neighborhood;
+  const chips = (arr) => (arr && arr.length)
+    ? arr.map(n => `<span class="chip">${escapeHtml(n)}</span>`).join('')
+    : `<span class="uni-none">${isAr ? '—' : '—'}</span>`;
+
+  cur.innerHTML = `
+    <div class="modal-section-title">📍 ${isAr ? 'إحصاءات حقيقية' : 'Real Stats'} <span class="uni-src">${isAr ? 'المصدر: College Scorecard' : 'via College Scorecard'}</span></div>
+    <div class="uni-stats-grid">
+      ${stat(isAr ? 'نسبة القبول' : 'Admit rate', data.admissionRate != null ? data.admissionRate + '%' : null)}
+      ${stat(isAr ? 'عدد الطلاب' : 'Enrollment', data.enrollment != null ? data.enrollment.toLocaleString() : null)}
+      ${stat(isAr ? 'متقدمون (تقديري)' : 'Applicants (est.)', data.applicantEstimate != null ? '~' + data.applicantEstimate.toLocaleString() : null)}
+      ${stat('SAT', data.satMidpoint)}
+      ${stat('ACT', data.actMidpoint)}
+      ${stat(isAr ? 'التكلفة/سنة' : 'Cost/yr', data.annualCost != null ? '$' + data.annualCost.toLocaleString() : null)}
+    </div>
+    ${nb ? `
+      <div class="uni-nb">
+        <div class="uni-nb-row"><span class="uni-nb-cat">🛒 ${isAr ? 'بقالة قريبة' : 'Groceries nearby'}</span><div class="chips-row">${chips(nb.groceries)}</div></div>
+        <div class="uni-nb-row"><span class="uni-nb-cat">🍽️ ${isAr ? 'مطاعم ومقاهٍ' : 'Food & cafes'}</span><div class="chips-row">${chips(nb.restaurants)}</div></div>
+        <div class="uni-nb-row"><span class="uni-nb-cat">🚉 ${isAr ? 'محطات نقل' : 'Transit stations'}</span><div class="chips-row">${chips(nb.transit)}</div></div>
+        <div class="uni-nb-note">${isAr ? 'الحي عبر OpenStreetMap ضمن ~1.5 كم من الحرم.' : 'Neighborhood via OpenStreetMap, within ~1.5km of campus.'}</div>
+      </div>` : ''}`;
 }
 
 function handleModalSave(btn) {
@@ -259,9 +333,15 @@ function buildCard(c, saved, i) {
     c.medianSAT      ? `SAT: ${c.medianSAT}` : '',
   ].filter(Boolean).map(s => `<span class="card-stat-pill">${s}</span>`).join('');
   const moreLabel = isAr ? 'تفاصيل ←' : 'More Info →';
+  const fit = Number(c.fitScore);
+  const fitHtml = Number.isFinite(fit) ? `<div class="card-fit" title="${isAr ? 'درجة الملاءمة' : 'Fit score'}">
+      <span class="card-fit-num">${Math.round(fit)}%</span>
+      <span class="card-fit-label">${isAr ? 'ملاءمة' : 'fit'}</span>
+    </div>` : '';
 
   return `<div class="card card--${currentCardSize}" style="animation-delay:${i * .06}s" data-college='${JSON.stringify(c).replace(/'/g, "&#39;")}'>
     <div class="card-badge card-badge--${c.type}">${BADGE_LABELS[c.type] || c.type}</div>
+    ${fitHtml}
     <div class="card-icon">${c.flag || '🎓'}</div>
     <div class="card-title">${c.name}</div>
     <div class="card-subtitle">${c.location || ''}</div>
@@ -472,9 +552,13 @@ function submitCollegeList(event) {
     `Funding: ${budget}`, `Extracurriculars: ${ec}`,
   ].filter(Boolean).join('\n');
 
+  // Right-Fit priorities (1=low, 5=high)
+  const w = id => form.querySelector(`#${id}`)?.value || '3';
+  const priorities = `Priorities (1=don't care, 5=critical): Academic prestige=${w('w_academics')}, Affordability=${w('w_cost')}, Location & setting=${w('w_location')}, Saudi/Muslim community=${w('w_culture')}, Campus size=${w('w_size')}`;
+
   const userMsg = currentLang === 'ar'
-    ? `ملفي الأكاديمي:\n${profile}\n\nابنِ قائمة جامعاتي كـ JSON.`
-    : `My profile:\n${profile}\n\nBuild my college list as JSON.`;
+    ? `ملفي الأكاديمي:\n${profile}\n\n${priorities}\n\nابنِ قائمة جامعاتي كـ JSON مع درجات الملاءمة.`
+    : `My profile:\n${profile}\n\n${priorities}\n\nBuild my college list as JSON with fit scores.`;
 
   // Save query + metadata to sessionStorage, then navigate to results page
   sessionStorage.setItem('daleel_result_query', JSON.stringify({
@@ -1275,7 +1359,7 @@ function switchTab(tabId, btn) {
 }
 
 /* ── System Prompts ────────────────────────────────────────── */
-const JSON_COLLEGE_SCHEMA = `{"assessment":"2-3 sentence honest profile assessment","colleges":[{"type":"reach","name":"Full University Name","shortName":"Short Name","location":"City, State, Country","flag":"🇺🇸","country":"USA","acceptanceRate":"4%","medianSAT":"1540","annualCost":"$57,500/yr","financialAid":"Need-blind for internationals","earlyDeadline":"Nov 1 (EA)","regularDeadline":"Jan 1 (RD)","applyThrough":"MIT Application","bestMajors":["CS","EE","Physics"],"saudiNotes":"Active Saudi club. Halal food available.","fitReason":"Your SAT Math and robotics background align with this school."}]}`;
+const JSON_COLLEGE_SCHEMA = `{"assessment":"2-3 sentence honest profile assessment","colleges":[{"type":"reach","name":"Full University Name","shortName":"Short Name","location":"City, State, Country","flag":"🇺🇸","country":"USA","acceptanceRate":"4%","medianSAT":"1540","annualCost":"$57,500/yr","financialAid":"Need-blind for internationals","earlyDeadline":"Nov 1 (EA)","regularDeadline":"Jan 1 (RD)","applyThrough":"MIT Application","bestMajors":["CS","EE","Physics"],"saudiNotes":"Active Saudi club. Halal food available.","fitReason":"Your SAT Math and robotics background align with this school.","fitScore":86,"fitBreakdown":{"academics":95,"cost":60,"location":80,"culture":75,"size":70}}]}`;
 
 const SYSTEM_PROMPTS = {
   collegeList: (lang) => `You are Daleel, an AI college advisor for Saudi students. Deep knowledge of:
@@ -1289,6 +1373,8 @@ const SYSTEM_PROMPTS = {
 ${lang === 'ar' ? 'Respond in Arabic (العربية) only.' : 'Respond in English only.'}
 Be HONEST — if a profile is weak, say so with specific improvements. Tone: direct, like a knowledgeable older sibling.
 Give exactly 3 reaches, 3 targets, 3 safeties.
+
+RIGHT-FIT SCORING: The student gave priority weights (1-5) for Academic prestige, Affordability, Location & setting, Saudi/Muslim community, and Campus size. For EACH college, score every dimension 0-100 for how well that school satisfies it (e.g. cost=high score means it is affordable / strong aid for the student's funding situation; culture=high means a large Muslim/Saudi community and halal access). Then compute "fitScore" (0-100) as the weighted average of the five fitBreakdown values using the student's weights, so schools matching what they care about most score higher. fitReason should reference their top priorities.
 
 CRITICAL: Return ONLY valid JSON matching this schema exactly, no markdown, no code fences, no text outside JSON:
 ${JSON_COLLEGE_SCHEMA}`,

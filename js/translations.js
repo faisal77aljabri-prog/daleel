@@ -834,3 +834,19 @@ T.ar.ec.cutSub = 'هذه أقل فائدة — احذفها إن تجاوزت ا
 T.ar.ec.honorsKeepTitle = '🏅 أفضل 5 جوائز';
 T.ar.ec.honorsCutTitle = '✂️ جوائز للحذف';
 T.ar.ec.rankLabel = 'الترتيب';
+
+/* ── Phase 2: Right-Fit Matcher sliders ── */
+T.en.collegeList.sectionFit = 'What Matters Most to You?';
+T.en.collegeList.fitHint = "Drag each slider. We'll score every match on how well it fits your priorities.";
+T.en.collegeList.fitAcademics = '🎓 Academic prestige';
+T.en.collegeList.fitCost = '💰 Affordability';
+T.en.collegeList.fitLocation = '📍 Location & setting';
+T.en.collegeList.fitCulture = '🕌 Saudi/Muslim community';
+T.en.collegeList.fitSize = '🏛️ Campus size';
+T.ar.collegeList.sectionFit = 'ما الأهم بالنسبة لك؟';
+T.ar.collegeList.fitHint = 'حرّك كل شريط. سنقيّم كل جامعة بناءً على مدى ملاءمتها لأولوياتك.';
+T.ar.collegeList.fitAcademics = '🎓 المستوى الأكاديمي';
+T.ar.collegeList.fitCost = '💰 القدرة على تحمّل التكلفة';
+T.ar.collegeList.fitLocation = '📍 الموقع والبيئة';
+T.ar.collegeList.fitCulture = '🕌 المجتمع السعودي/المسلم';
+T.ar.collegeList.fitSize = '🏛️ حجم الحرم الجامعي';

@@ -2704,3 +2704,44 @@ html[lang="ar"] .ob-field input, html[lang="ar"] .ob-field select { direction: r
 .ec-rank-badge { position: absolute; top: 10px; inset-inline-end: 10px; width: 24px; height: 24px; border-radius: 50%; background: var(--navy-deep); color: var(--gold); font-size: .72rem; font-weight: 700; display: flex; align-items: center; justify-content: center; }
 .cgl-cut { color: #991b1b; }
 .cgl-keep { color: #065f46; }
+
+/* ════════════════════════════════════════════════════════════════
+   PHASE 2 — Right-Fit Matcher + university enrichment
+   ════════════════════════════════════════════════════════════════ */
+
+/* Priority sliders */
+.fit-sliders { display: grid; grid-template-columns: 1fr 1fr; gap: 16px 24px; }
+.fit-slider { display: flex; flex-direction: column; gap: 7px; }
+.fit-slider-head { display: flex; justify-content: space-between; align-items: center; font-size: .85rem; font-weight: 600; color: var(--text-body); }
+.fit-slider-val { background: var(--navy-deep); color: var(--gold); font-size: .72rem; font-weight: 700; min-width: 22px; height: 22px; border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; }
+.fit-slider input[type=range] { -webkit-appearance: none; appearance: none; width: 100%; height: 6px; border-radius: 99px; background: linear-gradient(90deg, var(--gold) 0%, var(--surface) 0%); outline: none; }
+.fit-slider input[type=range]::-webkit-slider-thumb { -webkit-appearance: none; appearance: none; width: 20px; height: 20px; border-radius: 50%; background: var(--gold); border: 3px solid var(--white); box-shadow: 0 1px 6px rgba(11,25,41,.25); cursor: pointer; }
+.fit-slider input[type=range]::-moz-range-thumb { width: 18px; height: 18px; border-radius: 50%; background: var(--gold); border: 3px solid var(--white); cursor: pointer; }
+@media (max-width: 560px) { .fit-sliders { grid-template-columns: 1fr; } }
+
+/* Fit score badge on cards */
+.card-fit { position: absolute; top: 12px; inset-inline-end: 12px; display: flex; flex-direction: column; align-items: center; line-height: 1; }
+.card-fit-num { font-size: 1.05rem; font-weight: 800; color: var(--gold-dim); }
+.card-fit-label { font-size: .56rem; text-transform: uppercase; letter-spacing: .5px; color: var(--text-muted); }
+.card--sm .card-fit-num { font-size: .9rem; }
+
+/* Fit breakdown bars (modal) */
+.fit-bar-row { display: grid; grid-template-columns: 130px 1fr 28px; align-items: center; gap: 10px; margin-bottom: 8px; }
+.fit-bar-label { font-size: .78rem; color: var(--text-body); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.fit-bar-track { height: 7px; background: var(--surface); border-radius: 99px; overflow: hidden; }
+.fit-bar-fill { display: block; height: 100%; background: linear-gradient(90deg, var(--gold-dim), var(--gold)); border-radius: 99px; }
+.fit-bar-val { font-size: .74rem; font-weight: 700; color: var(--text-muted); text-align: end; }
+@media (max-width: 480px) { .fit-bar-row { grid-template-columns: 96px 1fr 24px; } }
+
+/* University enrichment (Scorecard + OSM) */
+.uni-enrich-loading { font-size: .82rem; color: var(--text-muted); font-style: italic; padding: 6px 0; }
+.uni-src { font-size: .62rem; font-weight: 500; color: var(--text-muted); text-transform: none; letter-spacing: 0; margin-inline-start: 6px; }
+.uni-stats-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin: 10px 0 14px; }
+.uni-stat { background: var(--off-white); border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 10px 8px; text-align: center; }
+.uni-stat-num { display: block; font-size: 1.05rem; font-weight: 800; color: var(--navy-deep); line-height: 1.2; }
+.uni-stat-label { display: block; font-size: .64rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: .4px; margin-top: 2px; }
+.uni-nb-row { margin-bottom: 10px; }
+.uni-nb-cat { display: block; font-size: .76rem; font-weight: 700; color: var(--text-dark); margin-bottom: 5px; }
+.uni-nb-note { font-size: .68rem; color: var(--text-muted); font-style: italic; margin-top: 4px; }
+.uni-none { font-size: .78rem; color: var(--text-muted); }
+@media (max-width: 480px) { .uni-stats-grid { grid-template-columns: repeat(2, 1fr); } }

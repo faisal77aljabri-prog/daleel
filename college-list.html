@@ -191,6 +191,34 @@
         </div>
       </div>
 
+      <div class="form-spacer"></div>
+
+      <!-- Right-Fit priorities -->
+      <div class="form-section-title" data-i18n="collegeList.sectionFit">What Matters Most to You?</div>
+      <small style="display:block;color:var(--text-muted);font-size:.78rem;margin:-6px 0 16px" data-i18n="collegeList.fitHint">Drag each slider. We'll score every match on how well it fits your priorities.</small>
+      <div class="fit-sliders">
+        <div class="fit-slider">
+          <div class="fit-slider-head"><span data-i18n="collegeList.fitAcademics">🎓 Academic prestige</span><span class="fit-slider-val" id="wv_academics">3</span></div>
+          <input type="range" id="w_academics" min="1" max="5" value="3" oninput="document.getElementById('wv_academics').textContent=this.value" />
+        </div>
+        <div class="fit-slider">
+          <div class="fit-slider-head"><span data-i18n="collegeList.fitCost">💰 Affordability</span><span class="fit-slider-val" id="wv_cost">3</span></div>
+          <input type="range" id="w_cost" min="1" max="5" value="3" oninput="document.getElementById('wv_cost').textContent=this.value" />
+        </div>
+        <div class="fit-slider">
+          <div class="fit-slider-head"><span data-i18n="collegeList.fitLocation">📍 Location &amp; setting</span><span class="fit-slider-val" id="wv_location">3</span></div>
+          <input type="range" id="w_location" min="1" max="5" value="3" oninput="document.getElementById('wv_location').textContent=this.value" />
+        </div>
+        <div class="fit-slider">
+          <div class="fit-slider-head"><span data-i18n="collegeList.fitCulture">🕌 Saudi/Muslim community</span><span class="fit-slider-val" id="wv_culture">3</span></div>
+          <input type="range" id="w_culture" min="1" max="5" value="3" oninput="document.getElementById('wv_culture').textContent=this.value" />
+        </div>
+        <div class="fit-slider">
+          <div class="fit-slider-head"><span data-i18n="collegeList.fitSize">🏛️ Campus size</span><span class="fit-slider-val" id="wv_size">3</span></div>
+          <input type="range" id="w_size" min="1" max="5" value="3" oninput="document.getElementById('wv_size').textContent=this.value" />
+        </div>
+      </div>
+
       <div class="form-actions">
         <button type="submit" class="btn btn-primary btn-lg" data-i18n="collegeList.submitBtn">
           🎓 Build My College List
