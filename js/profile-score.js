@@ -32,6 +32,7 @@ function getScoreInputs() {
     mathGpa:  n('psMathGpa'),
     satMath:  n('psSatMath'),
     satTotal: n('psSatTotal'),
+    act:      n('psAct'),
     qudurat:  n('psQudurat'),
     school:   v('psSchool') || '',
     major:    (v('psMajor') || '').toLowerCase(),
@@ -56,12 +57,16 @@ function calcAcademic(inp) {
   if (inp.mathGpa >= 90)      pts += 5;
   else if (inp.mathGpa >= 85) pts += 3;
 
-  // Test: SAT Math or Qudurat (take better)
+  // Test: SAT Math, ACT, or Qudurat (take the best signal)
   let testPts = 0;
   if (inp.satMath >= 750)      testPts = Math.max(testPts, 8);
   else if (inp.satMath >= 700) testPts = Math.max(testPts, 6);
   else if (inp.satMath >= 650) testPts = Math.max(testPts, 4);
   else if (inp.satMath >= 600) testPts = Math.max(testPts, 2);
+  if (inp.act >= 34)      testPts = Math.max(testPts, 8);
+  else if (inp.act >= 31) testPts = Math.max(testPts, 6);
+  else if (inp.act >= 27) testPts = Math.max(testPts, 4);
+  else if (inp.act >= 24) testPts = Math.max(testPts, 2);
   if (inp.qudurat >= 95)      testPts = Math.max(testPts, 8);
   else if (inp.qudurat >= 90) testPts = Math.max(testPts, 6);
   else if (inp.qudurat >= 80) testPts = Math.max(testPts, 3);
@@ -132,15 +137,21 @@ function buildActionCards(inp, scores) {
   if (inp.gpa < 85) actions.push({ pts: inp.gpa < 80 ? 6 : 3, icon:'📈', text: isAr ? `ارفع المعدل التراكمي إلى 85%+: يفتح أهلية CPP ويرفع درجتك الأكاديمية` : `Raise cumulative GPA to 85%+: unlocks CPP eligibility and boosts academic score` });
   if (inp.mathGpa < 85 && inp.gpa > 0) actions.push({ pts: 3, icon:'🧮', text: isAr ? `ارفع معدل الرياضيات/العلوم إلى 85%+: مطلوب لـ CPP` : `Raise Math & Science GPA to 85%+: required for CPP eligibility` });
 
-  // Test score actions
+  // Test score actions (CPP needs SAT Math 630+ or Qudurat 90+; ACT does not count for CPP)
+  const hasGoodAct = inp.act >= 31; // already earns strong academic test points
   if (inp.satMath < 630 && inp.qudurat < 90) {
     const satGap = Math.max(0, 630 - inp.satMath);
     const qGap   = Math.max(0, 90  - inp.qudurat);
     if (inp.satMath > 0) actions.push({ pts: 4, icon:'📝', text: isAr ? `ارفع SAT Math بمقدار ${satGap} نقطة إلى 630+` : `Raise SAT Math by ${satGap} points to 630+` });
+    else if (hasGoodAct) actions.push({ pts: 3, icon:'📝', text: isAr ? `لديك ACT قوي للقبول الجامعي. أضف SAT Math 630+ أو القدرات 90+ فقط إذا كنت تستهدف برنامج أرامكو CPP` : `Your ACT is strong for admissions. Add SAT Math 630+ or Qudurat 90+ only if targeting the Aramco CPP` });
     else                 actions.push({ pts: 6, icon:'📝', text: isAr ? `أخذ SAT Math والوصول إلى 630+: يفتح أهلية CPP ويضيف +6 نقاط` : `Take SAT Math and reach 630+: unlocks CPP eligibility and adds +6 pts` });
     if (inp.qudurat > 0) actions.push({ pts: 3, icon:'📝', text: isAr ? `ارفع القدرات بمقدار ${qGap} نقطة إلى 90+: يُعادل SAT Math 630` : `Raise Qudurat by ${qGap} points to 90+: equivalent to SAT Math 630 for CPP` });
   } else if (inp.satMath < 750 && inp.satMath > 0) {
     actions.push({ pts: 2, icon:'📝', text: isAr ? `ارفع SAT Math إلى 750+: أضف نقطتين إضافيتين للأكاديمي` : `Raise SAT Math to 750+: adds 2 more academic points` });
+  }
+  // No test at all
+  if (inp.satMath === 0 && inp.act === 0 && inp.qudurat === 0) {
+    actions.push({ pts: 8, icon:'📝', text: isAr ? `خذ اختباراً موحداً (SAT أو ACT أو القدرات): مطلوب لمعظم الجامعات` : `Take a standardized test (SAT, ACT, or Qudurat): required by most universities` });
   }
 
   // PS
@@ -261,7 +272,7 @@ function submitScoreAI() {
   const total = calcAcademic(inp) + calcEC(inp) + calcMaterials(inp) + calcSaudi(inp);
   const cppStatus = getCPPStatus(inp);
 
-  const profile = `GPA: ${inp.gpa}%, Math/Sci GPA: ${inp.mathGpa}%, SAT Math: ${inp.satMath || 'not taken'}, SAT Total: ${inp.satTotal || 'not taken'}, Qudurat: ${inp.qudurat || 'not taken'}, School: ${inp.school}, Major: ${inp.major || 'undecided'}, EC tier: ${inp.ecTier}, Personal Statement: ${inp.ps}, Recs: ${inp.recs}, AP courses: ${inp.ap}, Overall score: ${total}/100, CPP status: ${cppStatus}`;
+  const profile = `GPA: ${inp.gpa}%, Math/Sci GPA: ${inp.mathGpa}%, SAT Math: ${inp.satMath || 'not taken'}, SAT Total: ${inp.satTotal || 'not taken'}, ACT: ${inp.act || 'not taken'}, Qudurat: ${inp.qudurat || 'not taken'}, School: ${inp.school}, Major: ${inp.major || 'undecided'}, EC tier: ${inp.ecTier}, Personal Statement: ${inp.ps}, Recs: ${inp.recs}, AP courses: ${inp.ap}, Overall score: ${total}/100, CPP status: ${cppStatus}`;
 
   const userMsg = isAr
     ? `ملفي الأكاديمي:\n${profile}\n\nأعطني تحليلاً معمّقاً صادقاً لملفي مع خطوات محددة لتحسين كل فئة.`
@@ -291,7 +302,7 @@ document.addEventListener('DOMContentLoaded', () => {
   if (!document.getElementById('scoreNum')) return;
 
   // Wire live calculation to all inputs
-  document.querySelectorAll('#psGpa,#psMathGpa,#psSatMath,#psSatTotal,#psQudurat,#psSchool,#psMajor,#psEcNum,#psEcTier,#psPS,#psRecs,#psAP').forEach(el => {
+  document.querySelectorAll('#psGpa,#psMathGpa,#psSatMath,#psSatTotal,#psAct,#psQudurat,#psSchool,#psMajor,#psEcNum,#psEcTier,#psPS,#psRecs,#psAP').forEach(el => {
     el.addEventListener('input',  calculateLiveScore);
     el.addEventListener('change', calculateLiveScore);
   });
