@@ -147,6 +147,35 @@
       margin-right: 8px;
     }
     @keyframes spin { to { transform: rotate(360deg); } }
+
+    /* Auth Tabs */
+    .auth-tabs {
+      display: flex;
+      gap: 0;
+      margin-bottom: 28px;
+      border-bottom: 2px solid var(--border);
+    }
+    .auth-tab {
+      flex: 1;
+      padding: 14px 0;
+      text-align: center;
+      font-weight: 600;
+      font-size: 0.95rem;
+      color: var(--text-muted);
+      cursor: pointer;
+      transition: all 0.3s ease;
+      border-bottom: 3px solid transparent;
+      margin-bottom: -2px;
+      background: none;
+      border: none;
+    }
+    .auth-tab:hover {
+      color: var(--text-body);
+    }
+    .auth-tab.active {
+      color: var(--gold);
+      border-bottom-color: var(--gold);
+    }
   </style>
 </head>
 <body>
@@ -155,6 +184,12 @@
   <div class="auth-card">
     <div class="auth-logo">
       <span class="logo-arabic">دليل</span>
+    </div>
+
+    <!-- Auth Tabs -->
+    <div class="auth-tabs">
+      <button class="auth-tab active" onclick="switchForm('signup')">Create Account</button>
+      <button class="auth-tab" onclick="switchForm('signin')">Sign In</button>
     </div>
 
     <!-- Sign Up Form -->
@@ -182,10 +217,6 @@
       <button class="auth-btn" type="submit" id="signupBtn">
         Create Account
       </button>
-
-      <div class="auth-toggle">
-        Already have an account? <a onclick="switchForm('signin')">Sign In</a>
-      </div>
     </form>
 
     <!-- Sign In Form -->
@@ -208,10 +239,6 @@
       <button class="auth-btn" type="submit" id="signinBtn">
         Sign In
       </button>
-
-      <div class="auth-toggle">
-        Don't have an account? <a onclick="switchForm('signup')">Create one</a>
-      </div>
     </form>
 
   </div>

@@ -125,6 +125,23 @@ function requireAuth() {
 }
 
 /**
+ * Switch between sign-up and sign-in forms (and update tab styling)
+ */
+function switchForm(form) {
+  document.querySelectorAll('.auth-form').forEach(f => f.classList.remove('active'));
+  document.querySelectorAll('.auth-error').forEach(e => e.classList.remove('show'));
+  document.querySelectorAll('.auth-tab').forEach(t => t.classList.remove('active'));
+
+  if (form === 'signup') {
+    document.getElementById('signupForm')?.classList.add('active');
+    document.querySelectorAll('.auth-tab')[0]?.classList.add('active');
+  } else {
+    document.getElementById('signinForm')?.classList.add('active');
+    document.querySelectorAll('.auth-tab')[1]?.classList.add('active');
+  }
+}
+
+/**
  * Initialize on page load
  */
 document.addEventListener('DOMContentLoaded', () => {
