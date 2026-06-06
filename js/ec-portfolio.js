@@ -9,10 +9,11 @@ let currentLang = localStorage.getItem('daleel_lang') || 'en';
  * Load saved ECs from profile
  */
 function loadSavedECs() {
-  const userEmail = daleel.auth.getSessionUser?.() || '';
+  const userEmail = (typeof daleel !== 'undefined' && daleel.auth?.getSessionUser?.()) || localStorage.getItem('daleel_user_email') || 'guest';
   const profileKey = `daleel_profile_${userEmail}`;
   const profile = JSON.parse(localStorage.getItem(profileKey) || '{}');
   savedECs = profile.ecs || [];
+  console.log('Loaded ECs:', savedECs);
   renderECList();
 }
 
@@ -63,12 +64,13 @@ function deleteEC(id) {
  * Save ECs to user's profile
  */
 function saveECsToProfile() {
-  const userEmail = daleel.auth.getSessionUser?.() || '';
+  const userEmail = (typeof daleel !== 'undefined' && daleel.auth?.getSessionUser?.()) || localStorage.getItem('daleel_user_email') || 'guest';
   const profileKey = `daleel_profile_${userEmail}`;
   const profile = JSON.parse(localStorage.getItem(profileKey) || '{}');
   profile.ecs = savedECs;
   localStorage.setItem(profileKey, JSON.stringify(profile));
   localStorage.setItem('daleel_profile', JSON.stringify(profile)); // cross-tool sync
+  console.log('Saved ECs:', savedECs);
 }
 
 /**

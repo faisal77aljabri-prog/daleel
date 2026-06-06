@@ -644,20 +644,25 @@ function updateFAB() {
 /**
  * Show "My Profile" link in navbar if user is signed in
  */
-async function updateAuthNav() {
+function updateAuthNav() {
   const navProfile = document.getElementById('navProfile');
   if (!navProfile) return;
 
-  const userId = localStorage.getItem('daleel_user_id');
-  const userEmail = localStorage.getItem('daleel_user_email');
+  // Check if user is authenticated via auth.js
+  const userEmail = window.daleel?.auth?.getSessionUser?.() || localStorage.getItem('daleel_user_email');
 
-  if (userId && userEmail) {
+  if (userEmail) {
     navProfile.style.display = 'inline-block';
+    navProfile.href = '/profile.html';
     navProfile.textContent = `👤 ${userEmail.split('@')[0]}`;
   } else {
     navProfile.style.display = 'none';
   }
 }
+
+// Call updateAuthNav whenever auth state changes
+document.addEventListener('DOMContentLoaded', updateAuthNav);
+window.addEventListener('storage', updateAuthNav);
 
 /* ── My List page renderer ─────────────────────────────────── */
 function renderMyListPage() {
@@ -1559,76 +1564,26 @@ function switchTab(tabId, btn) {
 }
 
 /* ── System Prompts ────────────────────────────────────────── */
-const JSON_COLLEGE_SCHEMA = `{"assessment":"2-3 sentence honest profile assessment","colleges":[{"type":"reach","name":"Full University Name","shortName":"Short Name","location":"City, State, Country","flag":"🇺🇸","country":"USA","acceptanceRate":"4%","medianSAT":"1540","annualCost":"$57,500/yr","financialAid":"Need-blind for internationals","earlyDeadline":"Nov 1 (EA)","regularDeadline":"Jan 1 (RD)","applyThrough":"MIT Application","bestMajors":["CS","EE","Physics"],"pros":["Exceptional STEM programs ranked top-5 globally","Unmatched research opportunities with industry partnerships","Located in Boston tech hub with networking access","Generous financial aid for internationals","Strong alumni network across Fortune 500 companies"],"cons":["Brutal grading curves and highly competitive peer group","Expensive even with aid (~$80k after fin aid)","Cold winters in Massachusetts","Can feel intimidating for first-generation students","High stress culture, mental health challenges common"],"studentLife":"Campus life buzzes with 24/7 maker spaces, hackathons every weekend, and intense study sessions. Dorm culture is strong but competitive. Fraternities/sororities are optional. Food is decent but pricey. Housing guaranteed all 4 years. Great intramural sports and clubs.","careerOutcomes":"95% of graduates employed within 6 months. Average starting salary $78,000 (CS graduates earn $120k+). Top employers: Google, Apple, Microsoft, Goldman Sachs, McKinsey. Strong placement in Silicon Valley and NYC.","internships":"MIT emphasizes independent research; most students do 2+ summer internships. Strong connections with tech companies. Industry partners recruit directly on campus.","saudiNotes":"Active Saudi club (100+ members). Halal dining options in main cafeteria. Prayer room in student center. Saudi community very supportive.","fitReason":"Your SAT Math and robotics background align with this school.","fitScore":86,"fitBreakdown":{"academics":95,"cost":60,"location":80,"culture":75,"size":70}}]}`;
+const JSON_COLLEGE_SCHEMA = `{"assessment":"brief assessment","colleges":[{"type":"reach","name":"University Name","location":"City, State, Country","flag":"🇺🇸","country":"USA","acceptanceRate":"4%","medianSAT":"1540","annualCost":"$57,500","financialAid":"Need-blind","earlyDeadline":"Nov 1","regularDeadline":"Jan 1","applyThrough":"Common App","bestMajors":["CS"],"pros":["Top program in your major","Strong alumni network","Good financial aid"],"cons":["Very competitive","Expensive","High stress"],"studentLife":"Vibrant campus with research focus. Competitive but collaborative. Good dorm life and activities.","careerOutcomes":"95% employed in 6mo. Avg salary $75k. Top employers: Google, Microsoft, Apple.","internships":"Most students do summer internships. Strong tech company partnerships.","saudiNotes":"Active Saudi community. Halal options available. Prayer facility on campus.","fitReason":"Your scores match this school's profile.","fitScore":85,"fitBreakdown":{"academics":90,"cost":60,"location":75,"culture":70,"size":75}}]}`;
 
 const SYSTEM_PROMPTS = {
-  collegeList: (lang) => `You are Daleel, a detailed personalized college advisor for Saudi students. Expert knowledge of:
-- Saudi GPA, Qudurat, Tahsili systems
-- ACT vs SAT equivalences
-- Aramco CPP, KASP, Mawhiba, SABIC, STC scholarships
-- Saudi cultural context: halal dining, Muslim communities, prayer facilities
+  collegeList: (lang) => `You are Daleel, a college advisor for Saudi students. Expert in: Saudi GPA/Qudurat/Tahsili, ACT/SAT, CPP eligibility, KASP/Mawhiba scholarships.
 
 ${lang === 'ar' ? 'Respond in Arabic only.' : 'Respond in English only.'}
-TONE: Detailed, honest, supportive. Be FRANK — if weak, explain specific improvements.
+Give 3 REACH (admit <15%, stats at/below median), 3 TARGET (admit 15-40%, near median), 3 SAFETY (admit >40%, above median).
 
-TIERS:
-- REACH (3): Admit rate <15%. Stats at/below median. Explain why they're competitive anyway.
-- TARGET (3): Admit rate 15-40%. Stats near median. These are realistic, achievable.
-- SAFETY (3): Admit rate >40%. Stats above median. Solid backup options.
+For EACH school:
+- **Pros**: 3 specific strengths (e.g., "Ranked #3 for CS")
+- **Cons**: 3 realistic challenges
+- **studentLife**: 1-2 sentences on vibe/dorms/social
+- **careerOutcomes**: employment %, avg salary, top employers
+- **internships**: how common, quality
+- **saudiNotes**: Saudi community, halal, prayer facilities
+- **fitReason**: 1 sentence on why (reference top 2 priorities)
+- **fitScore**: 0-100 (weighted by their priorities)
+- **fitBreakdown**: {academics, cost, location, culture, size} each 0-100
 
-FOR EVERY SCHOOL, provide:
-
-**PROS** (5-10 specific strengths, not generic):
-- Program rank in their major
-- Research/internship opportunities
-- Alumni network strength
-- Location advantages
-- Specific financial aid generosity
-- Campus culture strengths
-- Example: "Ranked #3 globally for CS" not "great STEM programs"
-
-**CONS** (5-10 realistic challenges):
-- Competitive/brutal grading
-- Cost even with aid
-- Social/mental health challenges
-- Geographic isolation or weather
-- Lack of diversity (if applicable)
-- Example: "Expensive even after aid (~$70k/yr)" not "costs money"
-
-**STUDENT LIFE** (2-3 sentence paragraph):
-- Dorm culture, social scene, weekend activities
-- Food, housing, safety
-- Vibe: competitive vs collaborative, stressed vs relaxed
-- Unique traditions or community feel
-
-**CAREER OUTCOMES** (1-2 sentences):
-- Employment rate (%) within 6 months
-- Average starting salary (especially for their major)
-- Top 5 employers recruiting from this school
-
-**INTERNSHIPS** (1-2 sentences):
-- How common are summer internships?
-- Quality of co-op / work-study programs
-- Employer partnerships
-
-**SAUDI NOTES**:
-- Saudi student club size and activity level
-- Halal food availability (specify: dedicated halal section, limited options, etc.)
-- Prayer facilities (on-campus mosque, prayer room, etc.)
-- Saudi community presence and support
-- Islamic life quality for Muslim students
-
-**FIT REASONING**:
-- Reference their TOP 2 priorities
-- Use their exact stats to show competitiveness
-- Explain why NOW, not someday
-
-RIGHT-FIT SCORING:
-For each college, score all 5 dimensions 0-100 (student's priorities: academics, cost, location, culture, size).
-- fitScore = weighted average using their priority weights
-- Only high-fit schools exceed fitScore 75
-
-CRITICAL: Return ONLY valid JSON, no markdown, no code fences, no text outside JSON:
+CRITICAL: Return ONLY valid JSON, no markdown, no code fences:
 ${JSON_COLLEGE_SCHEMA}`,
 
   scholarships: (lang) => `You are Daleel, a scholarship advisor for Saudi students. Know all Saudi scholarships:
