@@ -4,34 +4,49 @@
  * Requires SUPABASE_URL and SUPABASE_ANON_KEY in Vercel env.
  */
 
-const SUPABASE_URL = import.meta?.env?.VITE_SUPABASE_URL || localStorage.getItem('supabase_url') || '';
-const SUPABASE_ANON_KEY = import.meta?.env?.VITE_SUPABASE_ANON_KEY || localStorage.getItem('supabase_key') || '';
-
+let SUPABASE_URL = localStorage.getItem('supabase_url') || '';
+let SUPABASE_ANON_KEY = localStorage.getItem('supabase_key') || '';
 let supabaseClient = null;
 
 /**
  * Initialize Supabase client. If keys are available, set up auth listener.
  */
 async function initAuth() {
-  if (!SUPABASE_URL || !SUPABASE_ANON_KEY) {
-    console.warn('Supabase keys not configured. Auth disabled.');
-    // For now, show a dev notice
+  try {
+    // Fetch config from API endpoint
+    const configRes = await fetch('/api/config');
+    const config = await configRes.json();
+    SUPABASE_URL = config.supabaseUrl;
+    SUPABASE_ANON_KEY = config.supabaseAnonKey;
+
+    if (!SUPABASE_URL || !SUPABASE_ANON_KEY) {
+      throw new Error('Supabase keys not returned from config endpoint');
+    }
+
+    // Cache for next time
+    localStorage.setItem('supabase_url', SUPABASE_URL);
+    localStorage.setItem('supabase_key', SUPABASE_ANON_KEY);
+  } catch (err) {
+    console.error('Failed to load Supabase config:', err);
     if (document.body) {
       const notice = document.createElement('div');
-      notice.style.cssText = 'position:fixed;top:0;left:0;right:0;background:#ffd700;padding:10px;z-index:9999;text-align:center;font-size:12px;color:#333';
-      notice.textContent = '⚠️ Supabase keys not configured. Add SUPABASE_URL and SUPABASE_ANON_KEY to Vercel env.';
+      notice.style.cssText = 'position:fixed;top:0;left:0;right:0;background:#ff4444;padding:10px;z-index:9999;text-align:center;font-size:12px;color:white';
+      notice.textContent = '❌ Supabase configuration failed. Check Vercel env vars and redeploy.';
       document.body.insertBefore(notice, document.body.firstChild);
     }
     return;
   }
 
-  // Import Supabase JS library (loaded from CDN if not bundled)
+  // Load Supabase JS library from CDN
   if (!window.supabase) {
     const script = document.createElement('script');
     script.src = 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2';
     script.onload = () => {
       supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
       setupAuthListeners();
+    };
+    script.onerror = () => {
+      console.error('Failed to load Supabase JS library');
     };
     document.head.appendChild(script);
   } else {
@@ -188,9 +203,13 @@ async function handleSignUp(e) {
   btn.innerHTML = '<span class="auth-loading"></span>Creating account...';
 
   try {
+    if (!supabaseClient) {
+      throw new Error('Supabase not initialized. Check console for errors.');
+    }
     await signUp(email, password);
     // Success — auth listener will handle redirect
   } catch (err) {
+    console.error('Sign-up error:', err);
     errorEl.textContent = err.message || 'Failed to create account';
     errorEl.classList.add('show');
     btn.disabled = false;
@@ -213,9 +232,13 @@ async function handleSignIn(e) {
   btn.innerHTML = '<span class="auth-loading"></span>Signing in...';
 
   try {
+    if (!supabaseClient) {
+      throw new Error('Supabase not initialized. Check console for errors.');
+    }
     await signIn(email, password);
     // Success — auth listener will handle redirect
   } catch (err) {
+    console.error('Sign-in error:', err);
     errorEl.textContent = err.message || 'Failed to sign in';
     errorEl.classList.add('show');
     btn.disabled = false;
