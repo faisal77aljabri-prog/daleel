@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>College Search — دليل</title>
+  <meta name="description" content="Search 10,000+ universities worldwide and get a deep, major-specific breakdown — courses, specializations, research, admissions, and career outcomes for Saudi students." />
+  <link rel="stylesheet" href="css/styles.css?v=13" />
+</head>
+<body>
+
+<nav class="navbar">
+  <div class="container">
+    <a href="index.html" class="nav-logo"><span class="logo-arabic">دليل</span><span class="logo-dot"></span></a>
+    <div class="nav-links">
+      <a href="index.html" data-i18n="nav.home">Home</a>
+      <div class="nav-dropdown">
+        <button class="nav-dropdown-btn" data-i18n="nav.applyGroup">Apply</button>
+        <div class="dropdown-menu">
+          <a href="college-list.html" data-i18n="nav.collegeList">College List</a>
+          <a href="college-search.html">College Search <span class="dropdown-new">NEW</span></a>
+          <a href="commonapp-ready.html">Common App Ready</a>
+          <a href="application-tracker.html" data-i18n="nav.tracker">App Tracker</a>
+          <a href="my-list.html" data-i18n="nav.myList">My List</a>
+        </div>
+      </div>
+      <a href="community.html" data-i18n="nav.community">Community</a>
+    </div>
+    <div class="nav-right">
+      <button class="lang-toggle" onclick="toggleLanguage()">عربي</button>
+      <button class="hamburger" aria-label="Menu"><span></span><span></span><span></span></button>
+    </div>
+  </div>
+</nav>
+
+<div class="page-header">
+  <div class="page-header-icon">🔍</div>
+  <h1>College Search</h1>
+  <p>Search 10,000+ universities worldwide — then get a deep, major-specific breakdown built for Saudi students.</p>
+</div>
+
+<section class="section">
+  <div class="container">
+
+    <!-- Search bar -->
+    <form class="form-card cs-search-card" id="csForm">
+      <div class="cs-search-row">
+        <div class="form-group" style="flex:2">
+          <label for="csQuery">University name</label>
+          <input type="text" id="csQuery" placeholder="e.g., Stanford, Toronto, King Fahd, Oxford…" />
+        </div>
+        <div class="form-group" style="flex:1">
+          <label for="csCountry">Country (optional)</label>
+          <input type="text" id="csCountry" placeholder="e.g., United States, Canada" />
+        </div>
+        <button type="submit" class="btn btn-primary btn-lg">🔍 Search</button>
+      </div>
+    </form>
+
+    <!-- Results -->
+    <div id="csResults">
+      <p class="cs-hint">Search by name (and optionally a country) to see matching universities. Click one for a full, major-specific deep-dive.</p>
+    </div>
+
+    <!-- Detail panel -->
+    <div id="csDetail" class="cs-detail" style="display:none"></div>
+
+  </div>
+</section>
+
+<footer>
+  <div class="container">
+    <div class="footer-bottom"><p data-i18n="footer.copy">Powered by Llama 3.3 · Groq · 2025</p></div>
+  </div>
+</footer>
+
+<script src="js/translations.js?v=8"></script>
+<script src="js/app.js?v=7"></script>
+<script src="js/onboarding.js?v=7"></script>
+<script src="js/college-search.js?v=1"></script>
+<script src="js/sidebar.js?v=9"></script>
+<script src="js/particles.js?v=2"></script>
+</body>
+</html>

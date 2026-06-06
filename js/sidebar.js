@@ -32,6 +32,7 @@ function initSidebar() {
         <div class="sidebar-section">
           <h5 class="sidebar-section-title">BUILD</h5>
           <a href="/college-list.html" class="sidebar-link">🎓<span>College List</span></a>
+          <a href="/college-search.html" class="sidebar-link">🔍<span>College Search</span></a>
           <a href="/commonapp-ready.html" class="sidebar-link">⚡<span>Common App Ready</span></a>
           <a href="/ec-advisor.html" class="sidebar-link">🏆<span>EC Portfolio</span></a>
           <a href="/essay-advisor.html" class="sidebar-link">✍️<span>Essay Advisor</span></a>
