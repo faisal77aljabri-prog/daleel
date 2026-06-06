@@ -81,10 +81,14 @@ function setupAuthListeners() {
  * Called when user successfully signs up or signs in.
  */
 function onUserSignedIn(user) {
-  // Redirect to profile or home based on context
+  // After verification or sign-in, go to profile hub
   const nextUrl = sessionStorage.getItem('auth_redirect') || '/profile.html';
   sessionStorage.removeItem('auth_redirect');
-  location.href = nextUrl;
+  console.log('User signed in:', user.email, '→ redirecting to', nextUrl);
+  // Use a small delay to ensure session is set
+  setTimeout(() => {
+    location.href = nextUrl;
+  }, 500);
 }
 
 /**

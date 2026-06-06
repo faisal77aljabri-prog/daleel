@@ -9,6 +9,7 @@ document.addEventListener('DOMContentLoaded', () => {
   initScrollAnimations();
   updateListBadge();
   updateFAB();
+  updateAuthNav();
   // Results page bootstrap
   if (document.getElementById('resultsOutput')) initResultsPage();
   // Floating countdown widget (countdown.js loaded separately on all pages)
@@ -611,6 +612,24 @@ function updateFAB() {
   fab.classList.toggle('show', count > 0);
   const countEl = fab.querySelector('.fab-count');
   if (countEl) countEl.textContent = count;
+}
+
+/**
+ * Show "My Profile" link in navbar if user is signed in
+ */
+async function updateAuthNav() {
+  const navProfile = document.getElementById('navProfile');
+  if (!navProfile) return;
+
+  const userId = localStorage.getItem('daleel_user_id');
+  const userEmail = localStorage.getItem('daleel_user_email');
+
+  if (userId && userEmail) {
+    navProfile.style.display = 'inline-block';
+    navProfile.textContent = `👤 ${userEmail.split('@')[0]}`;
+  } else {
+    navProfile.style.display = 'none';
+  }
 }
 
 /* ── My List page renderer ─────────────────────────────────── */
