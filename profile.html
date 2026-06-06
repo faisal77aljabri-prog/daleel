@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>My Profile — دليل</title>
+  <link rel="stylesheet" href="css/styles.css" />
+  <link rel="stylesheet" href="css/profile-hub.css" />
+</head>
+<body>
+
+<!-- Navigation + Sidebar (stub, will be added in Step 4) -->
+<nav class="navbar">
+  <div class="container">
+    <a href="index.html" class="nav-logo">
+      <span class="logo-arabic">دليل</span>
+      <span class="logo-dot"></span>
+    </a>
+    <div class="nav-links">
+      <a href="index.html" data-i18n="nav.home">Home</a>
+      <a href="profile.html" class="active">My Profile</a>
+      <a href="college-list.html" data-i18n="nav.collegeList">College List</a>
+      <a href="ec-advisor.html" data-i18n="nav.ecAdvisor">EC Advisor</a>
+      <a href="essay-advisor.html" data-i18n="nav.essayAdvisor">Essay Advisor</a>
+    </div>
+    <div class="nav-right">
+      <button class="lang-toggle" onclick="toggleLanguage()">عربي</button>
+      <button class="btn btn-outline btn-sm" onclick="handleSignOut()">Sign Out</button>
+    </div>
+  </div>
+</nav>
+
+<section class="section">
+  <div class="container">
+
+    <!-- Profile Header -->
+    <div class="profile-header" data-anim>
+      <div class="profile-header-content">
+        <h1 class="profile-title">Your Profile</h1>
+        <p class="profile-subtitle" id="userEmail">Loading...</p>
+      </div>
+      <button class="btn btn-outline" onclick="editMode()">✏️ Edit</button>
+    </div>
+
+    <!-- Tabs -->
+    <div class="profile-tabs" data-anim>
+      <button class="tab-btn active" data-tab="academics" onclick="switchTab('academics', this)">📊 Academics</button>
+      <button class="tab-btn" data-tab="tests" onclick="switchTab('tests', this)">📝 Tests</button>
+      <button class="tab-btn" data-tab="ecs" onclick="switchTab('ecs', this)">🏆 ECs & Honors</button>
+      <button class="tab-btn" data-tab="essays" onclick="switchTab('essays', this)">✍️ Essays</button>
+      <button class="tab-btn" data-tab="colleges" onclick="switchTab('colleges', this)">🎓 Colleges</button>
+    </div>
+
+    <!-- Tab Content -->
+    <div class="profile-tabs-content">
+
+      <!-- Academics Tab -->
+      <div class="tab-pane active" id="tab-academics">
+        <div class="profile-grid">
+          <div class="profile-card">
+            <h3>📚 Academic Info</h3>
+            <div class="profile-field">
+              <label>Cumulative GPA (%)</label>
+              <div class="profile-value" id="val-gpa">—</div>
+              <input type="text" id="edit-gpa" inputmode="decimal" placeholder="e.g. 91.5" style="display:none" />
+            </div>
+            <div class="profile-field">
+              <label>Math & Science GPA (%)</label>
+              <div class="profile-value" id="val-gpamath">—</div>
+              <input type="text" id="edit-gpamath" inputmode="decimal" placeholder="e.g. 88.0" style="display:none" />
+            </div>
+            <div class="profile-field">
+              <label>School Type</label>
+              <div class="profile-value" id="val-school">—</div>
+              <select id="edit-school" style="display:none">
+                <option value="">— Select —</option>
+                <option value="Saudi Public School">Saudi Public School</option>
+                <option value="International School in KSA">International School in KSA</option>
+                <option value="Out-of-Kingdom School">Out-of-Kingdom School</option>
+              </select>
+            </div>
+            <div class="profile-field">
+              <label>Intended Major</label>
+              <div class="profile-value" id="val-major">—</div>
+              <input type="text" id="edit-major" placeholder="e.g. Computer Science" style="display:none" />
+            </div>
+            <div class="profile-field">
+              <label>Target Country</label>
+              <div class="profile-value" id="val-country">—</div>
+              <input type="text" id="edit-country" placeholder="e.g. USA, UK, Canada" style="display:none" />
+            </div>
+            <div class="profile-field">
+              <label>Funding Option</label>
+              <div class="profile-value" id="val-funding">—</div>
+              <select id="edit-funding" style="display:none">
+                <option value="">— Select —</option>
+                <option value="Full Scholarship">Full Scholarship</option>
+                <option value="Partial Scholarship">Partial Scholarship</option>
+                <option value="Self-funded">Self-funded</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="profile-card">
+            <h3>🎯 Advanced Tests</h3>
+            <div class="profile-field">
+              <label>Qudurat Score</label>
+              <div class="profile-value" id="val-qudurat">—</div>
+              <input type="text" id="edit-qudurat" inputmode="numeric" placeholder="e.g. 92" style="display:none" />
+            </div>
+            <div class="profile-field">
+              <label>Tahsili Score</label>
+              <div class="profile-value" id="val-tahsili">—</div>
+              <input type="text" id="edit-tahsili" inputmode="numeric" placeholder="e.g. 85" style="display:none" />
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Tests Tab -->
+      <div class="tab-pane" id="tab-tests">
+        <div class="profile-grid">
+          <div class="profile-card">
+            <h3>📋 Test Scores</h3>
+            <div class="profile-field">
+              <label>SAT Total</label>
+              <div class="profile-value" id="val-sat">—</div>
+              <input type="text" id="edit-sat" inputmode="numeric" placeholder="e.g. 1400" style="display:none" />
+            </div>
+            <div class="profile-field">
+              <label>SAT Math</label>
+              <div class="profile-value" id="val-satmath">—</div>
+              <input type="text" id="edit-satmath" inputmode="numeric" placeholder="e.g. 680" style="display:none" />
+            </div>
+            <div class="profile-field">
+              <label>ACT Composite</label>
+              <div class="profile-value" id="val-act">—</div>
+              <input type="text" id="edit-act" inputmode="numeric" placeholder="e.g. 32" style="display:none" />
+            </div>
+            <div class="profile-field">
+              <label>AP / Advanced Courses</label>
+              <div class="profile-value" id="val-ap">—</div>
+              <select id="edit-ap" style="display:none">
+                <option value="">— Select —</option>
+                <option value="none">None</option>
+                <option value="some">Some (1–3 courses)</option>
+                <option value="many">Many (4+ courses)</option>
+              </select>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ECs & Honors Tab -->
+      <div class="tab-pane" id="tab-ecs">
+        <div class="profile-card">
+          <h3>🏆 Extracurricular Profile</h3>
+          <div class="profile-field">
+            <label>EC Tier / Assessment</label>
+            <div class="profile-value" id="val-ec-tier">—</div>
+            <select id="edit-ec-tier" style="display:none">
+              <option value="">— Select —</option>
+              <option value="developing">Developing</option>
+              <option value="moderate">Moderate</option>
+              <option value="strong">Strong</option>
+              <option value="exceptional">Exceptional</option>
+            </select>
+          </div>
+          <button class="btn btn-outline" onclick="location.href='ec-advisor.html'" style="margin-top:16px">
+            📊 Run EC Assessment
+          </button>
+          <div id="ec-assessment-result" style="margin-top:20px;display:none"></div>
+        </div>
+      </div>
+
+      <!-- Essays Tab -->
+      <div class="tab-pane" id="tab-essays">
+        <div class="profile-card">
+          <h3>✍️ Application Essays</h3>
+          <div class="profile-field">
+            <label>Personal Statement Status</label>
+            <div class="profile-value" id="val-ps-status">—</div>
+            <select id="edit-ps-status" style="display:none">
+              <option value="not-started">Not Started</option>
+              <option value="draft">Draft</option>
+              <option value="complete">Complete</option>
+            </select>
+          </div>
+          <div class="profile-field">
+            <label>Recommendation Letters</label>
+            <div class="profile-value" id="val-rec-count">—</div>
+            <select id="edit-rec-count" style="display:none">
+              <option value="0">0 letters</option>
+              <option value="1">1 letter</option>
+              <option value="2">2 letters</option>
+              <option value="3">3 letters</option>
+            </select>
+          </div>
+          <button class="btn btn-outline" onclick="location.href='essay-advisor.html'" style="margin-top:16px">
+            ✍️ Get Essay Feedback
+          </button>
+        </div>
+      </div>
+
+      <!-- Colleges Tab -->
+      <div class="tab-pane" id="tab-colleges">
+        <div class="profile-card">
+          <h3>🎓 Saved Colleges</h3>
+          <div id="saved-colleges-list">
+            <p style="color:var(--text-muted)">No colleges saved yet. <a href="college-list.html">Start building your list →</a></p>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Save Button (only in edit mode) -->
+    <div class="profile-save-row" style="display:none" id="saveRow">
+      <button class="btn btn-primary" onclick="saveProfile()">💾 Save Changes</button>
+      <button class="btn btn-outline" onclick="cancelEdit()">Cancel</button>
+    </div>
+
+  </div>
+</section>
+
+<!-- Footer -->
+<footer>
+  <div class="container">
+    <div class="footer-bottom">
+      <p data-i18n="footer.copy">Powered by Llama 3.3 · Groq · 2025</p>
+    </div>
+  </div>
+</footer>
+
+<script src="js/translations.js"></script>
+<script src="js/app.js"></script>
+<script src="js/auth.js"></script>
+<script src="js/profile-hub.js"></script>
+</body>
+</html>
