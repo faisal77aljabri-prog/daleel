@@ -192,12 +192,6 @@ function saveProfile() {
 /**
  * Handle sign out.
  */
-function handleSignOut() {
-  if (confirm('Are you sure you want to sign out?')) {
-    daleel.auth.signOut();
-  }
-}
-
 /**
  * Utility: set text content of an element.
  */
