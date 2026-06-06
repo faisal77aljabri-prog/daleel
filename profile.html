@@ -20,7 +20,26 @@
         <h1 class="profile-title">Your Profile</h1>
         <p class="profile-subtitle" id="userEmail">Loading...</p>
       </div>
-      <button class="btn btn-outline" onclick="editMode()">✏️ Edit</button>
+      <div style="display:flex;gap:10px">
+        <button class="btn btn-outline" onclick="toggleImportBox()">📥 Import</button>
+        <button class="btn btn-outline" onclick="editMode()">✏️ Edit</button>
+      </div>
+    </div>
+
+    <!-- Import from transcript / resume -->
+    <div id="importBox" class="profile-card" style="display:none;margin-bottom:24px">
+      <h3>📥 Import your info</h3>
+      <p style="color:var(--text-muted);margin-bottom:12px;font-size:.9rem">
+        Paste your transcript, résumé, or Common App text below and we'll pull out your
+        GPA, test scores, major and more — then fill your whole profile automatically.
+      </p>
+      <textarea id="importText" placeholder="Paste your transcript / résumé text here…"
+        style="width:100%;min-height:160px;padding:12px;border:1px solid var(--border);border-radius:8px;font-family:inherit;font-size:.95rem;resize:vertical"></textarea>
+      <div style="display:flex;gap:10px;align-items:center;margin-top:12px;flex-wrap:wrap">
+        <button class="btn btn-primary" id="importRunBtn" onclick="importFromText()">✨ Extract &amp; Fill</button>
+        <button class="btn btn-outline" onclick="toggleImportBox()">Cancel</button>
+        <span id="importStatus" style="font-size:.88rem;color:var(--text-muted)"></span>
+      </div>
     </div>
 
     <!-- Tabs -->
@@ -205,9 +224,9 @@
 </footer>
 
 <script src="js/translations.js?v=7"></script>
-<script src="js/app.js?v=5"></script>
-<script src="js/auth.js?v=5"></script>
-<script src="js/profile-hub.js?v=5"></script>
+<script src="js/app.js?v=7"></script>
+<script src="js/auth.js?v=7"></script>
+<script src="js/profile-hub.js?v=7"></script>
 <script src="js/sidebar.js?v=7"></script>
 </body>
 </html>

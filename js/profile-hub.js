@@ -228,6 +228,85 @@ function saveProfile() {
 /**
  * Handle sign out.
  */
+/* ── Import from transcript / résumé text ──────────────────────── */
+
+/**
+ * Show/hide the import box.
+ */
+function toggleImportBox() {
+  const box = document.getElementById('importBox');
+  if (!box) return;
+  box.style.display = box.style.display === 'none' ? 'block' : 'none';
+  if (box.style.display === 'block') document.getElementById('importText')?.focus();
+}
+
+/**
+ * Send pasted text to the AI, extract structured fields, and fill the profile.
+ */
+async function importFromText() {
+  const textEl = document.getElementById('importText');
+  const statusEl = document.getElementById('importStatus');
+  const btn = document.getElementById('importRunBtn');
+  const text = (textEl?.value || '').trim();
+
+  if (text.length < 20) {
+    if (statusEl) { statusEl.style.color = '#c33'; statusEl.textContent = 'Paste a bit more text first.'; }
+    return;
+  }
+
+  if (btn) { btn.disabled = true; btn.textContent = '⏳ Extracting…'; }
+  if (statusEl) { statusEl.style.color = 'var(--text-muted)'; statusEl.textContent = 'Reading your document…'; }
+
+  const sys = `You extract a student's academic profile from pasted text (transcript, résumé, or application).
+Return ONLY a JSON object with any of these keys you can find (omit unknowns, do not guess):
+{"gpa":"cumulative GPA as a number/percent string","gpaMath":"math & science GPA","school":"one of: Saudi Public School | International School in KSA | Out-of-Kingdom School","sat":"SAT total","satMath":"SAT math","act":"ACT composite","qudurat":"Qudurat score","tahsili":"Tahsili score","major":"intended major","country":"target country","ap":"one of: none | some | many"}
+No commentary, just the JSON.`;
+
+  let full = '';
+  try {
+    await new Promise((resolve, reject) => {
+      callAI(
+        [{ role: 'system', content: sys }, { role: 'user', content: text.slice(0, 6000) }],
+        (tok) => { full += tok; },
+        () => resolve(),
+        (err) => reject(err)
+      );
+    });
+
+    const data = (typeof parseAIJSON === 'function') ? parseAIJSON(full) : JSON.parse(full);
+    if (!data || typeof data !== 'object') throw new Error('Could not read that document.');
+
+    // Merge extracted values into the profile (don't wipe existing fields)
+    const allowed = ['gpa','gpaMath','school','sat','satMath','act','qudurat','tahsili','major','country','ap'];
+    let count = 0;
+    allowed.forEach(k => {
+      const v = data[k];
+      if (v !== undefined && v !== null && String(v).trim() !== '') {
+        profileData[k] = String(v).trim();
+        count++;
+      }
+    });
+
+    if (count === 0) {
+      if (statusEl) { statusEl.style.color = '#c33'; statusEl.textContent = 'Couldn’t find any stats in that text.'; }
+    } else {
+      // Persist (account + generic + shared profile hub if present)
+      const userEmail = daleel.auth.getSessionUser();
+      if (userEmail) localStorage.setItem(`daleel_profile_${userEmail}`, JSON.stringify(profileData));
+      localStorage.setItem('daleel_profile', JSON.stringify(profileData));
+      if (window.daleelProfile?.save) window.daleelProfile.save(profileData);
+
+      renderProfile();
+      if (statusEl) { statusEl.style.color = '#16a34a'; statusEl.textContent = `✓ Imported ${count} field${count>1?'s':''}.`; }
+      setTimeout(() => { toggleImportBox(); if (textEl) textEl.value = ''; }, 1200);
+    }
+  } catch (err) {
+    if (statusEl) { statusEl.style.color = '#c33'; statusEl.textContent = 'Import failed: ' + (err.message || 'try again'); }
+  } finally {
+    if (btn) { btn.disabled = false; btn.innerHTML = '✨ Extract &amp; Fill'; }
+  }
+}
+
 /**
  * Utility: set text content of an element.
  */
