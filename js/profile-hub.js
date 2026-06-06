@@ -63,8 +63,8 @@ function renderProfile() {
   set('val-act', profileData.act ? `${profileData.act}` : '—');
   set('val-ap', profileData.ap || '—');
 
-  // ECs
-  set('val-ec-tier', profileData.ecTier || '—');
+  // ECs — render the saved portfolio
+  renderSavedECs();
 
   // Essays
   set('val-ps-status', profileData.psStatus || '—');
@@ -72,6 +72,44 @@ function renderProfile() {
 
   // Saved colleges
   renderSavedColleges();
+}
+
+/**
+ * Render the saved EC portfolio (same data the EC Portfolio page saves).
+ */
+function renderSavedECs() {
+  const container = document.getElementById('profile-ecs-list');
+  if (!container) return;
+
+  const ecs = Array.isArray(profileData.ecs) ? profileData.ecs : [];
+  const badge = document.getElementById('ec-count-badge');
+  if (badge) badge.textContent = ecs.length ? `(${ecs.length})` : '';
+
+  if (ecs.length === 0) {
+    container.innerHTML = '<p style="color:var(--text-muted)">No activities saved yet. <a href="ec-advisor.html">Add your first one →</a></p>';
+    return;
+  }
+
+  container.innerHTML = ecs.map(ec => `
+    <div class="profile-college-card" style="flex-direction:column;align-items:stretch;gap:6px">
+      <div style="font-weight:700;color:var(--text-dark)">${escapeHTML(ec.name || 'Untitled')}</div>
+      ${ec.description ? `<div style="font-size:0.9rem;color:var(--text-body)">${escapeHTML(ec.description)}</div>` : ''}
+      ${ec.impact ? `<div style="font-size:0.85rem;color:var(--text-muted)"><strong>Impact:</strong> ${escapeHTML(ec.impact)}</div>` : ''}
+      ${ec.duration ? `<div style="font-size:0.85rem;color:var(--text-muted)"><strong>Duration:</strong> ${escapeHTML(ec.duration)}</div>` : ''}
+      ${ec.awards ? `<div style="font-size:0.85rem;color:var(--text-muted)"><strong>Awards:</strong> ${escapeHTML(ec.awards)}</div>` : ''}
+    </div>
+  `).join('');
+}
+
+/**
+ * Escape HTML to prevent broken layout / injection from saved text.
+ */
+function escapeHTML(str) {
+  return String(str)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;');
 }
 
 /**
@@ -134,7 +172,6 @@ function populateEditFields() {
   document.getElementById('edit-satmath').value = profileData.satMath || '';
   document.getElementById('edit-act').value = profileData.act || '';
   document.getElementById('edit-ap').value = profileData.ap || '';
-  document.getElementById('edit-ec-tier').value = profileData.ecTier || '';
   document.getElementById('edit-ps-status').value = profileData.psStatus || '';
   document.getElementById('edit-rec-count').value = profileData.recCount || '';
 }
@@ -165,7 +202,6 @@ function saveProfile() {
   profileData.satMath = document.getElementById('edit-satmath').value || undefined;
   profileData.act = document.getElementById('edit-act').value || undefined;
   profileData.ap = document.getElementById('edit-ap').value || undefined;
-  profileData.ecTier = document.getElementById('edit-ec-tier').value || undefined;
   profileData.psStatus = document.getElementById('edit-ps-status').value || undefined;
   profileData.recCount = document.getElementById('edit-rec-count').value || undefined;
 
