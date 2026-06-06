@@ -3170,3 +3170,229 @@ li:nth-child(5) { animation-delay: 0.5s; }
 .stagger-list li:nth-child(5) { animation-delay: 0.5s; }
 .stagger-list li:nth-child(n+6) { animation-delay: 0.6s; }
 
+
+/* ════════════════════════════════════════════════════════════════
+   SIDEBAR NAVIGATION — App-shell layout
+   ════════════════════════════════════════════════════════════════ */
+
+.sidebar {
+  position: fixed;
+  left: 0;
+  top: 0;
+  width: 280px;
+  height: 100vh;
+  background: var(--navy-deep);
+  border-right: 2px solid rgba(183, 156, 224, 0.15);
+  display: flex;
+  flex-direction: column;
+  z-index: 1000;
+  transform: translateX(-100%);
+  transition: transform 0.3s ease;
+  overflow-y: auto;
+  animation: slideInLeft 0.3s ease forwards;
+}
+
+.sidebar.open {
+  transform: translateX(0);
+}
+
+.sidebar-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0);
+  z-index: 999;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s ease;
+}
+
+.sidebar-overlay.open {
+  background: rgba(0, 0, 0, 0.5);
+  opacity: 1;
+  pointer-events: all;
+}
+
+.sidebar-header {
+  padding: 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid rgba(183, 156, 224, 0.2);
+}
+
+.sidebar-logo {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.sidebar-logo .logo-arabic {
+  font-size: 1.8rem;
+  font-weight: 900;
+  color: var(--gold);
+  letter-spacing: 2px;
+}
+
+.sidebar-logo .logo-dot {
+  font-size: 2rem;
+  color: var(--gold);
+}
+
+.sidebar-close {
+  background: none;
+  border: none;
+  font-size: 1.5rem;
+  color: var(--gold);
+  cursor: pointer;
+  padding: 0;
+}
+
+.sidebar-profile {
+  padding: 20px;
+  display: flex;
+  gap: 12px;
+  border-bottom: 1px solid rgba(183, 156, 224, 0.2);
+  animation: slideInLeft 0.4s ease backwards;
+  animation-delay: 0.1s;
+}
+
+.sidebar-profile-avatar {
+  width: 48px;
+  height: 48px;
+  background: linear-gradient(135deg, var(--gold), var(--gold-light));
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.5rem;
+  flex-shrink: 0;
+}
+
+.sidebar-profile-name {
+  font-weight: 700;
+  color: var(--gold);
+  font-size: 0.95rem;
+}
+
+.sidebar-profile-link {
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  text-decoration: none;
+  transition: color 0.3s ease;
+}
+
+.sidebar-profile-link:hover {
+  color: var(--gold);
+}
+
+.sidebar-nav {
+  flex: 1;
+  padding: 20px 0;
+  overflow-y: auto;
+}
+
+.sidebar-section {
+  padding: 0 16px;
+  margin-bottom: 24px;
+}
+
+.sidebar-section-title {
+  font-size: 0.7rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  color: var(--gold-dim);
+  margin: 0 0 12px 0;
+  padding: 0;
+}
+
+.sidebar-link {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 12px;
+  margin-bottom: 8px;
+  color: var(--text-light);
+  text-decoration: none;
+  border-radius: 8px;
+  transition: all 0.3s ease;
+  font-size: 0.95rem;
+  animation: slideInLeft 0.3s ease backwards;
+}
+
+.sidebar-link:hover {
+  background: rgba(183, 156, 224, 0.1);
+  color: var(--gold);
+  transform: translateX(4px);
+}
+
+.sidebar-link.active {
+  background: rgba(183, 156, 224, 0.2);
+  color: var(--gold);
+  font-weight: 700;
+}
+
+.sidebar-badge {
+  background: var(--gold);
+  color: var(--navy-deep);
+  font-size: 0.75rem;
+  font-weight: 700;
+  padding: 2px 6px;
+  border-radius: 4px;
+  min-width: 20px;
+  text-align: center;
+}
+
+.sidebar-footer {
+  padding: 16px;
+  border-top: 1px solid rgba(183, 156, 224, 0.2);
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.sidebar-btn {
+  background: rgba(183, 156, 224, 0.15);
+  border: 1px solid rgba(183, 156, 224, 0.25);
+  color: var(--gold);
+  padding: 10px;
+  border-radius: 6px;
+  font-weight: 600;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.sidebar-btn:hover {
+  background: rgba(183, 156, 224, 0.25);
+  border-color: var(--gold);
+}
+
+.sidebar-toggle {
+  background: none;
+  border: none;
+  color: var(--gold);
+  font-size: 1.5rem;
+  cursor: pointer;
+  padding: 8px 12px;
+  margin-left: auto;
+  display: none;
+}
+
+@media (max-width: 768px) {
+  .sidebar {
+    width: 100%;
+    max-width: 320px;
+  }
+
+  .sidebar-toggle {
+    display: block;
+  }
+}
+
+@media (max-width: 600px) {
+  .sidebar {
+    width: 100%;
+  }
+}
+
