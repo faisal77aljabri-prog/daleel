@@ -9,13 +9,15 @@
     for (let i = 0; i < count; i++) {
       const p = document.createElement('span');
       p.className = 'khuzama-particle';
-      const size = 4 + Math.random() * 11;
+      const size = 6 + Math.random() * 12;
+      const spin = (Math.random() < 0.5 ? -1 : 1) * (240 + Math.random() * 360);
       p.style.left = (Math.random() * 100) + '%';
       p.style.width = size + 'px';
-      p.style.height = size + 'px';
+      p.style.height = (size * 1.35) + 'px';      // elongated -> petal
+      p.style.setProperty('--spin', spin.toFixed(0) + 'deg');
       p.style.animationDuration = (9 + Math.random() * 13) + 's';
       p.style.animationDelay = (-Math.random() * 16) + 's';
-      p.style.opacity = (0.15 + Math.random() * 0.5).toFixed(2);
+      p.style.opacity = (0.18 + Math.random() * 0.5).toFixed(2);
       layer.appendChild(p);
     }
     host.insertBefore(layer, host.firstChild);

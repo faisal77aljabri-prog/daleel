@@ -3670,17 +3670,20 @@ html[dir="rtl"] .ca-stage-tag { margin-left:0; margin-right:10px; }
    ════════════════════════════════════════════════════════════ */
 .khuzama-particles { position:absolute; inset:0; overflow:hidden; pointer-events:none; z-index:1; }
 .khuzama-particle {
-  position:absolute; bottom:-24px; border-radius:50%;
-  background: radial-gradient(circle at 35% 35%, var(--gold-light), var(--gold) 60%, transparent 72%);
-  box-shadow: 0 0 10px rgba(198,171,238,.7);
+  --spin: 360deg;
+  position:absolute; bottom:-24px;
+  /* petal: rounded body tapering to a point at the bottom-left tip */
+  border-radius: 50% 50% 50% 0 / 70% 70% 30% 30%;
+  background: linear-gradient(135deg, var(--gold-light) 0%, var(--gold) 70%, var(--gold-dim) 100%);
+  box-shadow: 0 0 9px rgba(198,171,238,.5);
   animation: khuzamaFloat linear infinite;
   will-change: transform, opacity;
 }
 @keyframes khuzamaFloat {
-  0%   { transform: translateY(0) translateX(0) scale(1);     opacity: 0; }
-  12%  { opacity: .7; }
-  50%  { transform: translateY(-50vh) translateX(24px) scale(1.08); }
-  88%  { opacity: .55; }
-  100% { transform: translateY(-105vh) translateX(-12px) scale(.9); opacity: 0; }
+  0%   { transform: translateY(0)      translateX(0)    rotate(0deg);                opacity: 0; }
+  12%  { opacity: .75; }
+  50%  { transform: translateY(-50vh)  translateX(26px) rotate(calc(var(--spin) * .5)); }
+  88%  { opacity: .5; }
+  100% { transform: translateY(-106vh) translateX(-14px) rotate(var(--spin));         opacity: 0; }
 }
 @media (prefers-reduced-motion: reduce) { .khuzama-particle { animation: none; opacity: .3; } }
