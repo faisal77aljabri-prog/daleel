@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>EC Advisor — دليل</title>
+  <meta name="description" content="AI-powered extracurricular advisor for Saudi students. Find out how strong your ECs are and which colleges match them best." />
+  <link rel="stylesheet" href="css/styles.css" />
+</head>
+<body>
+
+<nav class="navbar">
+  <div class="container">
+    <a href="index.html" class="nav-logo">
+      <span class="logo-arabic">دليل</span>
+      <span class="logo-dot"></span>
+    </a>
+    <div class="nav-links">
+      <a href="index.html" data-i18n="nav.home">Home</a>
+      <div class="nav-dropdown">
+        <button class="nav-dropdown-btn" data-i18n="nav.applyGroup">Apply</button>
+        <div class="dropdown-menu">
+          <a href="college-list.html" data-i18n="nav.collegeList">College List</a>
+          <a href="application-tracker.html" data-i18n="nav.tracker">App Tracker <span class="dropdown-new">NEW</span></a>
+          <a href="my-list.html" data-i18n="nav.myList">My List <span class="nav-list-badge"></span></a>
+          <a href="countdown.html" data-i18n="nav.countdown">Countdown <span class="dropdown-new">NEW</span></a>
+        </div>
+      </div>
+      <div class="nav-dropdown">
+        <button class="nav-dropdown-btn" data-i18n="nav.resourcesGroup">Resources</button>
+        <div class="dropdown-menu">
+          <a href="scholarships.html" data-i18n="nav.scholarships">Scholarships</a>
+          <a href="cpp-calculator.html" data-i18n="nav.cppCalc">CPP Calculator <span class="dropdown-new">NEW</span></a>
+          <a href="profile-score.html" data-i18n="nav.profileScore">Profile Score <span class="dropdown-new">NEW</span></a>
+          <div class="dropdown-divider"></div>
+          <a href="sat-guide.html" data-i18n="nav.satGuide">Test Guide</a>
+          <a href="essay-advisor.html" data-i18n="nav.essayAdvisor">Essay Advisor</a>
+          <a href="essay-vault.html" data-i18n="nav.essayVault">Essay Vault <span class="dropdown-new">NEW</span></a>
+          <a href="ec-advisor.html" data-i18n="nav.ecAdvisor">EC Advisor</a>
+          <a href="tips-feed.html" data-i18n="nav.tips">Weekly Tips <span class="dropdown-new">NEW</span></a>
+        </div>
+      </div>
+      <a href="community.html" data-i18n="nav.community">Community <span class="dropdown-new">NEW</span></a>
+    </div>
+    <div class="nav-right">
+      <button class="lang-toggle" onclick="toggleLanguage()">عربي</button>
+      <button class="hamburger" aria-label="Menu">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </div>
+  <div class="mobile-menu">
+    <a href="index.html" data-i18n="nav.home">Home</a>
+    <a href="college-list.html" data-i18n="nav.collegeList">College List</a>
+    <a href="application-tracker.html" data-i18n="nav.tracker">App Tracker</a>
+    <a href="my-list.html" data-i18n="nav.myList">My List</a>
+    <a href="countdown.html" data-i18n="nav.countdown">Countdown</a>
+    <a href="scholarships.html" data-i18n="nav.scholarships">Scholarships</a>
+    <a href="cpp-calculator.html" data-i18n="nav.cppCalc">CPP Calculator</a>
+    <a href="profile-score.html" data-i18n="nav.profileScore">Profile Score</a>
+    <a href="sat-guide.html" data-i18n="nav.satGuide">Test Guide</a>
+    <a href="essay-advisor.html" data-i18n="nav.essayAdvisor">Essay Advisor</a>
+    <a href="essay-vault.html" data-i18n="nav.essayVault">Essay Vault</a>
+    <a href="ec-advisor.html" data-i18n="nav.ecAdvisor">EC Advisor</a>
+    <a href="tips-feed.html" data-i18n="nav.tips">Weekly Tips</a>
+    <a href="community.html" data-i18n="nav.community">Community</a>
+  </div>
+</nav>
+
+<div class="page-header">
+  <div class="page-header-icon">⚡</div>
+  <h1 data-i18n="ec.pageTitle">EC Advisor</h1>
+  <p data-i18n="ec.pageSubtitle">Find out exactly how strong your extracurriculars are — and which colleges match them best.</p>
+</div>
+
+<section class="section">
+  <div class="container">
+    <div class="two-col">
+
+      <!-- ── Left: Form ── -->
+      <div>
+
+        <div class="callout callout-gold" style="margin-bottom:28px;" data-anim>
+          <span class="callout-icon">🎯</span>
+          <div class="callout-content">
+            <h4>Honest EC Assessment</h4>
+            <p>Most students overestimate their ECs. This tool tells you exactly where you stand — Tier 1 (national/international) down to Tier 5 (minimal) — and what you'd need to do to move up.</p>
+          </div>
+        </div>
+
+        <form class="form-card" onsubmit="submitECAdvisor(event)" novalidate data-anim>
+
+          <div class="form-section-title" data-i18n="ec.ecName">Your Activities</div>
+
+          <!-- EC rows container -->
+          <div id="ecRows">
+            <!-- Row 1 (pre-filled) -->
+            <div class="ec-row">
+              <div class="form-group">
+                <label data-i18n="ec.ecName">Activity Name</label>
+                <input type="text" class="ec-name" data-i18n-placeholder="ec.ecNameHint" placeholder="e.g., Robotics Club Founder" />
+              </div>
+              <div class="form-group">
+                <label data-i18n="ec.ecType">Type</label>
+                <select class="ec-type">
+                  <option value="STEM">STEM / Robotics / Coding</option>
+                  <option value="Academic">Academic / Research</option>
+                  <option value="Leadership">Leadership</option>
+                  <option value="Community Service">Community Service</option>
+                  <option value="Sports">Sports / Athletics</option>
+                  <option value="Arts">Arts / Music / Writing</option>
+                  <option value="Work">Work / Internship</option>
+                  <option value="Religious">Religious / Cultural</option>
+                  <option value="Other">Other</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label data-i18n="ec.ecRole">Your Role</label>
+                <input type="text" class="ec-role" placeholder="e.g., Founder, Captain" />
+              </div>
+              <button type="button" class="ec-remove-btn" onclick="removeECRow(this)">✕</button>
+            </div>
+          </div>
+
+          <button type="button" class="ec-add-btn" onclick="addECRow()" data-i18n="ec.addEC">
+            + Add Another Activity
+          </button>
+
+          <div class="form-spacer"></div>
+
+          <!-- Honors & Awards -->
+          <div class="form-section-title" style="margin-top:24px" data-i18n="ec.honorsTitle">Honors &amp; Awards</div>
+          <small style="display:block;color:var(--text-muted);font-size:.78rem;margin:-6px 0 14px" data-i18n="ec.honorsHint">Common App allows up to 5 honors. Add all of them — the AI picks your best 5.</small>
+          <div id="honorRows"></div>
+          <button type="button" class="ec-add-btn" onclick="addHonorRow()" data-i18n="ec.addHonor">
+            + Add Another Honor
+          </button>
+
+          <div class="form-spacer"></div>
+
+          <div class="form-group" style="margin-top:16px;">
+            <label for="ecTargetColleges" data-i18n="ec.targetCollegesLabel">Target Colleges (optional)</label>
+            <small data-i18n="ec.targetCollegesHint">e.g., MIT, Carnegie Mellon, Imperial</small>
+            <input type="text" id="ecTargetColleges" placeholder="e.g., MIT, Carnegie Mellon, KFUPM" />
+          </div>
+
+          <div class="form-actions">
+            <button type="submit" class="btn btn-primary btn-lg" data-i18n="ec.submitBtn">
+              ⚡ Analyze My ECs
+            </button>
+          </div>
+        </form>
+
+        <!-- AI Result -->
+        <div id="ecResult" class="ai-result" style="margin-top:28px;">
+          <div class="ai-result-header">
+            <span class="ai-result-header-icon">⚡</span>
+            <span data-i18n="ec.resultHeader">Your EC Assessment</span>
+            <span class="ai-model-badge">Llama 3.3 · Groq</span>
+          </div>
+          <div class="loading-overlay" id="ecLoading">
+            <div class="spinner"></div>
+            <span data-i18n="ec.loadingText">Analyzing your extracurricular profile...</span>
+          </div>
+          <div class="ai-result-body" id="ecOutput"></div>
+        </div>
+
+      </div>
+
+      <!-- ── Right: Sidebar ── -->
+      <div style="display:flex;flex-direction:column;gap:20px;">
+
+        <!-- What makes a strong EC -->
+        <div class="angles-sidebar" data-anim="scale">
+          <h4>⚡ EC Tier Breakdown</h4>
+          <p style="font-size:.78rem;color:rgba(255,255,255,.5);margin-bottom:16px;">What tier are you actually in?</p>
+
+          <div class="angle-item">
+            <span class="angle-item-icon">🏆</span>
+            <p><strong>Tier 1 — National / International</strong> Published research, founded a company, national competition winner, Olympiad medalist. Rare — top 1% of applicants.</p>
+          </div>
+          <div class="angle-item">
+            <span class="angle-item-icon">⭐</span>
+            <p><strong>Tier 2 — Regional Impact</strong> Founded a club that grew significantly, regional competition winner, organized events with real community impact. Where strong applicants sit.</p>
+          </div>
+          <div class="angle-item">
+            <span class="angle-item-icon">📌</span>
+            <p><strong>Tier 3 — School Leadership</strong> School club president, varsity team, consistent community service, significant volunteer hours. Average for competitive applicants.</p>
+          </div>
+          <div class="angle-item">
+            <span class="angle-item-icon">📋</span>
+            <p><strong>Tier 4 — Participation</strong> Club member (not leader), occasional volunteering, casual hobbies. Common — needs differentiation.</p>
+          </div>
+          <div class="angle-item">
+            <span class="angle-item-icon">⚠️</span>
+            <p><strong>Tier 5 — Minimal</strong> Few or no meaningful activities. For top universities, this is a significant weakness. Addressable with time.</p>
+          </div>
+        </div>
+
+        <!-- Saudi-specific EC angles -->
+        <div class="info-card" data-anim>
+          <h4>🇸🇦 Saudi ECs That Stand Out</h4>
+          <ul style="font-size:.82rem;color:var(--text-body);line-height:1.7;padding-inline-start:18px;margin-top:8px;">
+            <li style="margin-bottom:6px;"><strong>STEM Competitions:</strong> Saudi Olympiad, FIRST Robotics, Google Science Fair</li>
+            <li style="margin-bottom:6px;"><strong>Entrepreneurship:</strong> Startup in Riyadh/Jeddah/Medina — Vision 2030 angle</li>
+            <li style="margin-bottom:6px;"><strong>Research:</strong> Any published or presented research, even at school level</li>
+            <li style="margin-bottom:6px;"><strong>Community firsts:</strong> "First in my city/school to…" is powerful</li>
+            <li style="margin-bottom:6px;"><strong>Arabic writing/poetry:</strong> Literary talent in Arabic reads as intellectual distinctiveness</li>
+            <li><strong>Religious leadership:</strong> Leading youth programs, Quran competitions (handled with specificity)</li>
+          </ul>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Floating My List button -->
+<button class="fab-list" id="fabList" onclick="location.href='my-list.html'">
+  🎓 My List <span class="fab-count">0</span>
+</button>
+
+<footer>
+  <div class="container">
+    <div class="footer-top">
+      <div class="footer-brand">
+        <span class="logo-arabic">دليل</span>
+        <p data-i18n="footer.tagline">دليل is built for Saudi students, by a Saudi student.</p>
+      </div>
+      <div class="footer-col">
+        <h4 data-i18n="footer.linksTitle">Tools</h4>
+        <a href="college-list.html"  data-i18n="footer.collegeList">College List Builder</a>
+        <a href="scholarships.html"  data-i18n="footer.scholarships">Scholarship Finder</a>
+        <a href="sat-guide.html"     data-i18n="footer.satGuide">Test Guide</a>
+        <a href="essay-advisor.html" data-i18n="footer.essayAdvisor">Essay Advisor</a>
+        <a href="ec-advisor.html"    data-i18n="nav.ecAdvisor">EC Advisor</a>
+      </div>
+      <div class="footer-col">
+        <h4 data-i18n="footer.resourcesTitle">Resources</h4>
+        <a href="scholarships.html" data-i18n="footer.res2">How CPP Works</a>
+        <a href="sat-guide.html"    data-i18n="footer.res3">Saudi Universities</a>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p data-i18n="footer.copy">Powered by Llama 3.3 · Groq · 2025</p>
+      <div class="footer-sponsors">
+        <span data-i18n="footer.sponsor">🏎️ Sponsored by ANAQ Racing</span>
+        <span class="sponsor-badge" data-i18n="footer.sponsorSub">Medina's #1 STEM Racing Team</span>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<script src="js/translations.js"></script>
+<script src="js/app.js"></script>
+<script src="js/onboarding.js"></script>
+<script src="js/countdown.js"></script>
+</body>
+</html>

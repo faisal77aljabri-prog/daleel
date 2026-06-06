@@ -320,7 +320,34 @@ function openCardModal(cardEl) {
     </div>
     ${c.annualCost ? `<div class="modal-section"><div class="modal-section-title">${currentLang === 'ar' ? 'التكلفة السنوية' : 'Annual Cost'}</div><div class="ccard-fit-box">${c.annualCost}</div></div>` : ''}
     ${c.bestMajors?.length ? `<div class="modal-section"><div class="modal-section-title">🎯 ${currentLang === 'ar' ? 'أفضل التخصصات' : 'Best Majors'}</div><div class="chips-row">${c.bestMajors.map(m => `<span class="chip">${m}</span>`).join('')}</div></div>` : ''}
-    ${c.saudiNotes ? `<div class="modal-section"><div class="modal-section-title">🇸🇦 ${currentLang === 'ar' ? 'ملاحظات سعودية' : 'Saudi Notes'}</div><p style="font-size:.82rem;color:var(--text-body);line-height:1.6">${c.saudiNotes}</p></div>` : ''}
+
+    ${c.pros || c.cons ? `<div class="modal-section"><div class="modal-section-title">⚖️ ${ar ? 'الإيجابيات والسلبيات' : 'Strengths & Challenges'}</div><div class="pros-cons">
+      ${c.pros ? `<div class="pros">
+        <h5>${ar ? '✓ المميزات' : '✓ Strengths'}</h5>
+        <ul>${c.pros.map(p => `<li>${p}</li>`).join('')}</ul>
+      </div>` : ''}
+      ${c.cons ? `<div class="cons">
+        <h5>${ar ? '✗ التحديات' : '✗ Challenges'}</h5>
+        <ul>${c.cons.map(p => `<li>${p}</li>`).join('')}</ul>
+      </div>` : ''}
+    </div></div>` : ''}
+
+    ${c.studentLife ? `<div class="detail-section khuzama-bg">
+      <h4>🎓 ${ar ? 'حياة الطلاب' : 'Student Life'}</h4>
+      <p style="color:var(--text-body);line-height:1.7;margin:0">${c.studentLife}</p>
+    </div>` : ''}
+
+    ${c.careerOutcomes ? `<div class="detail-section khuzama-bg">
+      <h4>💼 ${ar ? 'مخرجات التوظيف' : 'Career Outcomes'}</h4>
+      <p style="color:var(--text-body);line-height:1.7;margin:0">${c.careerOutcomes}</p>
+    </div>` : ''}
+
+    ${c.internships ? `<div class="detail-section khuzama-bg">
+      <h4>🚀 ${ar ? 'برامج التدريب' : 'Internship Programs'}</h4>
+      <p style="color:var(--text-body);line-height:1.7;margin:0">${c.internships}</p>
+    </div>` : ''}
+
+    ${c.saudiNotes ? `<div class="modal-section"><div class="modal-section-title">🇸🇦 ${currentLang === 'ar' ? 'ملاحظات سعودية' : 'Saudi Student Life'}</div><p style="font-size:.82rem;color:var(--text-body);line-height:1.6">${c.saudiNotes}</p></div>` : ''}
     ${c.fitReason ? `<div class="modal-section"><div class="modal-section-title">✨ ${currentLang === 'ar' ? 'لماذا تناسبك' : 'Why This Fits You'}</div><div class="ccard-fit-box">${c.fitReason}</div></div>` : ''}
     ${buildFitBreakdown(c)}
     <div class="modal-section" id="uniEnrichment" style="display:none"></div>
@@ -1532,38 +1559,74 @@ function switchTab(tabId, btn) {
 }
 
 /* ── System Prompts ────────────────────────────────────────── */
-const JSON_COLLEGE_SCHEMA = `{"assessment":"2-3 sentence honest profile assessment","colleges":[{"type":"reach","name":"Full University Name","shortName":"Short Name","location":"City, State, Country","flag":"🇺🇸","country":"USA","acceptanceRate":"4%","medianSAT":"1540","annualCost":"$57,500/yr","financialAid":"Need-blind for internationals","earlyDeadline":"Nov 1 (EA)","regularDeadline":"Jan 1 (RD)","applyThrough":"MIT Application","bestMajors":["CS","EE","Physics"],"saudiNotes":"Active Saudi club. Halal food available.","fitReason":"Your SAT Math and robotics background align with this school.","fitScore":86,"fitBreakdown":{"academics":95,"cost":60,"location":80,"culture":75,"size":70}}]}`;
+const JSON_COLLEGE_SCHEMA = `{"assessment":"2-3 sentence honest profile assessment","colleges":[{"type":"reach","name":"Full University Name","shortName":"Short Name","location":"City, State, Country","flag":"🇺🇸","country":"USA","acceptanceRate":"4%","medianSAT":"1540","annualCost":"$57,500/yr","financialAid":"Need-blind for internationals","earlyDeadline":"Nov 1 (EA)","regularDeadline":"Jan 1 (RD)","applyThrough":"MIT Application","bestMajors":["CS","EE","Physics"],"pros":["Exceptional STEM programs ranked top-5 globally","Unmatched research opportunities with industry partnerships","Located in Boston tech hub with networking access","Generous financial aid for internationals","Strong alumni network across Fortune 500 companies"],"cons":["Brutal grading curves and highly competitive peer group","Expensive even with aid (~$80k after fin aid)","Cold winters in Massachusetts","Can feel intimidating for first-generation students","High stress culture, mental health challenges common"],"studentLife":"Campus life buzzes with 24/7 maker spaces, hackathons every weekend, and intense study sessions. Dorm culture is strong but competitive. Fraternities/sororities are optional. Food is decent but pricey. Housing guaranteed all 4 years. Great intramural sports and clubs.","careerOutcomes":"95% of graduates employed within 6 months. Average starting salary $78,000 (CS graduates earn $120k+). Top employers: Google, Apple, Microsoft, Goldman Sachs, McKinsey. Strong placement in Silicon Valley and NYC.","internships":"MIT emphasizes independent research; most students do 2+ summer internships. Strong connections with tech companies. Industry partners recruit directly on campus.","saudiNotes":"Active Saudi club (100+ members). Halal dining options in main cafeteria. Prayer room in student center. Saudi community very supportive.","fitReason":"Your SAT Math and robotics background align with this school.","fitScore":86,"fitBreakdown":{"academics":95,"cost":60,"location":80,"culture":75,"size":70}}]}`;
 
 const SYSTEM_PROMPTS = {
-  collegeList: (lang) => `You are Daleel, a personalized college advisor for Saudi students. Expert knowledge of:
-- Saudi GPA system (percentages), Qudurat (out of 100), Tahsili (out of 100)
-- ACT (out of 36) vs SAT: ACT 36≈SAT 1600, 34≈1500, 31≈1390, 27≈1260, 24≈1160
-- Aramco CPP: SAT Math 630+ OR Qudurat 90+, GPA 85%+ cumulative & Math/Science, international school only. CPP Waiver skips prep.
-- Saudi scholarships: KASP (government), Mawhiba (gifted), SABIC (STEM), STC (tech)
-- Saudi cultural fit: halal dining, Muslim communities, prayer facilities, Saudi alumni networks
+  collegeList: (lang) => `You are Daleel, a detailed personalized college advisor for Saudi students. Expert knowledge of:
+- Saudi GPA, Qudurat, Tahsili systems
+- ACT vs SAT equivalences
+- Aramco CPP, KASP, Mawhiba, SABIC, STC scholarships
+- Saudi cultural context: halal dining, Muslim communities, prayer facilities
 
 ${lang === 'ar' ? 'Respond in Arabic only.' : 'Respond in English only.'}
-TONE: Direct, supportive, knowledgeable. Be HONEST — if weak, say so with specific next steps.
+TONE: Detailed, honest, supportive. Be FRANK — if weak, explain specific improvements.
 
-REACH (3): Highly selective (admit rate <15%). Student's stats are at/below median. Include why the major/fit makes it possible.
-TARGET (3): Good fit (admit rate 15-40%). Student's stats are near median. These are realistic schools.
-SAFETY (3): Likely acceptance (admit rate >40%). Student's stats above median. Ensure good options.
+TIERS:
+- REACH (3): Admit rate <15%. Stats at/below median. Explain why they're competitive anyway.
+- TARGET (3): Admit rate 15-40%. Stats near median. These are realistic, achievable.
+- SAFETY (3): Admit rate >40%. Stats above median. Solid backup options.
 
-FOR EACH COLLEGE, explain:
-- Why this tier (use their actual stats vs school's typical ranges)
-- Why it matches their goals and priorities (reference their top 2 priorities)
-- Unique value for their major/interests
-- Saudi community presence / Muslim life / international student support
-- Financial aid outlook for international students if relevant
+FOR EVERY SCHOOL, provide:
 
-RIGHT-FIT SCORING: Student weighted 5 priorities (1=low, 5=high). For EACH college:
-- Academics (0-100): Does the program's quality and prestige match their standard? Top program in their major=100
-- Cost (0-100): Affordability given typical aid + their funding situation. Meets needs=100, requires loans=60, unaffordable=20
-- Location (0-100): How well does the setting (urban/suburban/rural), geography (close to home, region of interest), weather match their preference?
-- Culture (0-100): Saudi/Muslim community presence, halal food accessibility, prayer facilities, cultural fit
-- Size (0-100): Campus population match to their preference (large research = 100, small liberal arts = 100 for different students)
+**PROS** (5-10 specific strengths, not generic):
+- Program rank in their major
+- Research/internship opportunities
+- Alumni network strength
+- Location advantages
+- Specific financial aid generosity
+- Campus culture strengths
+- Example: "Ranked #3 globally for CS" not "great STEM programs"
+
+**CONS** (5-10 realistic challenges):
+- Competitive/brutal grading
+- Cost even with aid
+- Social/mental health challenges
+- Geographic isolation or weather
+- Lack of diversity (if applicable)
+- Example: "Expensive even after aid (~$70k/yr)" not "costs money"
+
+**STUDENT LIFE** (2-3 sentence paragraph):
+- Dorm culture, social scene, weekend activities
+- Food, housing, safety
+- Vibe: competitive vs collaborative, stressed vs relaxed
+- Unique traditions or community feel
+
+**CAREER OUTCOMES** (1-2 sentences):
+- Employment rate (%) within 6 months
+- Average starting salary (especially for their major)
+- Top 5 employers recruiting from this school
+
+**INTERNSHIPS** (1-2 sentences):
+- How common are summer internships?
+- Quality of co-op / work-study programs
+- Employer partnerships
+
+**SAUDI NOTES**:
+- Saudi student club size and activity level
+- Halal food availability (specify: dedicated halal section, limited options, etc.)
+- Prayer facilities (on-campus mosque, prayer room, etc.)
+- Saudi community presence and support
+- Islamic life quality for Muslim students
+
+**FIT REASONING**:
+- Reference their TOP 2 priorities
+- Use their exact stats to show competitiveness
+- Explain why NOW, not someday
+
+RIGHT-FIT SCORING:
+For each college, score all 5 dimensions 0-100 (student's priorities: academics, cost, location, culture, size).
 - fitScore = weighted average using their priority weights
-- fitReason = 1 sentence referencing which of their top 2 priorities this school excels at
+- Only high-fit schools exceed fitScore 75
 
 CRITICAL: Return ONLY valid JSON, no markdown, no code fences, no text outside JSON:
 ${JSON_COLLEGE_SCHEMA}`,
