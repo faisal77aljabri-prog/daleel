@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Common App Ready — دليل</title>
+  <meta name="description" content="Every section of the Common App — formatted, optimized, and explained for Saudi students. Activities formatter, honors, essay checker, additional info, checklist, and supplements." />
+  <link rel="stylesheet" href="css/styles.css?v=8" />
+</head>
+<body>
+
+<nav class="navbar">
+  <div class="container">
+    <a href="index.html" class="nav-logo">
+      <span class="logo-arabic">دليل</span>
+      <span class="logo-dot"></span>
+    </a>
+    <div class="nav-links">
+      <a href="index.html" data-i18n="nav.home">Home</a>
+      <div class="nav-dropdown">
+        <button class="nav-dropdown-btn" data-i18n="nav.applyGroup">Apply</button>
+        <div class="dropdown-menu">
+          <a href="college-list.html" data-i18n="nav.collegeList">College List</a>
+          <a href="commonapp-ready.html">Common App Ready <span class="dropdown-new">NEW</span></a>
+          <a href="application-tracker.html" data-i18n="nav.tracker">App Tracker</a>
+          <a href="my-list.html" data-i18n="nav.myList">My List</a>
+          <a href="countdown.html" data-i18n="nav.countdown">Countdown</a>
+        </div>
+      </div>
+      <a href="community.html" data-i18n="nav.community">Community</a>
+    </div>
+    <div class="nav-right">
+      <button class="lang-toggle" onclick="toggleLanguage()">عربي</button>
+      <button class="hamburger" aria-label="Menu"><span></span><span></span><span></span></button>
+    </div>
+  </div>
+</nav>
+
+<!-- ── Hero ── -->
+<div class="page-header">
+  <div class="page-header-icon">⚡</div>
+  <h1>Your Common App. Saudi-Ready.</h1>
+  <p>Every section of the Common App — formatted, optimized, and explained for Saudi students. Copy. Paste. Submit.</p>
+  <div class="ca-stat-pills">
+    <span class="ca-pill"><strong>150 char</strong> limit — Activities</span>
+    <span class="ca-pill"><strong>650 words</strong> — Essays</span>
+    <span class="ca-pill"><strong>100%</strong> Saudi-Specific</span>
+  </div>
+</div>
+
+<div class="ca-layout container">
+
+  <!-- ── Sticky side nav ── -->
+  <aside class="ca-sidenav">
+    <h5>On this page</h5>
+    <a href="#sec-activities" class="active">⚡ Activities</a>
+    <a href="#sec-honors">🏅 Honors</a>
+    <a href="#sec-essay">✍️ Essay Checker</a>
+    <a href="#sec-additional">📄 Additional Info</a>
+    <a href="#sec-checklist">✅ Checklist</a>
+    <a href="#sec-supplements">🏛️ Supplements</a>
+  </aside>
+
+  <!-- ── Main column ── -->
+  <main class="ca-main">
+
+    <!-- ════ SECTION 1 — ACTIVITIES ════ -->
+    <section class="ca-section" id="sec-activities">
+      <div class="ca-sec-head">
+        <h2>Activities Section — 150 Characters. Make Every One Count.</h2>
+        <p>Common App gives you 150 characters per activity. Most students waste them. This tool formats yours to be as strong as possible.</p>
+      </div>
+      <div id="caActivitiesContainer"></div>
+      <div class="ca-action-row">
+        <button class="btn btn-outline" id="caAddActivityBtn" onclick="caAddActivity()">➕ Add Another Activity (max 10)</button>
+        <button class="btn btn-primary" id="caExportBtn" style="display:none" onclick="caExportActivities()">📦 Export All Activities</button>
+      </div>
+    </section>
+
+    <!-- ════ SECTION 2 — HONORS ════ -->
+    <section class="ca-section" id="sec-honors">
+      <div class="ca-sec-head">
+        <h2>Honors Section — 5 Slots. Use Them Wisely.</h2>
+        <p>Common App gives you 5 honor slots. Saudi students often undersell their achievements here or use school-level honors when they have national ones.</p>
+      </div>
+      <div id="caHonorsContainer"></div>
+      <div class="ca-action-row">
+        <button class="btn btn-outline" id="caAddHonorBtn" onclick="caAddHonor()">➕ Add Another Honor (max 5)</button>
+      </div>
+
+      <h3 class="ca-sub">🇸🇦 Saudi Honors — Explained for Adcoms</h3>
+      <p class="ca-sub-note">US admissions officers don't always recognize these. Here's how to describe them.</p>
+      <div class="ca-explainer-grid">
+        <div class="info-card"><h4>🔬 KAUST SRSI</h4><p>Saudi Research Science Institute — a selective summer research program at KAUST. <strong>~Top 80 of 15,000 applicants (≈0.53%).</strong> Describe it as a nationally prestigious research selection, not a "summer camp."</p></div>
+        <div class="info-card"><h4>☄️ Purple Comet</h4><p>An <strong>international</strong> team math competition. Always frame with global context: "International Math Meet — global team competition," not a local contest.</p></div>
+        <div class="info-card"><h4>🧪 Ibdaa (إبداع)</h4><p>Saudi Arabia's national science & innovation competition. Frame as "National Science & Innovation Olympiad" so adcoms grasp the scale.</p></div>
+        <div class="info-card"><h4>🎓 Mawhiba (موهبة)</h4><p>The national gifted-students foundation. Selection signals top-percentile aptitude — describe as "National Gifted & Talented Program."</p></div>
+        <div class="info-card"><h4>🛢️ Aramco CPP Selection</h4><p>Selection for Aramco's College Preparation Program is itself an honor — one of the most competitive sponsorships in the Kingdom. Top US adcoms recognize Aramco.</p></div>
+      </div>
+    </section>
+
+    <!-- ════ SECTION 3 — ESSAY CHECKER ════ -->
+    <section class="ca-section" id="sec-essay">
+      <div class="ca-sec-head">
+        <h2>Essays — 650 Words. Make Them Remember You.</h2>
+        <p>The Common App personal statement has a 650-word limit. This tool checks your essay and gives Saudi-specific feedback.</p>
+      </div>
+      <div class="form-card">
+        <div class="form-group">
+          <label for="caEssayPrompt">Common App Prompt</label>
+          <select id="caEssayPrompt">
+            <option>Prompt 1 — Background, identity, interest, or talent that defines who you are.</option>
+            <option>Prompt 2 — A challenge, setback, or failure and what you learned.</option>
+            <option>Prompt 3 — A belief or idea you questioned.</option>
+            <option>Prompt 4 — A problem you've solved or would like to solve.</option>
+            <option>Prompt 5 — An accomplishment or realization that sparked growth.</option>
+            <option>Prompt 6 — A topic or concept that captivates you.</option>
+            <option>Prompt 7 — Free choice / topic of your own design.</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="caEssayText">Your Essay Draft <span class="ca-counter ca-count-ok" id="caEssayCount">0 / 650 words</span></label>
+          <textarea id="caEssayText" rows="12" placeholder="Paste your full draft here…" oninput="caCountEssay()"></textarea>
+        </div>
+        <button class="btn btn-primary btn-lg" onclick="caCheckEssay()">🔍 Check My Essay</button>
+      </div>
+      <div class="ca-result" id="caEssayResult"></div>
+    </section>
+
+    <!-- ════ SECTION 4 — ADDITIONAL INFORMATION ════ -->
+    <section class="ca-section" id="sec-additional">
+      <div class="ca-sec-head">
+        <h2>Additional Information — The Most Underused Section.</h2>
+        <p>Most students leave this blank. Saudi students have more to explain here than almost anyone.</p>
+      </div>
+
+      <div class="ca-explainer-grid">
+        <div class="info-card">
+          <h4>📚 Curriculum Context</h4>
+          <p>If your school offers an American Diploma without AP, explain it.</p>
+          <div class="ca-copy-wrap"><span class="ca-copy-src ca-template">My school does not offer AP or IB courses. I independently enrolled at Blyth Academy Online (Ontario curriculum) to pursue rigorous coursework in [subjects].</span><button class="btn btn-outline btn-sm ca-copy-btn" onclick="caCopy(this)">📋 Copy</button></div>
+        </div>
+        <div class="info-card">
+          <h4>📊 Saudi Grading System</h4>
+          <p>US adcoms don't know what 95% means in a Saudi context.</p>
+          <div class="ca-copy-wrap"><span class="ca-copy-src ca-template">Saudi schools grade on a percentage scale. A score of 90%+ is considered exceptional and represents the top tier of academic achievement.</span><button class="btn btn-outline btn-sm ca-copy-btn" onclick="caCopy(this)">📋 Copy</button></div>
+        </div>
+        <div class="info-card">
+          <h4>🛢️ Aramco CPP Context</h4>
+          <p>If applying for the CPP waiver, mention it — it adds credibility.</p>
+          <div class="ca-copy-wrap"><span class="ca-copy-src ca-template">I am a candidate for the Saudi Aramco College Preparation Program (CPP), a highly selective national sponsorship program for top-performing Saudi students.</span><button class="btn btn-outline btn-sm ca-copy-btn" onclick="caCopy(this)">📋 Copy</button></div>
+        </div>
+        <div class="info-card">
+          <h4>🌍 COVID / Unique Circumstances</h4>
+          <p>If anything unusual affected your record — school changes, moving countries, curriculum gaps — explain it briefly and factually here.</p>
+        </div>
+        <div class="info-card">
+          <h4>🔬 Research Explanation</h4>
+          <p>If you did KAUST SRSI or similar, explain the program's prestige.</p>
+          <div class="ca-copy-wrap"><span class="ca-copy-src ca-template">I was selected for the KAUST Saudi Research Science Institute (SRSI), a nationally competitive summer research program admitting roughly the top 0.5% of applicants.</span><button class="btn btn-outline btn-sm ca-copy-btn" onclick="caCopy(this)">📋 Copy</button></div>
+        </div>
+      </div>
+
+      <div class="form-card" style="margin-top:18px">
+        <div class="form-section-title">✨ AI Additional Information Generator</div>
+        <div class="form-group">
+          <label for="caAddlInput">Tell us anything unusual about your background, context adcoms need, or achievements that need explaining</label>
+          <textarea id="caAddlInput" rows="5" placeholder="e.g., I changed schools twice, my school has no APs so I self-studied 4, I did KAUST SRSI, my grades are in percentages…"></textarea>
+        </div>
+        <button class="btn btn-primary" onclick="caGenAdditional()">✨ Generate My Additional Info</button>
+        <div class="ca-result" id="caAddlResult"></div>
+      </div>
+    </section>
+
+    <!-- ════ SECTION 5 — CHECKLIST ════ -->
+    <section class="ca-section" id="sec-checklist">
+      <div class="ca-sec-head">
+        <h2>Are You Actually Ready to Submit?</h2>
+        <p>Every section of the Common App — checked off as you complete it.</p>
+      </div>
+      <div class="ca-progress">
+        <div class="ca-progress-track"><div class="ca-progress-bar" id="caProgressBar"></div></div>
+        <span class="ca-progress-pct" id="caProgressPct">0% complete</span>
+      </div>
+
+      <div class="ca-checklist">
+        <div class="ca-check-group">
+          <h4>👤 Personal Information</h4>
+          <label class="ca-check-item"><input type="checkbox" class="ca-check" id="ck_pi1"><span>Legal name matches passport</span></label>
+          <label class="ca-check-item"><input type="checkbox" class="ca-check" id="ck_pi2"><span>Saudi address entered correctly</span></label>
+          <label class="ca-check-item"><input type="checkbox" class="ca-check" id="ck_pi3"><span>Saudi national ID / Iqama number ready</span></label>
+        </div>
+        <div class="ca-check-group">
+          <h4>🎓 Academic History</h4>
+          <label class="ca-check-item"><input type="checkbox" class="ca-check" id="ck_ah1"><span>AISM transcript uploaded</span></label>
+          <label class="ca-check-item"><input type="checkbox" class="ca-check" id="ck_ah2"><span>Blyth Academy transcript requested and uploaded</span></label>
+          <label class="ca-check-item"><input type="checkbox" class="ca-check" id="ck_ah3"><span>All schools attended listed (including Merrick Prep if applicable)</span></label>
+          <label class="ca-check-item"><input type="checkbox" class="ca-check" id="ck_ah4"><span>Grades entered in percentage format with explanation in Additional Info</span></label>
+        </div>
+        <div class="ca-check-group">
+          <h4>📊 Test Scores</h4>
+          <label class="ca-check-item"><input type="checkbox" class="ca-check" id="ck_ts1"><span>SAT scores sent to all schools via College Board</span></label>
+          <label class="ca-check-item"><input type="checkbox" class="ca-check" id="ck_ts2"><span>Score report matches self-reported scores</span></label>
+        </div>
+        <div class="ca-check-group">
+          <h4>⚡ Activities (10 slots)</h4>
+          <label class="ca-check-item"><input type="checkbox" class="ca-check" id="ck_ac1"><span>All 10 activities formatted to 150 characters</span></label>
+          <label class="ca-check-item"><input type="checkbox" class="ca-check" id="ck_ac2"><span>Listed in order of importance (most impressive first)</span></label>
+          <label class="ca-check-item"><input type="checkbox" class="ca-check" id="ck_ac3"><span>Hours per week and weeks per year filled accurately</span></label>
+        </div>
+        <div class="ca-check-group">
+          <h4>🏅 Honors (5 slots)</h4>
+          <label class="ca-check-item"><input type="checkbox" class="ca-check" id="ck_hn1"><span>Top 5 honors selected and formatted</span></label>
+          <label class="ca-check-item"><input type="checkbox" class="ca-check" id="ck_hn2"><span>Recognition levels accurate</span></label>
+        </div>
+        <div class="ca-check-group">
+          <h4>✍️ Essays</h4>
+          <label class="ca-check-item"><input type="checkbox" class="ca-check" id="ck_es1"><span>Personal statement under 650 words</span></label>
+          <label class="ca-check-item"><input type="checkbox" class="ca-check" id="ck_es2"><span>All required supplements written</span></label>
+          <label class="ca-check-item"><input type="checkbox" class="ca-check" id="ck_es3"><span>All optional supplements written (always write optional ones)</span></label>
+          <label class="ca-check-item"><input type="checkbox" class="ca-check" id="ck_es4"><span>Essays proofread by advisor</span></label>
+        </div>
+        <div class="ca-check-group">
+          <h4>📨 Recommendations</h4>
+          <label class="ca-check-item"><input type="checkbox" class="ca-check" id="ck_rc1"><span>Two teacher recommendations requested</span></label>
+          <label class="ca-check-item"><input type="checkbox" class="ca-check" id="ck_rc2"><span>Counselor recommendation requested</span></label>
+          <label class="ca-check-item"><input type="checkbox" class="ca-check" id="ck_rc3"><span>Teachers given enough time (minimum 6 weeks notice)</span></label>
+          <label class="ca-check-item"><input type="checkbox" class="ca-check" id="ck_rc4"><span>Followed up politely</span></label>
+        </div>
+        <div class="ca-check-group">
+          <h4>🏫 School Report</h4>
+          <label class="ca-check-item"><input type="checkbox" class="ca-check" id="ck_sr1"><span>Counselor has submitted school profile</span></label>
+          <label class="ca-check-item"><input type="checkbox" class="ca-check" id="ck_sr2"><span>Predicted grades submitted for UK applications</span></label>
+        </div>
+        <div class="ca-check-group">
+          <h4>📄 Additional Information</h4>
+          <label class="ca-check-item"><input type="checkbox" class="ca-check" id="ck_ai1"><span>Curriculum context explained</span></label>
+          <label class="ca-check-item"><input type="checkbox" class="ca-check" id="ck_ai2"><span>Saudi grading system explained</span></label>
+          <label class="ca-check-item"><input type="checkbox" class="ca-check" id="ck_ai3"><span>Any unusual circumstances addressed</span></label>
+        </div>
+        <div class="ca-check-group">
+          <h4>💳 Application Fee / Waiver</h4>
+          <label class="ca-check-item"><input type="checkbox" class="ca-check" id="ck_fee1"><span>Fee paid or waiver requested for each school</span></label>
+        </div>
+        <div class="ca-check-group">
+          <h4>🇸🇦 Saudi-Specific</h4>
+          <label class="ca-check-item"><input type="checkbox" class="ca-check" id="ck_sa1"><span>Aramco CPP application window monitored</span></label>
+          <label class="ca-check-item"><input type="checkbox" class="ca-check" id="ck_sa2"><span>Transcript authenticated by Saudi Ministry of Education</span></label>
+          <label class="ca-check-item"><input type="checkbox" class="ca-check" id="ck_sa3"><span>Passport valid through expected graduation date</span></label>
+        </div>
+      </div>
+    </section>
+
+    <!-- ════ SECTION 6 — SUPPLEMENTS ════ -->
+    <section class="ca-section" id="sec-supplements">
+      <div class="ca-sec-head">
+        <h2>Supplements — Where Most Students Lose Their Spot.</h2>
+        <p>Every school you apply to has required supplements beyond the personal statement. Here's what Saudi students need to know about each.</p>
+      </div>
+
+      <div class="ca-supp-list">
+        <div class="ca-supp-card" onclick="caToggleSupp(this)"><div class="ca-supp-row"><strong>Cornell</strong><span>Why Cornell + short answers</span><span class="ca-supp-toggle">＋</span></div><div class="ca-supp-body"><p><strong>Saudi tip:</strong> Mention regional impact and a builder narrative — Cornell loves applied, real-world problem solvers.</p></div></div>
+        <div class="ca-supp-card" onclick="caToggleSupp(this)"><div class="ca-supp-row"><strong>Columbia</strong><span>Why Columbia + Core Curriculum</span><span class="ca-supp-toggle">＋</span></div><div class="ca-supp-body"><p><strong>Saudi tip:</strong> CS + Bedouin poetry is a perfect Core Curriculum argument — bridge technical and classical-humanities interests.</p></div></div>
+        <div class="ca-supp-card" onclick="caToggleSupp(this)"><div class="ca-supp-row"><strong>Brown</strong><span>Why Brown + open curriculum</span><span class="ca-supp-toggle">＋</span></div><div class="ca-supp-body"><p><strong>Saudi tip:</strong> Explain how your interests don't fit neat boxes — the Open Curriculum rewards genuine intellectual range.</p></div></div>
+        <div class="ca-supp-card" onclick="caToggleSupp(this)"><div class="ca-supp-row"><strong>Yale</strong><span>Why Yale + intellectual interest</span><span class="ca-supp-toggle">＋</span></div><div class="ca-supp-body"><p><strong>Saudi tip:</strong> A Bedouin poetry essay fits perfectly here — lead with intellectual curiosity.</p></div></div>
+        <div class="ca-supp-card" onclick="caToggleSupp(this)"><div class="ca-supp-row"><strong>Penn</strong><span>Why Penn + community</span><span class="ca-supp-toggle">＋</span></div><div class="ca-supp-body"><p><strong>Saudi tip:</strong> Lean into an entrepreneurial builder narrative — Penn values pre-professional ambition.</p></div></div>
+        <div class="ca-supp-card" onclick="caToggleSupp(this)"><div class="ca-supp-row"><strong>Harvard</strong><span>Why Harvard + community</span><span class="ca-supp-toggle">＋</span></div><div class="ca-supp-body"><p><strong>Saudi tip:</strong> Regional firsts + civic impact — show leadership that changed your community.</p></div></div>
+        <div class="ca-supp-card" onclick="caToggleSupp(this)"><div class="ca-supp-row"><strong>Princeton</strong><span>Why Princeton + short answers</span><span class="ca-supp-toggle">＋</span></div><div class="ca-supp-body"><p><strong>Saudi tip:</strong> The most formulaic — follow instructions exactly and answer each prompt precisely.</p></div></div>
+      </div>
+
+      <div class="form-card" style="margin-top:18px">
+        <div class="form-section-title">💡 AI Supplement Brainstormer</div>
+        <div class="form-grid">
+          <div class="form-group"><label for="caSuppSchool">School</label>
+            <select id="caSuppSchool">
+              <option>Cornell</option><option>Columbia</option><option>Brown</option><option>Yale</option>
+              <option>Penn</option><option>Harvard</option><option>Princeton</option><option>Other</option>
+            </select></div>
+          <div class="form-group full"><label for="caSuppPrompt">Paste the supplement prompt</label>
+            <textarea id="caSuppPrompt" rows="3" placeholder="e.g., Why are you drawn to your chosen area of study? (150 words)"></textarea></div>
+          <div class="form-group full"><label for="caSuppContext">Optional: a little about you</label>
+            <textarea id="caSuppContext" rows="2" placeholder="Your major, key activities, anything distinctive…"></textarea></div>
+        </div>
+        <button class="btn btn-primary" onclick="caBrainstormSupp()">💡 Brainstorm 3 Angles</button>
+        <div class="ca-result" id="caSuppResult"></div>
+      </div>
+    </section>
+
+  </main>
+</div>
+
+<!-- Export modal -->
+<div class="ca-modal" id="caExportModal">
+  <div class="ca-modal-card">
+    <div class="ca-modal-head"><h3>📦 All Activities</h3><button class="ca-modal-close" onclick="caCloseExport()">✕</button></div>
+    <p style="color:var(--text-muted);font-size:.88rem;margin-bottom:10px">Copy this and paste each line into the matching Common App activity.</p>
+    <div class="ca-copy-wrap"><textarea class="ca-copy-src" id="caExportText" rows="12"></textarea>
+      <button class="btn btn-primary btn-sm ca-copy-btn" onclick="caCopy(this)">📋 Copy All</button></div>
+  </div>
+</div>
+
+<footer>
+  <div class="container">
+    <div class="footer-bottom">
+      <p data-i18n="footer.copy">Powered by Llama 3.3 · Groq · 2025</p>
+    </div>
+  </div>
+</footer>
+
+<script src="js/translations.js?v=7"></script>
+<script src="js/app.js?v=7"></script>
+<script src="js/commonapp.js?v=1"></script>
+<script src="js/sidebar.js?v=8"></script>
+</body>
+</html>
