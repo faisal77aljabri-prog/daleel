@@ -3194,7 +3194,7 @@ li:nth-child(5) { animation-delay: 0.5s; }
 
 /* Default: show as collapsed icon bar */
 .sidebar.collapsed {
-  width: 80px;
+  width: 70px;
 }
 
 .sidebar.open {
@@ -3202,53 +3202,57 @@ li:nth-child(5) { animation-delay: 0.5s; }
 }
 
 /* Sidebar collapsed state - show only icons */
+.sidebar.collapsed {
+  overflow: hidden;
+}
+
 .sidebar.collapsed .sidebar-logo .logo-arabic,
-.sidebar.collapsed .sidebar-logo .logo-dot {
-  display: none;
-}
-
-.sidebar.collapsed .sidebar-profile,
-.sidebar.collapsed .sidebar-nav,
-.sidebar.collapsed .sidebar-footer {
-  padding-left: 0;
-  padding-right: 0;
-}
-
-.sidebar.collapsed .sidebar-profile {
-  flex-direction: column;
-  align-items: center;
-  text-align: center;
-  padding: 12px 0;
-}
-
+.sidebar.collapsed .sidebar-logo .logo-dot,
 .sidebar.collapsed .sidebar-profile-name,
 .sidebar.collapsed .sidebar-profile-link,
-.sidebar.collapsed .sidebar-profile-avatar {
-  display: none;
-}
-
 .sidebar.collapsed .sidebar-section-title,
-.sidebar.collapsed .sidebar-btn {
-  display: none;
-}
-
-.sidebar.collapsed .sidebar-link {
-  justify-content: center;
-  padding: 12px 0;
-  font-size: 1.2rem;
-}
-
-.sidebar.collapsed .sidebar-link span {
-  display: none;
-}
-
+.sidebar.collapsed .sidebar-btn,
+.sidebar.collapsed .sidebar-link > span,
 .sidebar.collapsed .sidebar-badge {
-  display: none;
+  display: none !important;
 }
 
 .sidebar.collapsed .sidebar-header {
-  padding: 14px;
+  padding: 14px 8px;
   justify-content: center;
+  gap: 0;
+}
+
+.sidebar.collapsed .sidebar-close {
+  display: none;
+}
+
+.sidebar.collapsed .sidebar-profile {
+  padding: 8px 0;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+.sidebar.collapsed .sidebar-profile-avatar {
+  width: 40px;
+  height: 40px;
+  margin: 0 auto;
+}
+
+.sidebar.collapsed .sidebar-nav {
+  padding: 0;
+}
+
+.sidebar.collapsed .sidebar-link {
+  padding: 12px 6px;
+  justify-content: center;
+  font-size: 1.3rem;
+  text-align: center;
+}
+
+.sidebar.collapsed .sidebar-footer {
+  padding: 8px 0;
 }
 
 
