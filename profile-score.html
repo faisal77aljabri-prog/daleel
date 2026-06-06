@@ -182,14 +182,12 @@
               <input type="text" id="psMajor" placeholder="e.g. Computer Science, Pre-Med, Energy" />
             </div>
             <div class="form-group full">
-              <label for="psEcTier" data-i18n="score.ecTierLabel">EC Strength Tier</label>
-              <select id="psEcTier">
-                <option value="none">None</option>
-                <option value="developing">Developing (some activities, limited leadership)</option>
-                <option value="moderate">Moderate (school leadership, consistent involvement)</option>
-                <option value="strong">Strong (regional leadership, significant impact)</option>
-                <option value="exceptional">Exceptional (national/international, research, founded org)</option>
-              </select>
+              <label data-i18n="score.ecPortfolioLabel">Extracurriculars</label>
+              <div class="ps-ec-summary">
+                <span id="psEcCountText" data-i18n="score.ecPortfolioNone">No activities saved yet</span>
+                <a href="ec-advisor.html" class="btn btn-outline btn-sm">⚡ <span data-i18n="score.ecPortfolioManage">Manage EC Portfolio</span></a>
+              </div>
+              <small data-i18n="score.ecPortfolioHint">Your score uses the activities saved in your EC Portfolio — add more there to raise it.</small>
             </div>
             <div class="form-group">
               <label for="psPS" data-i18n="score.psLabel">Personal Statement</label>
@@ -290,11 +288,11 @@
   </div>
 </footer>
 
-<script src="js/translations.js?v=7"></script>
+<script src="js/translations.js?v=8"></script>
 <script src="js/app.js?v=5"></script>
 <script src="js/onboarding.js?v=7"></script>
 <script src="js/countdown.js?v=5"></script>
-<script src="js/profile-score.js?v=5"></script>
+<script src="js/profile-score.js?v=2"></script>
 <script src="js/sidebar.js?v=8"></script>
   <script src="js/particles.js?v=2"></script>
 </body>

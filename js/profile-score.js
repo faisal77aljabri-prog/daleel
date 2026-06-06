@@ -9,7 +9,7 @@
      AP Courses:   many=4, some=2, none=0  (max total 30 → clamp)
 
    Extracurriculars (25 pts):
-     EC tier:  exceptional=25, strong=18, moderate=12, developing=5, none=0
+     EC Portfolio count:  7+=25, 5+=20, 3+=14, 1+=8, 0=0
 
    Application Materials (25 pts):
      PS:    complete=15, draft=8, not-started=0
@@ -36,8 +36,7 @@ function getScoreInputs() {
     qudurat:  n('psQudurat'),
     school:   v('psSchool') || '',
     major:    (v('psMajor') || '').toLowerCase(),
-    ecNum:    n('psEcNum'),
-    ecTier:   v('psEcTier') || 'none',
+    ecCount:  getSavedECCount(),
     ps:       v('psPS') || 'not-started',
     recs:     parseInt(v('psRecs') || '0'),
     ap:       v('psAP') || 'none',
@@ -79,10 +78,26 @@ function calcAcademic(inp) {
   return Math.min(pts, 30);
 }
 
+/* Read how many activities the student has saved in their EC Portfolio. */
+function getSavedECCount() {
+  try {
+    let email = null;
+    try { const s = JSON.parse(localStorage.getItem('daleel_session') || 'null'); email = s?.email || null; } catch {}
+    let p = {};
+    if (email) { try { p = JSON.parse(localStorage.getItem(`daleel_profile_${email}`) || '{}'); } catch {} }
+    if (!p.ecs || !p.ecs.length) { try { p = JSON.parse(localStorage.getItem('daleel_profile') || '{}'); } catch {} }
+    return Array.isArray(p.ecs) ? p.ecs.length : 0;
+  } catch { return 0; }
+}
+
+/* Score extracurriculars by how many activities are in the EC Portfolio. */
 function calcEC(inp) {
-  const tierMap = { exceptional:25, strong:18, moderate:12, developing:5, none:0,
-    'استثنائي':25, 'قوي':18, 'متوسط':12, 'متطور':5, 'لا يوجد':0 };
-  return tierMap[inp.ecTier] ?? 0;
+  const c = inp.ecCount || 0;
+  if (c >= 7) return 25;
+  if (c >= 5) return 20;
+  if (c >= 3) return 14;
+  if (c >= 1) return 8;
+  return 0;
 }
 
 function calcMaterials(inp) {
@@ -161,9 +176,13 @@ function buildActionCards(inp, scores) {
   // Recs
   if (inp.recs < 2) actions.push({ pts: inp.recs === 0 ? 6 : 3, icon:'📨', text: isAr ? `احصل على ${2 - inp.recs} رسالة توصية إضافية (الهدف: 2–3)` : `Get ${2 - inp.recs} more recommendation letter${inp.recs===0?'s':''} (target: 2–3)` });
 
-  // EC tier
-  const ecPotential = { none:18, developing:13, moderate:7, 'لا يوجد':18, 'متطور':13, 'متوسط':7 };
-  if (ecPotential[inp.ecTier]) actions.push({ pts: ecPotential[inp.ecTier], icon:'⚡', text: isAr ? `طوّر أنشطتك اللاصفية إلى مستوى أعلى: أكبر مكسب محتمل` : `Develop extracurriculars to a higher tier: highest potential gain` });
+  // EC portfolio — encourage building toward 5+ saved activities
+  const ecCount = inp.ecCount || 0;
+  if (ecCount < 5) {
+    const add = 5 - ecCount;
+    const gain = ecCount >= 3 ? 6 : (ecCount >= 1 ? 12 : 20);
+    actions.push({ pts: gain, icon:'⚡', text: isAr ? `أضف ${add} نشاطاً إلى محفظة الأنشطة (الهدف 5+): أكبر مكسب محتمل` : `Add ${add} more activit${add===1?'y':'ies'} to your EC Portfolio (target 5+): highest potential gain` });
+  }
 
   // AP courses
   if (inp.ap === 'none' || inp.ap === 'لا يوجد') actions.push({ pts: 4, icon:'📚', text: isAr ? `التسجيل في مواد AP أو متقدمة: +4 نقاط` : `Enroll in AP or advanced courses: +4 pts` });
@@ -272,7 +291,7 @@ function submitScoreAI() {
   const total = calcAcademic(inp) + calcEC(inp) + calcMaterials(inp) + calcSaudi(inp);
   const cppStatus = getCPPStatus(inp);
 
-  const profile = `GPA: ${inp.gpa}%, Math/Sci GPA: ${inp.mathGpa}%, SAT Math: ${inp.satMath || 'not taken'}, SAT Total: ${inp.satTotal || 'not taken'}, ACT: ${inp.act || 'not taken'}, Qudurat: ${inp.qudurat || 'not taken'}, School: ${inp.school}, Major: ${inp.major || 'undecided'}, EC tier: ${inp.ecTier}, Personal Statement: ${inp.ps}, Recs: ${inp.recs}, AP courses: ${inp.ap}, Overall score: ${total}/100, CPP status: ${cppStatus}`;
+  const profile = `GPA: ${inp.gpa}%, Math/Sci GPA: ${inp.mathGpa}%, SAT Math: ${inp.satMath || 'not taken'}, SAT Total: ${inp.satTotal || 'not taken'}, ACT: ${inp.act || 'not taken'}, Qudurat: ${inp.qudurat || 'not taken'}, School: ${inp.school}, Major: ${inp.major || 'undecided'}, EC activities saved: ${inp.ecCount}, Personal Statement: ${inp.ps}, Recs: ${inp.recs}, AP courses: ${inp.ap}, Overall score: ${total}/100, CPP status: ${cppStatus}`;
 
   const userMsg = isAr
     ? `ملفي الأكاديمي:\n${profile}\n\nأعطني تحليلاً معمّقاً صادقاً لملفي مع خطوات محددة لتحسين كل فئة.`
@@ -302,10 +321,20 @@ document.addEventListener('DOMContentLoaded', () => {
   if (!document.getElementById('scoreNum')) return;
 
   // Wire live calculation to all inputs
-  document.querySelectorAll('#psGpa,#psMathGpa,#psSatMath,#psSatTotal,#psAct,#psQudurat,#psSchool,#psMajor,#psEcNum,#psEcTier,#psPS,#psRecs,#psAP').forEach(el => {
+  document.querySelectorAll('#psGpa,#psMathGpa,#psSatMath,#psSatTotal,#psAct,#psQudurat,#psSchool,#psMajor,#psPS,#psRecs,#psAP').forEach(el => {
     el.addEventListener('input',  calculateLiveScore);
     el.addEventListener('change', calculateLiveScore);
   });
+
+  // Show how many EC-portfolio activities feed the score
+  const ecCount = getSavedECCount();
+  const ecText = document.getElementById('psEcCountText');
+  if (ecText) {
+    const ar = (typeof currentLang !== 'undefined' && currentLang === 'ar');
+    ecText.textContent = ecCount
+      ? (ar ? `${ecCount} نشاط محفوظ في محفظتك` : `${ecCount} activit${ecCount===1?'y':'ies'} saved in your portfolio`)
+      : (ar ? 'لا أنشطة محفوظة بعد' : 'No activities saved yet');
+  }
 
   // Initialize ring display
   const R = 80, circumference = 2 * Math.PI * R;
