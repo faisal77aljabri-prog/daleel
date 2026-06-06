@@ -16,7 +16,7 @@ const CA_SAUDI_RULES = `You are an expert Common App advisor for SAUDI students.
 - Islamic identity should be present but lived, not performative (faith as experience, not explanation).
 - Arabic language is an intellectual asset, not a barrier.
 - Bedouin poetry / classical Arabic are genuinely rare — treat as exceptional intellectual distinction.
-- Saudi international-school students have a curriculum narrative (Blyth + APs = proactively seeking rigor).
+- Saudi international-school students have a curriculum narrative (accredited online courses + self-studied APs = proactively seeking rigor).
 - Vision 2030 adds legitimacy to entrepreneurial extracurriculars.`;
 
 function caIsAr() { return (typeof currentLang !== 'undefined' && currentLang === 'ar'); }
