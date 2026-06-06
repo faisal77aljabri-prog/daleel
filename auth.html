@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Sign In / Sign Up — دليل</title>
+  <link rel="stylesheet" href="css/styles.css" />
+  <style>
+    .auth-container {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: linear-gradient(135deg, var(--navy-deep) 0%, var(--navy-light) 100%);
+      padding: 20px;
+    }
+    .auth-card {
+      background: white;
+      border-radius: var(--radius-lg);
+      padding: 40px;
+      max-width: 420px;
+      width: 100%;
+      box-shadow: var(--shadow-lg);
+    }
+    .auth-logo {
+      text-align: center;
+      margin-bottom: 32px;
+    }
+    .auth-logo .logo-arabic {
+      font-size: 2.2rem;
+      font-weight: 900;
+      color: var(--gold);
+      letter-spacing: 2px;
+    }
+    .auth-title {
+      font-size: 1.6rem;
+      font-weight: 800;
+      color: var(--text-dark);
+      margin-bottom: 12px;
+      text-align: center;
+    }
+    .auth-subtitle {
+      font-size: 0.9rem;
+      color: var(--text-muted);
+      text-align: center;
+      margin-bottom: 28px;
+    }
+    .auth-form { display: none; }
+    .auth-form.active { display: block; }
+    .auth-form .form-group {
+      margin-bottom: 16px;
+    }
+    .auth-form label {
+      display: block;
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: var(--text-dark);
+      margin-bottom: 8px;
+    }
+    .auth-form input {
+      width: 100%;
+      padding: 12px 14px;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      font-size: 1rem;
+      transition: all var(--transition);
+    }
+    .auth-form input:focus {
+      outline: none;
+      border-color: var(--gold);
+      box-shadow: 0 0 0 3px rgba(183,156,224,.1);
+    }
+    .auth-btn {
+      width: 100%;
+      padding: 12px;
+      background: var(--gold);
+      color: white;
+      font-weight: 700;
+      border: none;
+      border-radius: 8px;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: all var(--transition);
+      margin-top: 20px;
+    }
+    .auth-btn:hover {
+      background: var(--gold-light);
+      transform: translateY(-2px);
+      box-shadow: 0 4px 16px rgba(183,156,224,.3);
+    }
+    .auth-btn:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+      transform: none;
+    }
+    .auth-error {
+      background: #fee;
+      color: #c33;
+      padding: 12px;
+      border-radius: 6px;
+      font-size: 0.85rem;
+      margin-bottom: 16px;
+      display: none;
+    }
+    .auth-error.show { display: block; }
+    .auth-divider {
+      text-align: center;
+      margin: 24px 0;
+      position: relative;
+    }
+    .auth-divider::before {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 50%;
+      right: 0;
+      height: 1px;
+      background: var(--border);
+    }
+    .auth-divider span {
+      position: relative;
+      background: white;
+      padding: 0 12px;
+      color: var(--text-muted);
+      font-size: 0.85rem;
+    }
+    .auth-toggle {
+      text-align: center;
+      margin-top: 20px;
+      font-size: 0.9rem;
+    }
+    .auth-toggle a {
+      color: var(--gold);
+      text-decoration: none;
+      font-weight: 600;
+      cursor: pointer;
+    }
+    .auth-toggle a:hover { text-decoration: underline; }
+    .auth-loading {
+      display: inline-block;
+      width: 16px;
+      height: 16px;
+      border: 2px solid rgba(255,255,255,.3);
+      border-top-color: white;
+      border-radius: 50%;
+      animation: spin .6s linear infinite;
+      margin-right: 8px;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+  </style>
+</head>
+<body>
+
+<div class="auth-container">
+  <div class="auth-card">
+    <div class="auth-logo">
+      <span class="logo-arabic">دليل</span>
+    </div>
+
+    <!-- Sign Up Form -->
+    <form class="auth-form active" id="signupForm">
+      <h1 class="auth-title">Create Account</h1>
+      <p class="auth-subtitle">Join thousands of Saudi students</p>
+
+      <div class="auth-error" id="signupError"></div>
+
+      <div class="form-group">
+        <label for="signupEmail">Email Address</label>
+        <input type="email" id="signupEmail" placeholder="your@email.com" required />
+      </div>
+
+      <div class="form-group">
+        <label for="signupPassword">Password</label>
+        <input type="password" id="signupPassword" placeholder="At least 6 characters" required />
+      </div>
+
+      <div class="form-group">
+        <label for="signupPasswordConfirm">Confirm Password</label>
+        <input type="password" id="signupPasswordConfirm" placeholder="Confirm password" required />
+      </div>
+
+      <button class="auth-btn" type="submit" id="signupBtn">
+        Create Account
+      </button>
+
+      <div class="auth-toggle">
+        Already have an account? <a onclick="switchForm('signin')">Sign In</a>
+      </div>
+    </form>
+
+    <!-- Sign In Form -->
+    <form class="auth-form" id="signinForm">
+      <h1 class="auth-title">Welcome Back</h1>
+      <p class="auth-subtitle">Sign in to your account</p>
+
+      <div class="auth-error" id="signinError"></div>
+
+      <div class="form-group">
+        <label for="signinEmail">Email Address</label>
+        <input type="email" id="signinEmail" placeholder="your@email.com" required />
+      </div>
+
+      <div class="form-group">
+        <label for="signinPassword">Password</label>
+        <input type="password" id="signinPassword" placeholder="Your password" required />
+      </div>
+
+      <button class="auth-btn" type="submit" id="signinBtn">
+        Sign In
+      </button>
+
+      <div class="auth-toggle">
+        Don't have an account? <a onclick="switchForm('signup')">Create one</a>
+      </div>
+    </form>
+
+  </div>
+</div>
+
+<script src="js/auth.js"></script>
+</body>
+</html>

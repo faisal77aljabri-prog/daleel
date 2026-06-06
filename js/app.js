@@ -267,7 +267,7 @@ function closeCardModal() {
 function openCardModal(cardEl) {
   ensureModal();
   const c = JSON.parse(cardEl.dataset.college);
-  const accent = COUNTRY_ACCENTS[c.country] || '#C9A84C';
+  const accent = COUNTRY_ACCENTS[c.country] || '#B79CE0';
   const isSaved = getMyList().some(s => s.name === c.name);
   const saveLabel = isSaved
     ? (currentLang === 'ar' ? '✓ في قائمتك' : '✓ In Your List')
@@ -1298,7 +1298,7 @@ function renderECResult(data, container) {
   const isAr = currentLang === 'ar';
   const SC = {
     exceptional: { pct:100, color:'#059669', badgeCls:'card-badge--safety'  },
-    strong:      { pct:80,  color:'#C9A84C', badgeCls:'card-badge--target'  },
+    strong:      { pct:80,  color:'#B79CE0', badgeCls:'card-badge--target'  },
     moderate:    { pct:55,  color:'#f59e0b', badgeCls:'card-badge--target'  },
     developing:  { pct:35,  color:'#f97316', badgeCls:'card-badge--reach'   },
     minimal:     { pct:15,  color:'#ef4444', badgeCls:'card-badge--reach'   },
