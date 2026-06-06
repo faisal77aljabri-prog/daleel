@@ -5,13 +5,53 @@
 const DALEEL_PROFILE_KEY = 'daleel_profile';
 const DALEEL_ONBOARDED_KEY = 'daleel_onboarded';
 
-/* ── Public helpers (used by tool pages) ─────────────────────── */
-function getStoredProfile() {
-  try { return JSON.parse(localStorage.getItem(DALEEL_PROFILE_KEY) || '{}'); }
-  catch { return {}; }
+/* ── Account awareness ───────────────────────────────────────── */
+/* The signed-in student's email, if any (read directly so this works on
+   every page regardless of whether auth.js is loaded). */
+function getActiveUserEmail() {
+  try {
+    const s = JSON.parse(localStorage.getItem('daleel_session') || 'null');
+    return s?.email || null;
+  } catch { return null; }
 }
+function userProfileKey() {
+  const email = getActiveUserEmail();
+  return email ? `daleel_profile_${email}` : null;
+}
+
+/* Some keys are spelled differently across tools — keep both spellings in
+   sync so a value entered anywhere fills fields everywhere. */
+function normalizeProfile(p) {
+  if (!p || typeof p !== 'object') return {};
+  if (p.satTotal == null && p.sat != null) p.satTotal = p.sat;
+  if (p.sat == null && p.satTotal != null) p.sat = p.satTotal;
+  return p;
+}
+
+/* ── Public helpers (used by tool pages) ─────────────────────── */
+/* Read the canonical profile: the signed-in account's profile takes
+   precedence, layered over the generic local profile. */
+function getStoredProfile() {
+  let base = {};
+  try { base = JSON.parse(localStorage.getItem(DALEEL_PROFILE_KEY) || '{}'); } catch {}
+  const ukey = userProfileKey();
+  if (ukey) {
+    try {
+      const u = JSON.parse(localStorage.getItem(ukey) || '{}');
+      base = { ...base, ...u }; // account values win
+    } catch {}
+  }
+  return normalizeProfile(base);
+}
+
+/* Write the profile to the generic key AND the signed-in account key so it
+   follows the student across tools and sessions. */
 function saveStoredProfile(p) {
-  localStorage.setItem(DALEEL_PROFILE_KEY, JSON.stringify(p));
+  const merged = normalizeProfile({ ...getStoredProfile(), ...p });
+  localStorage.setItem(DALEEL_PROFILE_KEY, JSON.stringify(merged));
+  const ukey = userProfileKey();
+  if (ukey) localStorage.setItem(ukey, JSON.stringify(merged));
+  return merged;
 }
 
 /* Map canonical profile keys → field IDs that may exist on the current page.
@@ -55,6 +95,75 @@ function prefillForms() {
       el.dispatchEvent(new Event('change', { bubbles: true }));
     });
   });
+}
+
+/* Reverse of prefill: read whatever the student typed into this page's tool
+   forms and merge it back into the canonical profile, so info entered in one
+   tool becomes available in every other tool. */
+function captureFormsToProfile() {
+  const updates = {};
+  Object.entries(PROFILE_FIELD_MAP).forEach(([key, ids]) => {
+    for (const id of ids) {
+      const el = document.getElementById(id);
+      if (!el) continue;
+      const val = (el.value || '').trim();
+      if (!val) continue;
+      const isSelect = el.tagName === 'SELECT';
+      const defaultVal = isSelect ? (el.options[0]?.value ?? '') : '';
+      if (val === defaultVal) continue;
+      updates[key] = val;
+      break; // first non-empty field wins for this key
+    }
+  });
+  if (Object.keys(updates).length) saveStoredProfile(updates);
+  return updates;
+}
+
+/* One-click fill: drop everything we know about the student into this page's
+   forms (overwriting blanks; leaves anything the student already typed). */
+function autofillFromProfile() {
+  prefillForms();
+  const n = document.getElementById('daleel-autofill-note');
+  if (n) {
+    n.textContent = (typeof t === 'function' ? t('onboarding.autofilled') : 'Filled from your saved info ✓');
+    n.style.display = 'inline';
+    setTimeout(() => { n.style.display = 'none'; }, 2500);
+  }
+}
+
+/* If this page has any profile-driven fields and we have saved info, drop a
+   small "Use my saved info" button at the top of the first form. */
+function injectAutofillButton() {
+  const profile = getStoredProfile();
+  if (!profile || !Object.keys(profile).length) return;
+
+  // Does this page actually contain any mappable field?
+  const hasField = Object.values(PROFILE_FIELD_MAP)
+    .some(ids => ids.some(id => document.getElementById(id)));
+  if (!hasField) return;
+  if (document.getElementById('daleel-autofill-bar')) return;
+
+  // Find a sensible container: the form-card / form holding the first field.
+  let anchor = null;
+  for (const ids of Object.values(PROFILE_FIELD_MAP)) {
+    for (const id of ids) {
+      const el = document.getElementById(id);
+      if (el) { anchor = el.closest('.form-card, form, section, .container') || el.parentElement; break; }
+    }
+    if (anchor) break;
+  }
+  if (!anchor) return;
+
+  const bar = document.createElement('div');
+  bar.id = 'daleel-autofill-bar';
+  bar.style.cssText = 'display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:18px;padding:12px 16px;background:rgba(183,156,224,.10);border:1px solid rgba(183,156,224,.3);border-radius:10px';
+  const label = (typeof t === 'function' ? t('onboarding.useSaved') : '📥 Use my saved info');
+  const prompt = (typeof t === 'function' ? t('onboarding.savedPrompt') : 'We have your profile saved.');
+  bar.innerHTML = `
+    <span style="font-size:.9rem;color:var(--text-body)">${prompt}</span>
+    <button type="button" class="btn btn-primary btn-sm" onclick="autofillFromProfile()">${label}</button>
+    <span id="daleel-autofill-note" style="display:none;color:#16a34a;font-size:.85rem;font-weight:600"></span>`;
+  anchor.insertBefore(bar, anchor.firstChild);
 }
 
 /* ── Onboarding modal ────────────────────────────────────────── */
@@ -215,6 +324,19 @@ function openOnboarding() {
 document.addEventListener('DOMContentLoaded', () => {
   // Always try to prefill forms from a saved profile
   prefillForms();
+  // Offer a one-click "use my saved info" button on tool pages
+  injectAutofillButton();
+
+  // Two-way sync: whenever the student submits/runs a tool, capture what
+  // they entered back into their profile so other tools benefit.
+  document.addEventListener('submit', () => { try { captureFormsToProfile(); } catch (e) {} }, true);
+  document.addEventListener('click', (e) => {
+    const btn = e.target.closest?.('button, .btn');
+    if (btn && btn.id !== 'daleel-autofill-bar') {
+      try { captureFormsToProfile(); } catch (err) {}
+    }
+  }, true);
+
   // Show the quiz only on genuine first visit
   if (!localStorage.getItem(DALEEL_ONBOARDED_KEY)) {
     obDraft = {};
@@ -222,3 +344,11 @@ document.addEventListener('DOMContentLoaded', () => {
     setTimeout(buildOnboarding, 600);
   }
 });
+
+// Expose for other modules (profile page, etc.)
+window.daleelProfile = {
+  get: getStoredProfile,
+  save: saveStoredProfile,
+  prefill: prefillForms,
+  capture: captureFormsToProfile,
+};

@@ -756,6 +756,9 @@ T.en.onboarding = {
   next: 'Next →', back: '← Back', skip: 'Skip for now', finish: '✓ Save & Start',
   done: 'Profile saved! Your tools are now personalized.',
   optional: 'All fields optional — fill what you have.',
+  useSaved: '📥 Use my saved info',
+  autofilled: 'Filled from your saved info ✓',
+  savedPrompt: 'We have your profile saved.',
 };
 T.ar.onboarding = {
   welcome: 'مرحباً بك في دليل',
@@ -773,6 +776,9 @@ T.ar.onboarding = {
   next: 'التالي →', back: '→ رجوع', skip: 'تخطٍّ الآن', finish: '✓ احفظ وابدأ',
   done: 'تم حفظ ملفك! أدواتك الآن مخصصة لك.',
   optional: 'جميع الحقول اختيارية — املأ ما لديك.',
+  useSaved: '📥 استخدم بياناتي المحفوظة',
+  autofilled: 'تم الملء من بياناتك المحفوظة ✓',
+  savedPrompt: 'لدينا ملفك محفوظ.',
 };
 
 /* ── Phase 1: ACT labels ── */
