@@ -3250,27 +3250,40 @@ li:nth-child(5) { animation-delay: 0.5s; }
 
 .sidebar.collapsed .sidebar-header {
   padding: 14px;
+  justify-content: space-between;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.sidebar.collapsed .sidebar-logo {
+  flex: none;
+}
+
+.sidebar.collapsed .sidebar-header-actions {
+  width: 100%;
   justify-content: center;
 }
 
-.sidebar-header-actions {
-  display: flex;
-  gap: 8px;
-  align-items: center;
-}
-
 .sidebar-collapse {
-  background: none;
-  border: none;
-  font-size: 1.2rem;
+  background: rgba(183, 156, 224, 0.1);
+  border: 1px solid rgba(183, 156, 224, 0.3);
+  font-size: 1.1rem;
   color: var(--gold);
   cursor: pointer;
-  padding: 4px;
-  transition: transform 0.2s ease;
+  padding: 6px 10px;
+  border-radius: 6px;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 32px;
+  min-height: 32px;
 }
 
 .sidebar-collapse:hover {
-  transform: scale(1.1);
+  background: rgba(183, 156, 224, 0.2);
+  border-color: var(--gold);
+  transform: scale(1.05);
 }
 
 .sidebar-overlay {
@@ -3295,12 +3308,21 @@ li:nth-child(5) { animation-delay: 0.5s; }
   justify-content: space-between;
   align-items: center;
   border-bottom: 1px solid rgba(183, 156, 224, 0.2);
+  gap: 12px;
+}
+
+.sidebar-header-actions {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  flex-shrink: 0;
 }
 
 .sidebar-logo {
   display: flex;
   align-items: center;
   gap: 4px;
+  flex: 1;
 }
 
 .sidebar-logo .logo-arabic {
@@ -3316,12 +3338,24 @@ li:nth-child(5) { animation-delay: 0.5s; }
 }
 
 .sidebar-close {
-  background: none;
-  border: none;
-  font-size: 1.5rem;
+  background: rgba(183, 156, 224, 0.1);
+  border: 1px solid rgba(183, 156, 224, 0.3);
+  font-size: 1.1rem;
   color: var(--gold);
   cursor: pointer;
-  padding: 0;
+  padding: 6px 10px;
+  border-radius: 6px;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 32px;
+  min-height: 32px;
+}
+
+.sidebar-close:hover {
+  background: rgba(183, 156, 224, 0.2);
+  border-color: var(--gold);
 }
 
 .sidebar-profile {
