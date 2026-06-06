@@ -3,7 +3,7 @@
  */
 
 let savedECs = [];
-let currentLang = localStorage.getItem('daleel_lang') || 'en';
+let ecLang = localStorage.getItem('daleel_lang') || 'en';
 
 /**
  * Load saved ECs from profile
@@ -28,7 +28,7 @@ function addEC() {
   const awards = document.getElementById('ecAwards')?.value?.trim();
 
   if (!name || !description) {
-    alert(currentLang === 'ar' ? 'أدخل الاسم والوصف' : 'Please enter name and description');
+    alert(ecLang === 'ar' ? 'أدخل الاسم والوصف' : 'Please enter name and description');
     return;
   }
 
@@ -46,18 +46,18 @@ function addEC() {
   saveECsToProfile();
   resetECForm();
   renderECList();
-  showNotification(currentLang === 'ar' ? 'تمت إضافة النشاط' : 'Activity added!');
+  showNotification(ecLang === 'ar' ? 'تمت إضافة النشاط' : 'Activity added!');
 }
 
 /**
  * Delete an EC
  */
 function deleteEC(id) {
-  if (!confirm(currentLang === 'ar' ? 'هل تريد حذفه؟' : 'Delete this activity?')) return;
+  if (!confirm(ecLang === 'ar' ? 'هل تريد حذفه؟' : 'Delete this activity?')) return;
   savedECs = savedECs.filter(ec => ec.id !== id);
   saveECsToProfile();
   renderECList();
-  showNotification(currentLang === 'ar' ? 'تم الحذف' : 'Deleted');
+  showNotification(ecLang === 'ar' ? 'تم الحذف' : 'Deleted');
 }
 
 /**
@@ -85,7 +85,7 @@ async function getECFeedback(id) {
 
   container.innerHTML = '<div class="loading-overlay visible"><div class="spinner"></div><p>Getting feedback…</p></div>';
 
-  const ar = currentLang === 'ar';
+  const ar = ecLang === 'ar';
   const prompt = ar
     ? `قيّم نشاطي الجامعي هذا وأعطني نصائح لتحسين العرض:
        الاسم: ${ec.name}
@@ -124,7 +124,7 @@ async function getECFeedback(id) {
       );
     });
   } catch (err) {
-    container.innerHTML = `<p style="color:red">${currentLang === 'ar' ? 'حدث خطأ' : 'Error'}: ${err.message}</p>`;
+    container.innerHTML = `<p style="color:red">${ecLang === 'ar' ? 'حدث خطأ' : 'Error'}: ${err.message}</p>`;
   }
 }
 
@@ -137,12 +137,12 @@ function renderECList() {
 
   if (savedECs.length === 0) {
     container.innerHTML = `<p style="color:var(--text-muted);text-align:center;padding:40px">
-      ${currentLang === 'ar' ? 'لم تضف أي نشاط بعد' : 'No activities yet. Add your first one above!'}
+      ${ecLang === 'ar' ? 'لم تضف أي نشاط بعد' : 'No activities yet. Add your first one above!'}
     </p>`;
     return;
   }
 
-  const ar = currentLang === 'ar';
+  const ar = ecLang === 'ar';
   container.innerHTML = savedECs.map(ec => `
     <div class="ec-portfolio-card">
       <div class="ec-card-header">
@@ -211,6 +211,6 @@ function showNotification(msg) {
  * Initialize on page load
  */
 document.addEventListener('DOMContentLoaded', () => {
-  currentLang = localStorage.getItem('daleel_lang') || 'en';
+  ecLang = localStorage.getItem('daleel_lang') || 'en';
   loadSavedECs();
 });

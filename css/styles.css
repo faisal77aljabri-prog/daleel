@@ -3407,7 +3407,8 @@ body.auth-page { margin-left: 0; }
 .sidebar-link {
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  justify-content: flex-start;
+  gap: 12px;
   padding: 12px 12px;
   margin-bottom: 8px;
   color: var(--text-light);
@@ -3415,7 +3416,13 @@ body.auth-page { margin-left: 0; }
   border-radius: 8px;
   transition: all 0.3s ease;
   font-size: 0.95rem;
+  white-space: nowrap;
   animation: slideInLeft 0.3s ease backwards;
+}
+
+/* Push the My List count badge to the far right */
+.sidebar-link .sidebar-badge {
+  margin-left: auto;
 }
 
 .sidebar-link:hover {

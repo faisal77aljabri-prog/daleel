@@ -31,30 +31,30 @@ function initSidebar() {
       <nav class="sidebar-nav">
         <div class="sidebar-section">
           <h5 class="sidebar-section-title">BUILD</h5>
-          <a href="/college-list.html" class="sidebar-link">🎓<span> College List</span></a>
-          <a href="/ec-advisor.html" class="sidebar-link">⚡<span> EC Portfolio</span></a>
-          <a href="/essay-advisor.html" class="sidebar-link">✍️<span> Essay Advisor</span></a>
+          <a href="/college-list.html" class="sidebar-link">🎓<span>College List</span></a>
+          <a href="/ec-advisor.html" class="sidebar-link">⚡<span>EC Portfolio</span></a>
+          <a href="/essay-advisor.html" class="sidebar-link">✍️<span>Essay Advisor</span></a>
         </div>
 
         <div class="sidebar-section">
           <h5 class="sidebar-section-title">TOOLS</h5>
-          <a href="/profile-score.html" class="sidebar-link">📊<span> Profile Score</span></a>
-          <a href="/scholarships.html" class="sidebar-link">💰<span> Scholarships</span></a>
-          <a href="/cpp-calculator.html" class="sidebar-link">📈<span> CPP Calculator</span></a>
-          <a href="/sat-guide.html" class="sidebar-link">📝<span> Test Guide</span></a>
+          <a href="/profile-score.html" class="sidebar-link">📊<span>Profile Score</span></a>
+          <a href="/scholarships.html" class="sidebar-link">💰<span>Scholarships</span></a>
+          <a href="/cpp-calculator.html" class="sidebar-link">📈<span>CPP Calculator</span></a>
+          <a href="/sat-guide.html" class="sidebar-link">📝<span>Test Guide</span></a>
         </div>
 
         <div class="sidebar-section">
           <h5 class="sidebar-section-title">DISCOVER</h5>
-          <a href="/my-list.html" class="sidebar-link">📋<span> My List <span class="sidebar-badge" id="sidebarBadge">0</span></span></a>
-          <a href="/community.html" class="sidebar-link">💬<span> Community</span></a>
-          <a href="/tips-feed.html" class="sidebar-link">💡<span> Tips</span></a>
+          <a href="/my-list.html" class="sidebar-link">📋<span>My List <span class="sidebar-badge" id="sidebarBadge">0</span></span></a>
+          <a href="/community.html" class="sidebar-link">💬<span>Community</span></a>
+          <a href="/tips-feed.html" class="sidebar-link">💡<span>Tips</span></a>
         </div>
 
         <div class="sidebar-section">
           <h5 class="sidebar-section-title">TRACK</h5>
-          <a href="/application-tracker.html" class="sidebar-link">✅<span> App Tracker</span></a>
-          <a href="/countdown.html" class="sidebar-link">⏰<span> Countdown</span></a>
+          <a href="/application-tracker.html" class="sidebar-link">✅<span>App Tracker</span></a>
+          <a href="/countdown.html" class="sidebar-link">⏰<span>Countdown</span></a>
         </div>
       </nav>
 
