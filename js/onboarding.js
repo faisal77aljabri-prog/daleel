@@ -193,7 +193,8 @@ const OB_STEPS = [
     { key: 'major',   label: 'q_major', hint: 'q_majorHint', type: 'text' },
     { key: 'country', label: 'q_country', type: 'select', options: [
       { v: 'No preference', l: 'No Preference' }, { v: 'USA', l: 'USA' },
-      { v: 'UK', l: 'UK' }, { v: 'Canada', l: 'Canada' }, { v: 'Europe', l: 'Europe' },
+      { v: 'UK', l: 'UK' }, { v: 'Canada', l: 'Canada' }, { v: 'Australia', l: 'Australia' },
+      { v: 'Europe', l: 'Europe' }, { v: 'Saudi Arabia', l: 'Saudi Arabia' }, { v: 'UAE', l: 'UAE' },
     ] },
     { key: 'funding', label: 'q_funding', type: 'select', options: [
       { v: '', l: '— Select —' },
