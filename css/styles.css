@@ -3249,6 +3249,8 @@ li:nth-child(5) { animation-delay: 0.5s; }
   justify-content: center;
   font-size: 1.3rem;
   text-align: center;
+  white-space: nowrap;
+  overflow: hidden;
 }
 
 .sidebar.collapsed .sidebar-footer {
