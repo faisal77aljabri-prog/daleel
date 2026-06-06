@@ -9,34 +9,31 @@ let isEditMode = false;
 /**
  * Initialize profile page: require auth, load profile data.
  */
-async function initProfile() {
-  const user = await daleel.auth.requireAuth();
-  if (user) {
-    document.getElementById('userEmail').textContent = user.email;
-    await loadProfile();
+function initProfile() {
+  const userEmail = daleel.auth.requireAuth();
+  if (userEmail) {
+    document.getElementById('userEmail').textContent = userEmail;
+    loadProfile();
   }
 }
 
 /**
- * Load profile data from Supabase or localStorage.
+ * Load profile data from localStorage.
  */
-async function loadProfile() {
-  const userId = localStorage.getItem('daleel_user_id');
+function loadProfile() {
+  const userEmail = daleel.auth.getSessionUser();
 
-  if (!userId) {
-    console.error('No user ID found');
+  if (!userEmail) {
+    console.error('No user session found');
     return;
   }
 
   try {
-    // For now, load from localStorage (Supabase DB integration comes in a later phase)
-    const stored = localStorage.getItem(`daleel_profile_${userId}`);
+    const stored = localStorage.getItem(`daleel_profile_${userEmail}`);
     if (stored) {
       profileData = JSON.parse(stored);
     } else {
-      // Or load from the old daleel_profile if migrating
-      const legacyProfile = JSON.parse(localStorage.getItem('daleel_profile') || '{}');
-      profileData = legacyProfile;
+      profileData = {};
     }
   } catch (err) {
     console.error('Error loading profile:', err);
@@ -153,9 +150,9 @@ function cancelEdit() {
 }
 
 /**
- * Save profile changes to localStorage (and eventually to Supabase).
+ * Save profile changes to localStorage.
  */
-async function saveProfile() {
+function saveProfile() {
   profileData.gpa = document.getElementById('edit-gpa').value || undefined;
   profileData.gpaMath = document.getElementById('edit-gpamath').value || undefined;
   profileData.school = document.getElementById('edit-school').value || undefined;
@@ -172,10 +169,10 @@ async function saveProfile() {
   profileData.psStatus = document.getElementById('edit-ps-status').value || undefined;
   profileData.recCount = document.getElementById('edit-rec-count').value || undefined;
 
-  // Save to localStorage
-  const userId = localStorage.getItem('daleel_user_id');
-  if (userId) {
-    localStorage.setItem(`daleel_profile_${userId}`, JSON.stringify(profileData));
+  // Save to localStorage under user email
+  const userEmail = daleel.auth.getSessionUser();
+  if (userEmail) {
+    localStorage.setItem(`daleel_profile_${userEmail}`, JSON.stringify(profileData));
   }
 
   // Also save to old location for cross-tool compatibility
@@ -195,13 +192,9 @@ async function saveProfile() {
 /**
  * Handle sign out.
  */
-async function handleSignOut() {
+function handleSignOut() {
   if (confirm('Are you sure you want to sign out?')) {
-    try {
-      await daleel.auth.signOut();
-    } catch (err) {
-      alert('Error signing out: ' + err.message);
-    }
+    daleel.auth.signOut();
   }
 }
 
