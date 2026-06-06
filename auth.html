@@ -4,6 +4,20 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Sign In / Sign Up — دليل</title>
+  <script>
+    // Redirect already-signed-in users to home
+    function checkAuthStatus() {
+      try {
+        const session = JSON.parse(localStorage.getItem('daleel_session') || 'null');
+        if (session && session.email) {
+          window.location.href = '/';
+          return;
+        }
+      } catch (e) {}
+    }
+    // Run before page renders
+    checkAuthStatus();
+  </script>
   <link rel="stylesheet" href="css/styles.css" />
   <style>
     .auth-container {

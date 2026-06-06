@@ -11,7 +11,10 @@ function initSidebar() {
           <span class="logo-arabic">دليل</span>
           <span class="logo-dot">.</span>
         </div>
-        <button class="sidebar-close" onclick="toggleSidebar()">✕</button>
+        <div class="sidebar-header-actions">
+          <button class="sidebar-collapse" onclick="toggleSidebarCollapse()" title="Minimize sidebar">◀</button>
+          <button class="sidebar-close" onclick="toggleSidebar()">✕</button>
+        </div>
       </div>
 
       <div class="sidebar-profile">
@@ -120,5 +123,38 @@ function handleSidebarSignOut() {
   }
 }
 
+/**
+ * Collapse/expand sidebar
+ */
+function toggleSidebarCollapse() {
+  const sidebar = document.getElementById('daleel-sidebar');
+  const collapseBtn = document.querySelector('.sidebar-collapse');
+
+  if (sidebar && collapseBtn) {
+    sidebar.classList.toggle('collapsed');
+    collapseBtn.textContent = sidebar.classList.contains('collapsed') ? '▶' : '◀';
+    localStorage.setItem('daleel_sidebar_collapsed', sidebar.classList.contains('collapsed') ? '1' : '0');
+  }
+}
+
+/**
+ * Restore sidebar collapse state from localStorage
+ */
+function restoreSidebarState() {
+  const sidebar = document.getElementById('daleel-sidebar');
+  const collapseBtn = document.querySelector('.sidebar-collapse');
+  const isCollapsed = localStorage.getItem('daleel_sidebar_collapsed') === '1';
+
+  if (sidebar) {
+    if (isCollapsed) {
+      sidebar.classList.add('collapsed');
+      if (collapseBtn) collapseBtn.textContent = '▶';
+    }
+  }
+}
+
 // Initialize sidebar on page load
-document.addEventListener('DOMContentLoaded', initSidebar);
+document.addEventListener('DOMContentLoaded', () => {
+  initSidebar();
+  setTimeout(restoreSidebarState, 50); // Defer slightly to ensure sidebar is rendered
+});
