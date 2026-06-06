@@ -98,15 +98,22 @@ function toggleSidebar() {
  * Update sidebar profile info
  */
 function updateSidebarProfile() {
-  const userEmail = (typeof daleel !== 'undefined' && daleel.auth?.getSessionUser?.()) || localStorage.getItem('daleel_user_email');
-  const profileName = document.getElementById('sidebarProfileName');
+  // Read the session directly so this works even on pages without auth.js
+  let userEmail = (typeof daleel !== 'undefined' && daleel.auth?.getSessionUser?.()) || null;
+  if (!userEmail) {
+    try {
+      const session = JSON.parse(localStorage.getItem('daleel_session') || 'null');
+      userEmail = session?.email || null;
+    } catch (e) {}
+  }
 
-  if (userEmail && profileName) {
-    profileName.textContent = userEmail.split('@')[0];
+  const profileName = document.getElementById('sidebarProfileName');
+  if (profileName) {
+    profileName.textContent = userEmail ? userEmail.split('@')[0] : 'Guest';
   }
 
   // Update My List badge
-  const list = getMyList?.() || [];
+  const list = (typeof getMyList === 'function' ? getMyList() : []) || [];
   const badge = document.getElementById('sidebarBadge');
   if (badge) badge.textContent = list.length;
 }
