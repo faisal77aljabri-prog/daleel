@@ -11,10 +11,7 @@ function initSidebar() {
           <span class="logo-arabic">دليل</span>
           <span class="logo-dot">.</span>
         </div>
-        <div class="sidebar-header-actions">
-          <button class="sidebar-collapse" onclick="toggleSidebarCollapse()" title="Minimize sidebar">◀</button>
-          <button class="sidebar-close" onclick="toggleSidebar()">✕</button>
-        </div>
+        <button class="sidebar-close" onclick="toggleSidebar()" title="Close menu">✕</button>
       </div>
 
       <div class="sidebar-profile">
@@ -124,37 +121,44 @@ function handleSidebarSignOut() {
 }
 
 /**
- * Collapse/expand sidebar
+ * Auto-collapse sidebar after a delay when mouse leaves
  */
-function toggleSidebarCollapse() {
-  const sidebar = document.getElementById('daleel-sidebar');
-  const collapseBtn = document.querySelector('.sidebar-collapse');
+let sidebarHoverTimeout;
 
-  if (sidebar && collapseBtn) {
-    sidebar.classList.toggle('collapsed');
-    collapseBtn.textContent = sidebar.classList.contains('collapsed') ? '▶' : '◀';
-    localStorage.setItem('daleel_sidebar_collapsed', sidebar.classList.contains('collapsed') ? '1' : '0');
-  }
+function setupSidebarHover() {
+  const sidebar = document.getElementById('daleel-sidebar');
+  if (!sidebar) return;
+
+  // Start collapsed
+  sidebar.classList.add('collapsed');
+
+  sidebar.addEventListener('mouseenter', () => {
+    clearTimeout(sidebarHoverTimeout);
+    sidebar.classList.remove('collapsed');
+  });
+
+  sidebar.addEventListener('mouseleave', () => {
+    sidebarHoverTimeout = setTimeout(() => {
+      sidebar.classList.add('collapsed');
+    }, 300);
+  });
 }
 
 /**
- * Restore sidebar collapse state from localStorage
+ * Auto-start sidebar in collapsed state
  */
 function restoreSidebarState() {
   const sidebar = document.getElementById('daleel-sidebar');
-  const collapseBtn = document.querySelector('.sidebar-collapse');
-  const isCollapsed = localStorage.getItem('daleel_sidebar_collapsed') === '1';
-
   if (sidebar) {
-    if (isCollapsed) {
-      sidebar.classList.add('collapsed');
-      if (collapseBtn) collapseBtn.textContent = '▶';
-    }
+    sidebar.classList.add('collapsed');
   }
 }
 
 // Initialize sidebar on page load
 document.addEventListener('DOMContentLoaded', () => {
   initSidebar();
-  setTimeout(restoreSidebarState, 50); // Defer slightly to ensure sidebar is rendered
+  setTimeout(() => {
+    restoreSidebarState();
+    setupSidebarHover();
+  }, 50); // Defer slightly to ensure sidebar is rendered
 });
