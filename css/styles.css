@@ -8,21 +8,21 @@
 
 /* ── Variables ─────────────────────────────────────────────── */
 :root {
-  --navy-deep:   #281640;
-  --navy-mid:    #351F52;
-  --navy-light:  #3F2662;
-  --navy-hover:  #1F0F35;
-  --gold:        #B79CE0;
-  --gold-light:  #D4B0F0;
-  --gold-dim:    #7F5FA8;
+  --navy-deep:   #3A2566;
+  --navy-mid:    #4B3080;
+  --navy-light:  #5E3D9C;
+  --navy-hover:  #2E1C52;
+  --gold:        #C6ABEE;
+  --gold-light:  #E4D2F9;
+  --gold-dim:    #9576C9;
   --white:       #FFFFFF;
-  --off-white:   #F7F5EF;
-  --surface:     #F0EEE8;
-  --border:      #E2DED4;
-  --text-dark:   #281640;
-  --text-body:   #2D3748;
-  --text-muted:  #718096;
-  --text-light:  #CBD5E0;
+  --off-white:   #FAF7FF;
+  --surface:     #F3EEFC;
+  --border:      #E7DEF6;
+  --text-dark:   #2A1A47;
+  --text-body:   #3B3457;
+  --text-muted:  #7A7393;
+  --text-light:  #D8CCEC;
 
   --radius-sm:   6px;
   --radius-md:   12px;
@@ -191,10 +191,13 @@ html[lang="ar"] .nav-right { flex-direction: row-reverse; margin-inline-start: 0
 
 /* ── Page Header ─────────────────────────────────────────────── */
 .page-header {
-  background: linear-gradient(135deg, var(--navy-deep) 0%, var(--navy-mid) 100%);
+  background: linear-gradient(135deg, var(--navy-mid) 0%, var(--navy-light) 70%, #6B4AB0 100%);
   padding: 56px 24px 48px;
   text-align: center;
+  position: relative;
+  overflow: hidden;
 }
+.page-header > * { position: relative; z-index: 2; }
 
 html[lang="ar"] .page-header { text-align: center; }
 
@@ -220,11 +223,12 @@ html[lang="ar"] .page-header { text-align: center; }
 
 /* ── Hero ────────────────────────────────────────────────────── */
 .hero {
-  background: linear-gradient(155deg, var(--navy-deep) 0%, var(--navy-mid) 55%, #0e2a45 100%);
+  background: linear-gradient(155deg, var(--navy-mid) 0%, var(--navy-light) 55%, #6B4AB0 100%);
   padding: 96px 24px 80px;
   position: relative;
   overflow: hidden;
 }
+.hero .container { position: relative; z-index: 2; }
 
 .hero::before {
   content: '';
@@ -3660,3 +3664,23 @@ html[dir="rtl"] .ca-tile { border-left:none; border-right:4px solid var(--gold-d
   padding:3px 11px; font-size:.62rem; font-weight:700; letter-spacing:.5px; text-transform:uppercase; white-space:nowrap; }
 .page-header .ca-stage-tag { color:var(--gold-light); background:rgba(183,156,224,.2); border-color:rgba(183,156,224,.4); }
 html[dir="rtl"] .ca-stage-tag { margin-left:0; margin-right:10px; }
+
+/* ════════════════════════════════════════════════════════════
+   Khuzama floating particles (lavender) — on dark hero/header
+   ════════════════════════════════════════════════════════════ */
+.khuzama-particles { position:absolute; inset:0; overflow:hidden; pointer-events:none; z-index:1; }
+.khuzama-particle {
+  position:absolute; bottom:-24px; border-radius:50%;
+  background: radial-gradient(circle at 35% 35%, var(--gold-light), var(--gold) 60%, transparent 72%);
+  box-shadow: 0 0 10px rgba(198,171,238,.7);
+  animation: khuzamaFloat linear infinite;
+  will-change: transform, opacity;
+}
+@keyframes khuzamaFloat {
+  0%   { transform: translateY(0) translateX(0) scale(1);     opacity: 0; }
+  12%  { opacity: .7; }
+  50%  { transform: translateY(-50vh) translateX(24px) scale(1.08); }
+  88%  { opacity: .55; }
+  100% { transform: translateY(-105vh) translateX(-12px) scale(.9); opacity: 0; }
+}
+@media (prefers-reduced-motion: reduce) { .khuzama-particle { animation: none; opacity: .3; } }
