@@ -59,16 +59,23 @@ async function initAuth() {
  * Listen for auth state changes and update UI accordingly.
  */
 function setupAuthListeners() {
-  if (!supabaseClient) return;
+  if (!supabaseClient) {
+    console.error('setupAuthListeners: supabaseClient not initialized');
+    return;
+  }
 
+  console.log('Auth listeners setup. Checking initial session...');
   supabaseClient.auth.onAuthStateChange((event, session) => {
+    console.log('Auth state changed:', event, 'Session:', session?.user?.email);
     const token = session?.access_token;
     if (token) {
+      console.log('User has valid token, signing in:', session.user.email);
       localStorage.setItem('daleel_auth_token', token);
       localStorage.setItem('daleel_user_id', session.user.id);
       localStorage.setItem('daleel_user_email', session.user.email);
       onUserSignedIn(session.user);
     } else {
+      console.log('No valid token, signing out');
       localStorage.removeItem('daleel_auth_token');
       localStorage.removeItem('daleel_user_id');
       localStorage.removeItem('daleel_user_email');
@@ -81,12 +88,16 @@ function setupAuthListeners() {
  * Called when user successfully signs up or signs in.
  */
 function onUserSignedIn(user) {
+  console.log('onUserSignedIn called for:', user.email);
   // After verification or sign-in, go to profile hub
   const nextUrl = sessionStorage.getItem('auth_redirect') || '/profile.html';
+  const redirect = sessionStorage.getItem('auth_redirect');
   sessionStorage.removeItem('auth_redirect');
-  console.log('User signed in:', user.email, '→ redirecting to', nextUrl);
+  console.log('Auth redirect value:', redirect);
+  console.log('Going to:', nextUrl);
   // Use a small delay to ensure session is set
   setTimeout(() => {
+    console.log('Redirecting to:', nextUrl);
     location.href = nextUrl;
   }, 500);
 }
@@ -105,19 +116,30 @@ function onUserSignedOut() {
  * Get current signed-in user (from localStorage or Supabase session).
  */
 async function getCurrentUser() {
+  // First check Supabase session (most reliable after email verification)
+  if (supabaseClient) {
+    try {
+      const { data: { user } } = await supabaseClient.auth.getUser();
+      if (user) {
+        console.log('Found user from Supabase:', user.email);
+        return user;
+      }
+    } catch (err) {
+      console.error('Error getting Supabase user:', err);
+    }
+  }
+
+  // Fall back to localStorage
   const token = localStorage.getItem('daleel_auth_token');
   const userId = localStorage.getItem('daleel_user_id');
   const email = localStorage.getItem('daleel_user_email');
 
   if (token && userId && email) {
+    console.log('Found user from localStorage:', email);
     return { id: userId, email };
   }
 
-  if (supabaseClient) {
-    const { data: { user } } = await supabaseClient.auth.getUser();
-    return user;
-  }
-
+  console.log('No user found');
   return null;
 }
 
