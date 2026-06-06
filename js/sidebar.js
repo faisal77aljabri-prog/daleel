@@ -3,6 +3,12 @@
  */
 
 function initSidebar() {
+  // Don't show the sidebar on the auth/login page
+  if (window.location.pathname.includes('auth.html')) {
+    document.body.classList.add('auth-page');
+    return;
+  }
+
   // Inject sidebar HTML
   const sidebarHTML = `
     <div class="sidebar" id="daleel-sidebar">

@@ -3175,26 +3175,42 @@ li:nth-child(5) { animation-delay: 0.5s; }
    SIDEBAR NAVIGATION — App-shell layout
    ════════════════════════════════════════════════════════════════ */
 
+/* ── App shell: sidebar replaces the old top navbar ── */
+
+/* Hide the legacy top navbar everywhere — the sidebar is the nav now */
+.navbar { display: none !important; }
+
+/* Push all page content to the right of the 72px icon rail */
+body { margin-left: 72px; }
+
+/* Auth page has no sidebar rail — keep it full width */
+body.auth-page { margin-left: 0; }
+
 .sidebar {
   position: fixed;
   left: 0;
   top: 0;
-  width: 280px;
+  width: 264px;
   height: 100vh;
   background: var(--navy-deep);
-  border-right: 2px solid rgba(183, 156, 224, 0.15);
+  border-right: 1px solid rgba(183, 156, 224, 0.15);
   display: flex;
   flex-direction: column;
   z-index: 1000;
   transform: translateX(0);
-  transition: width 0.3s ease;
+  transition: width 0.25s ease, box-shadow 0.25s ease;
   overflow-y: auto;
   overflow-x: hidden;
 }
 
-/* Default: show as collapsed icon bar */
+/* Expanded (hover) state casts a shadow over content */
+.sidebar:not(.collapsed) {
+  box-shadow: 6px 0 28px rgba(40, 22, 64, 0.35);
+}
+
+/* Default: show as collapsed icon rail */
 .sidebar.collapsed {
-  width: 70px;
+  width: 72px;
 }
 
 .sidebar.open {
@@ -3247,10 +3263,16 @@ li:nth-child(5) { animation-delay: 0.5s; }
 .sidebar.collapsed .sidebar-link {
   padding: 12px 6px;
   justify-content: center;
-  font-size: 1.3rem;
+  font-size: 1.35rem;
   text-align: center;
   white-space: nowrap;
   overflow: hidden;
+  margin: 4px 8px;
+}
+
+/* Keep icon centered on hover when collapsed (no sideways nudge) */
+.sidebar.collapsed .sidebar-link:hover {
+  transform: none;
 }
 
 .sidebar.collapsed .sidebar-footer {
